@@ -1,0 +1,148 @@
+https://github.com/orgs/eomcs/repositories
+
+
+*형상관리 시스템
+configuration mamagement system) CMS = rervsion control system VCS 
+1.소스코드의 변경을 기록보관 하는 시스템
+2.공유,접근권한 제어
+
+첫번째.    local 버전관리 시스템(사용자)
+	-개인용 버전관리 시스템
+	-공유불가
+
+	저장소 =Repoository=Repo.  
+
+
+
+두번째.  중앙 버전관리 시스템 =>공유가능
+
+SVN
+CVS
+
+
+	중앙 서버에서 관리
+		      변경사항
+  	  upload
+	check in =commit
+
+	  download
+	checkout
+
+단점: 서버가 날아가면 다날아간다
+
+그래서 리눅스토발즈가 2주만에 git를 만듬 (전세계 개발자가 다씀)
+
+
+
+*세번쩨. 분산 버전 관리시스템(팔만대장경,조선왕조실록)
+	Git
+
+
+Remote
+
+			VCS<-> Repo
+
+------------------------------------------------------------------------
+
+
+local
+
+
+
+
+Git 설치
+
+
+git 클라이언트 검색후 다운받고 설치
+
+mk git
+
+git clone https://github.com/eomcs/eomcs-java.git
+
+git clone https://github.com/eomjinyoung/bitcamp-workspace
+
+git clone https://github.com/eomcs/eomcs-docs
+
+
+git pull (안될때는 폴더 지워버리고 다시 클론)
+
+
+업로드할때 
+
+로컬에 저장후 로컬저장소를 올리는거\
+git push
+아이디적고
+코드적고
+
+
+
+
+
+ * 부동소수점을 2진수로 표현하는 방법  	
+
+
+
+12.375
+
+
+12->1100
+
+0.375 ->
+		
+
+
+
+* 문자를 2진수로 표현하는 방법
+
+
+미국표준						2.국제표준					3.국제표준		4.기업(아레아한글) 국가표준
+1.ASCII (7bit)					-> ISO-8859-1 (8bit)			->	EUC-KR 	(2byte)		-> 조합형 (2byte)			
+ 아메리칸 스탠다드 코드 포 인포메이션 인터체인지	(+유럽문자)					(KSC-5601)		   	
+American Standard Code for Information Interchange											
+'A'->1000001					-> A -> 0100 0001									
+(영어+숫자+특수문자)				(ASCII+유럽문자)					최대  65535자		    최대 3만이상					
+최대128자					최대 256자					한글:2350자		    		
+												
+ 						국제표준						국제표준
+5.기업표준(마이크로소프트)				6.unicode(2byte,4byte)=UTF16			7.UTF-8 	(8bit로 표현할 수있는 문자는 예전처럼 그대로 8bit로 표현)		
+  MS949(CP949) (2byte)				   BE방식      LE방식(나열하는 방식차이)		유니코드 변형 규칙	    ->그외 문자는 규칙에 따라 번형하자!
+  EUC-KR + 약 8000자 규칙 추가			A -> 0041    4100								한글 2byte -> 3byte	
+ 												일반적으로 텍스트를 저장할때 사용하는 규격
+  						가 ->AC00   00AC						
+  한글11172 자					각 ->AC01   01AC										
+													
+						한글 11172자 + @옛한글,한국전용한자			
+
+
+
+
+* 텍스트 와 바이러니
+
+Text   	    			Binary
+.txt	    			.doc	    
+.java  	    			.hwp
+.html	    			.pdf
+.css	    			.avi
+.js	    			.mp3
+.xml  	    			.jpg
+  (문자 집합)   			.gif
+ (character set)	    
+★문자 변환규칙★에따라 저장된 파일.	전용 S/W으로만 편집가능.
+(메모장으로 편집가능!)
+
+
+
+ *논리 값을 2진수로 표현하는 법
+
+
+	True -> 0000 0001 (1)
+	False -> 0000 0000 (0)
+
+ 배열인경우
+
+ 1바이트를 사용한다.
+  true- 01
+  false- 00
+
+
+

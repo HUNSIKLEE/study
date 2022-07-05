@@ -1,0 +1,33 @@
+* 자바 문법 : 기본 구조
+
+class Hello {
+       클래스명  리턴값유형 메소드명	        외부콘솔 입력값
+    public static void main(String[] args){
+[		  명령어 실행을 시작하는 지점(진입점 entry point)
+
+
+        System.out.println("Hello!!"); // 명령문
+
+    }
+}
+
+
+
+
+*자바 문법 : 소스파일 - 클래스 블록과 - .class
+
+
+Exam01.java
+	----------> 컴파일
+class A{}		A.class
+class B{}		B.class
+class C{}		C.class
+
+
+유지보수가 쉽도록 1클래스에 1소스파일
+		클래스명=소스파일명을 같게한다.
+A.java 
+
+명령 프롬프트 = 콘솔(Consolr)= commnd 
+
+public(공개)로 설정된 클래스 블록인 경우 파일명은 클래스블록 이름과 같아야한다.

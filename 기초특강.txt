@@ -1,0 +1,114 @@
+기초특강(엄진영 강사님)        https://github.com/eomjinyoung
+
+jinyoung.eom@gmail.com
+
+
+로드맵 회사 1년 후 방통대 2년 석사 2년 
+
+
+B2C (B to c)
+서비스
+
+관리시스템
+
+
+
+JAVA             HTML
+파이썬           CSS
+PHP(네이버)     J.S(자바 스크립트) 남는시간에 책사서 볼것
+
+
+소프트웨어는 크게 2가지로 나뉨
+소프트웨어 개발 
+어플리케이션 개발
+
+S/W 개발
+시스템 S/W : 하드웨어 제어 [OS,안드로이드(리눅스),IOS(유닉스)]
+                		     Driver(그래픽카드 드라이버 등등)
+
+*Application S/W: 파워포인트 엑셀 한글 웹브라우저 밤브 카톡 줌 포토샾 네이버메일 카페	
+어플리케이션 
+
+
+어플리케이션 소프트웨어는
+스탠드얼론이랑 클라이언트로 나뉨.
+
+Standalone: 단독 실행
+한글,엑셀,스타,워크,디아,포토샾
+
+공부해야되는것  *Client server (C/S): 네트워킹 필요
+ Zoom , 카톡 , 네이버메일, 롤
+
+클라이언트 서버는 
+자체통신 규칙
+웹통신 규칙 으로 나뉨
+
+
+자체통신 규칙 - lol,카톡, FTP,Zoom,
+
+** 웹통신규칙 - 웹브라우저 사용, HTTP/HTTPS 통신규칙                  	
+ 	        YES24,11st,당근마켓,옥션,쿠팡,네이버메일,웹오피스
+
+Web application
+웹 어플리케이션
+					        Apche,IIS
+Actor(시스템을 사용하는자 사용자 ) -> Web Brower -> web server -> *Application 
+				 1.요청(+데이터)  2.실행
+Actor(시스템을 사용하는자 사용자 ) <- Web Brower <- web server <- *Application
+ 				4응답(결과,화면)   3.결과	    
+				 프론트		백앤드	      
+
+ 
+Local (pc)					Remote(원격 컴퓨터)     	단말기=터미널
+
+
+
+
+Web application 
+              실행
+web server -> *Application(C/C++,파이썬,C#,PHP, *Java+SQL(데이터제어)+XML(설정정보 다루는 문법)+JSON(데이터표현) )
+보조 기술 -> Mybatis,*Spring, senlot/JSP, AJAX
+화면생성 기술 -> HTML ,CSS,자바스크립트
+
+
+					프로그래밍 시작
+1.Standalone app
+ 프로그래밍 개념.
+ Java 언어 문법
+ -리터럴(literal): 데이터표기법
+ -변수(cariable)
+ -연산자(산술,비교,관계,논리,조건,비트)
+ -조건,반복문,
+ -메서드,클래스,패키지
+
+2. client/server app
+ -통신프로그래밍
+ -핵심* 병행프로그래밍(Multi 프로세싱, Multi tasking, Multi thruing)
+ 
+-File I/O API
+
+-Collection API
+
+
+3. Web APP
+-Servlet/JSP 기술 (형식이 필요해서 쓰는)
+-HTML,CSS.자바스크립트
+-Framewark (Mybatis,*Spring) - 사용하기 편리하게 만들어놓은 틀
+
+
+*프로그래밍 도구
+
+1. 명령어 편집기 -> 메모장,Visual studio Code(VSCode),Eclipse/IntelliJ
+2. Java Development kit (JDK)
+3. Gradle 빌드 도구
+4. Git 버전고나리 시스템 형상관리도구
+5. MariaDB 데이터 관리시스템
+
+VScode 			 가상 기계어		
+->자바 명령문작성 .java      ->bytecode (.class)		JVM (bytecode player)
+
+
+
+
+
+
