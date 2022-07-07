@@ -1,0 +1,131 @@
+			https://meet.google.com/uou-bbtj-qzf 
+			구글 미트 주소
+
+
+
+
+			  	* 변수 선언 ->메모리를 준비시키는 명령
+				->값을 저장할 메모리
+primitive type 
+자바원시 타입
+자바기본 타입
+
+	데이터 저장할 유형 		메모리이름
+	     Data type			  변수명      ;     ex) byte b;
+	    byte	  (1)					  		
+	    short    (2)			
+    정수	    int	  (4)				
+	    long    (8)						
+	  					
+부동소수점    float	  (4)				
+	   double  (8)				
+						
+   논리	   boolean (4)				
+	   배열일 경우 1byte를 다룬다				
+   문자	   char(2)						
+	unsigned(음수없다는뜻) (-없이 65535까지 문자이기때문에 음수라는 개념이 없음 양수만씀)					
+							
+						
+	
+				* 변수에 값 저장하기
+					    ->assignment
+
+	변수명 = 리터럴 ;
+		변수명;
+		명령문(Statement( 명령문)안에 Expression (표현식) = 값을 리턴하는 명령문. 
+							    ->명령문 실행을 완료하면 값을 리턴;
+		
+
+	
+	              int					 i;
+	4byte 크기에 메모리 확보한다
+
+
+	
+			* process 와 메모리
+					실행
+		 java.exe			->	프로세스	
+		     ↑				process
+		컴파일러 프로그램			   ↑
+			Application S/W		실행중인 프로그램
+							Application S/W
+
+프로세스가 OS한테 실행하는 동안 데이터를 보관할때 사용하는 메모리를 달라고 요청함
+그러면 OS가 램에서 일부영역을 사용하라고 허락하면 프로세스가 할당된 메모리를 사용해서 데이터를 보관함
+
+
+
+			JWM과 메모리
+
+
+			OS   	2.JVM이 사용할 메모리 확보	->		메모리
+
+			↓    1.실행
+					
+					
+		           JVM  	-> 3 메모	리 사용 
+					 -변수 생성
+					 -값 저장
+					 -객체 생성
+					 -바이트코드 로딩	
+						.
+						.
+						.
+
+OS로부터 메모리 할당량을 받으면 RAM이 적절하게 구역을 크게 3가지로 나눈다
+
+
+Method Area			JWM stack			Healp
+			
+
+  assignment operator(할당,배정,대입 연산자)
+     ↓	 
+s    =	i+j;
+	expression 결과값을 출력해야하는 표현식
+
+
+
+
+				* r-value 	와	l -vale
+		
+			int 	i;
+
+			x	 = 	i  	+ 	j
+		        l-value		         r-value
+			↓			↓
+		오직 변수만올수있다	          변수,리터럴, expression
+			
+			100 = i; 	     에러
+			i+j  = 200;    에러
+			
+
+				*변수 선언 
+
+
+			int  	i;
+			int 	x,y,z;
+			int 	100;
+			int  	x=100,y,z=200;
+
+				
+				
+				
+				
+				
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			 
+	
+	
