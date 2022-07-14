@@ -148,5 +148,300 @@ Sytem Maintenance (유지 보수)
 
 
 
+							*도구함의 도구를 쓰기위한 준비
 
 
+도구함 = 클래스
+
+도구(데이터를 다루는것) = 메서드
+
+
+Math.abs(값) 부동소수점 비교할때 썻었음 0.000001
+
+abs라는 도구는 별도의 데이터를 준비할 필요없이 바로 사용가능한 도구다. 이런도구는 도구함 이름으로 바로 사용할수 있다.
+
+(값)을 파라미터 or 아규먼트라 칭하고 그 도구를 실행하는데 필요한 값.
+	parameter  argumnet
+
+데이터를 준비할 필요없이 바로 사용가능한 도구를 보통 스태틱 매서드라 한다.
+
+사용법 Math.abs(값);
+	 도구함.도구
+	 calss. math
+
+Date.getYear();
+
+
+getYear 이 도구는 그냥 사용할 수 없다. Date 도구함을 이용해서 데이터를 준비한 후에 사용할 수  있다.
+
+
+데이터를 준비한 후에 사용가능한 도구를 보통 인스턴스 메서드
+
+
+사용법 
+
+1.도구 사용전 데이터를 준비한다.(설정)
+ Date	 	d	=		new Date(); new는 도구함의 도구를 쓸수있도록 설정하기
+		d는 설정된 데이터를 가르키는 변수	
+2.설정된 정보를 가지고 도구를 실행한다.
+
+	d.getYear()
+	↑
+	설정된 정보를 가리키는변수
+		   참조변수(reference)
+
+
+createdDate = System.currentTimeMillis();//1970.1.1.00시 
+Allocates a Date object and initializes it to represent the specified number of milliseconds since the standard base time known as "the epoch", namely January 1, 1970, 00:00:00 GMT.기준
+
+
+
+				*일반 변수와 배열
+
+
+일반변수는 변수하나당 크기가 저장되어있지만
+
+배열에서는 메모리 주소가 저장되고 주소가 저장될만큼 충분한 공간이있다.
+변수의 크기는 특정하지 않다.
+
+배열은 연속된 int 메모리 있고 그안에 순서대로 번호가 지정되는데 그 번호는 배열의 각 메모리를 가리키는 번호 = 인덱스(index)라고 한다.
+
+배열의 처음 가리키는 번호안에는 배열메모리의 시작 주소가 들어있다.
+
+유요한 인덱스가 아닐때 발생하는것을 ArrayindexOutofBoundeException 오류 발생
+
+
+
+메모리의 주소를 저장하는 변수를 레퍼런스(reference)라 한다.
+
+new명령을 통해 준비한 메모리를 배열 인스턴스 (instunce)라 한다
+
+
+
+
+					*배열 레퍼런스와 배열 인스턴스
+
+
+
+인스턴스에 소속된 변수는 기본값이 자동으로 설정된다
+정수는 0 부동소수점은 0.0 논리는 false 로 문자는 /u0000으로 결국 모든 값이 0으로 자동 설정된다.
+
+
+레퍼런스와 인스턴스 : Garbage 가비지
+
+int[] arr1 = new int[3];
+
+arr1 = new int[2];
+
+이렇게 했을경우 메모리의 주소를 잃어버려 사용할 수 없는 인스턴스를 가비지라 부른다.			
+Garbage collector 가 cpu가 한가하거나 메모리가 부족할때 Garbage를 제거한다. 
+**JVM을 종료하면  JVM이 사용했던 모든 메모리를 OS가 강제로 해제시킨다.
+
+
+				* Garbage와 레퍼런스 카운트(인스턴스의 주소를 갖고있는 레퍼런스 변수의 개수)
+						=포인터
+int[] arr1 = new int[3];
+
+int[] arr2 = new int[2];
+
+int[] arr3 = arr1 ;
+
+arr2 = arr3;
+
+레퍼런스 카운트가 0 인 인스턴스를 Garbage라 한다.
+
+					* Primitive type 변수와 레퍼런스(변수)
+
+	primitive(근원의 기초의,원시의) Date Type
+
+
+	byte b;
+	short s;
+	int 	i;
+	long  l;
+	char c;
+	float f;
+	double d;
+	boolean bool;
+=>  데이터안에 정수 값이 들어간다.
+
+
+	
+
+*	String s; 당분간은 문자열을 저장된다.
+	Date date;
+				Date 도구함의 설정정보를 담으 메모리의 ★주소가 들어간다.
+
+				
+					* final
+
+			int i  = 100;														
+			     i = 200;																
+			     ↑										
+			      변수는 기본적으로 언제든지 값을 변경할 수 있다.			
+	
+	원래의 특성을 변경한다. =modifier(변경자,한정자,제한자)
+  	↓
+	final int x = 10;
+	          x = 200; <= 오류뜸. final이 붙은 변수는 값을 한번만 저장할 수 있다.
+
+
+
+									* 코드를 유집수하기 쉽게 만드는 문법
+
+
+
+
+*메서드 ; 특정 작업을 수행하는 코드를 묶어 놓은것
+
+
+	       			파라미터 목록 -> 작업수행에 필요한 데이터를 받을 변수
+	     	                  ↓
+viod	     proccesBoardlist () {  . .. . } <- 메서드 몸체(body) 
+	              ↑				작업을 수행하는 코드가 들어있다.
+리턴타입  	   메서드명
+↑				>>>>>>>>메서드명 ↓
+
+작업 완료후 결과값의 리턴 여부		        메서드가 수행하는 작업을 잘드러내는 이름으로 작명하고
+void는 값을 리턴 안함						작업은 행위이기 때문에 동사구 형태로 만든다.
+그 밖에는 리턴하는 값의 타입						가끔 명사구나 전치사구 형태를 만들 경우도 있다.
+
+
+
+					* 메서드에 묶인 코드 실행하기 : 메서드 호출(call)
+
+							↓메서드 파라미터의 전달할 값(아규먼트 argumnet)
+				변수 = 메스드명 ( 값, 값,...);
+	  			↓		실행할 메서드
+		메서드가 값을 리턴할 경우
+		그 값을 받을 변수
+		(값을 받지 않아도 된다)
+
+
+					* 파라미터 와 아규먼트
+
+				
+		int plus (int a, int b)
+							메서드 정의 디파인 define 메서드
+		return a+b;
+
+		
+		int result = plus (100, 200);	<- 메서드 호출(call) 
+
+			파라미터에 넘겨주는 값 아규먼트( 100,200)
+			아규먼트 값을 넘겨받는 변수를 파라미터라한다. (a,b)
+	
+					* 메서드 호출  -> 반드시 리턴됨 
+
+	main thread
+			main  () {
+
+				m1();		
+	
+				m2();
+
+
+				m3();
+
+
+				}
+
+			*메서드와 변수의 공유
+
+* 로컬 변수 (local variables)
+메서드 블록 안에 선언된 변수
+	메서드 실행할때 생성		
+	메서드 완료할때 삭제
+	메서드 안에서만 사용가능
+
+
+
+static 변수 사용 스태틱 메서드 안에 있는 변수들을 밖으로빼 통합해 쓰는 변수
+
+모디피어 원래의 성질을 봐꿔 사용하는것.
+
+
+
+
+				*메소드 분류하기 => 클래스( class) 클래스 명은 명사,명사구,가끔 형용사 로 지을것
+
+
+class App
+
+main() {-}
+welcome
+displaymenu
+prompt menu
+dispalyLine
+
+				
+					*컴파일 옵션:  -sourcepath 옵션
+							   다른클래스 까지 컴파일 해주는 옵션
+
+javac  -d bin/main -encoding UTF-8 -sourcepath src/main/java src/main/java/com/bitcamp/board/App.java
+
+javac 컴파일러
+
+-encoding UTF-8 소스파일의 인코딩 순자집합  컴파일러에게 소스파일이 어떤 규칭에 따라 저장되었는지 알려주는 옵션
+
+-d bin/main 컴파일 결과로 생성되는  .class파일을 둘 폴더 지정
+
+-sourcepath src/main/java 소스파일에서 참조하는 클래스가 있는 파일의 경로를 알려준다.
+
+src/main/java/com/bitcamp/board/App.java 소스파일 경로
+
+	
+					
+				* 클래스 관계도
+
+
+App이란 클래스는 boardhandler 를 사용한다.	 App -> BoardHandler	
+
+
+App을 client 라 하고 BoardHandler 을 dependency 의존객체라한다.						
+				
+App을 client 라 하고 Prompt 를 dependency 의존객체라한다.						
+					
+dependency 를 client 라하고 Prompt 를 dependency 의존객체라한다.						
+상대적이다 
+
+쌍방참조가 되면 버그 찾기가 힘들다.
+
+단방향이 되어야한다.
+						
+class -> Responsibility= role 책임이있다	
+
+관계가 형성됨 
+
+
+
+			* Eclipse Integrated Development Environment (IDE)
+						통합 개발 환경
+
+IBM에서 만들었음 재단에서 기부받아서 무료로 배포 
+
+Eclipse + 플러그인 = 개발 환경 구축
+
+
+
+이클립스 IDE 설정
+eomcs-docs/devtool/eclipse_tomcat_webapp 참조
+
+네이버 d2 폰트 다운 ( 개발자폰트)
+
+whitespace
+
+엔터 탭 스페이스
+
+
+board-app / app <-프로젝트 폴더 <- Eclipse IDE가 임포트 못함
+
+ eclipse 설정파일 3개
+project <- 프로젝트 정보를 담는 파일
+classpath <- 소스 디렉토리 경로와 의존라이브러리 정보를 담은 파일
+settings/* <- Eclipse IDE에서 자바관련 도구의 설정정보를담은 폴더
+gradle eclipse <-설정파일 생성 ( 그전에 빌드 그레이들 들어가서 id '이클립스' 적어줘야함 )
+
+
+			
+		 
