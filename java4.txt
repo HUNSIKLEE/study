@@ -287,7 +287,7 @@ arr2 = arr3;
 
 
 
-									* 코드를 유집수하기 쉽게 만드는 문법
+									* 코드를 유지보수하기 쉽게 만드는 문법
 
 
 
@@ -445,3 +445,167 @@ gradle eclipse <-설정파일 생성 ( 그전에 빌드 그레이들 들어가�
 
 			
 		 
+eomcs-docs/devtool/ 
+
+
+
+											 Ivar jacobson
+									3 Amigo	 Gracly booch   
+											 James Rumbaugh
+	
+											↑ 
+											위의 대학교수들이 모여서 UNL을 만듦.
+											Rational 회사 창업하고 Rational Rose(UNL도구) 만듬 ===IBM이 인수
+											
+												
+		*UNL ( Unified Modeling Language) 국제표준
+
+
+ Unified  -> 통합된
+
+Modeling -> 생각하 바를 글과 그림으로 표현
+
+Language -> 문법
+
+
+Scanner 클래스 + System.in
+			 System.in(키보드와 연결되어있음)의 역활은
+			키보드에서 들어오는 입력값을 들어오는역활
+			키보드의 입력을 잃는 일
+Scanner 클래스
+System.in이 넘겨준 값을 원하는 형태로 잘라주는 일
+
+nextInt () 
+nextLine()
+
+		오브젝트	=	객채          (클래스,인스턴스,메서드,변수) 다 객채다 
+			하나의 일을하는것 . 역활단위로 분류시킨다 		
+
+
+
+
+Static Method				Math.abs (클래스다음바로 매서드)
+= class Method 
+
+	설정정보
+	    ↓
+	Instance Method
+
+		설정 정보를 가리키는 변수 설정 정보가 들어있는 메모리의 주소를 담는 변수 =레퍼런스(reference)
+		    ↓
+Scannner keyboadInput = new Scanner(System.in);
+	  			  ↑
+				Scanner 도구함에 들어있고 도구를 사용하기 전에 필요 정보를 설정
+
+
+Scanner.nextInt() 오류남 그 이유는 어느 데이터(파일,키보드,랜선)를 읽어야 할지 모름
+
+keyboardInput.nextInt()
+↑
+nextInput()를 실행하는데 필요한 정보가 있는곳
+
+
+
+SimpleDateFormat 클래스 사용법
+
+-> format(); 인스턴스 메서드
+
+new Date(createdDate) 밀리초를 가지고 날자 정보를 설정.
+
+
+
+ main () 메서드에 들어있는 코드를 기능별로 분리하여 메서드를 정의하고 이 분리된 메서드를 호출 한다.
+
+
+클래스는 책임을 가진다 다른말로 역할을 가진다.
+
+
+		l==	Low Coupling : 관련된 클래스를 줄여라!! 
+		l						->다른클래스의 변경에 따른 영향 최소화
+		l
+		l==	High Cohesion : 한 클래스가 가능한 한개의 역할을 수행하도록 응집력,집중도를 높여라
+General
+Rosponsible
+Assignment
+Software
+Patterns
+GRASP 패턴
+객체지향 프로그래밍의 근본적인 가이드
+
+
+				* 클래스 사용법
+
+Board <- 게시글 데이터를 저장할 새 메모리 설계도 - 사용자가 정의하는 데이터타입
+	
+									   new 명령으로 준비하는 변수
+									       ↓
+**********primitive type 의 변수를 제외한 나머지 모든 변수는 인스턴스의 주소를 담는 레퍼런스변수이다. 
+	 
+맥 컨트롤 스페이스
+시스템환경설정 keyboard선택 단축키탭선택 단축키에서 왼쪽에 입력소스 단축키 체크해재
+
+
+
+
+
+
+			primitive type 변수의 배열과 레퍼런스의 배열
+
+
+int[] arr = new int[3] 
+ int 메모리 3개 만들라
+
+arr[0] = 100;
+arr[1] = 200;
+arr[2] = 300;
+
+
+
+Board[] arr = new Board[100];
+
+
+for (int i = 0; i < arr.length; i++) {
+
+arr[i] = new Board();
+
+								
+	Board[] boards = new Board[SIZE];
+
+
+
+							
+					
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+				*부팅
+부팅이란 전원 키면 메인보드안에 롬안에 펌웨워란 소프트웨어를 실행시키고
+펌웨워는 부트섹터에 있는 OS Loader를 실행 시키고 
+OS Loader는 OS kernel을 실행 시킨다 OS 커널은  하드웨어를 관리한다
+CPU,RAM,HDD,mouser,keyboard 등등 
+최소한의 상태를 로딩시키는것.
+
+			*HDD 의 데이터 저장
+
+수직 기록 방식 
+수평 기록 방식 
+
+
+
+
+
+
+
+
