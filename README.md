@@ -1,22 +1,4 @@
 # study
-메모장
-# test
+ 2022_08_03
 
-good morning <br>
-
->안녕하세요?
->>하하하하
->>>허허허허허
-
-+하이
-
-++하하하
- 
-##요요 
-
-plz click [here](https://github.com/HUNSIKLEE)
-
-
-
-|홍길동| 유관순| 임꺽정<br>
-|정렬 |     |
+interface 너무너무 어려워요!!!!!!
