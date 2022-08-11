@@ -1,0 +1,141 @@
+host = cisco.soldesk.com
+
+user = cisco.soldesk.com|ccna
+
+pw = dkagh1234
+
+
+cafe.naver.com/itwillcisco
+=====================================
+
+-PC IP		 - 172.16.1.5
+-PC Mac		 - 00-E0-4C-14-05-30
+-G/W IP 		 - 172.16.0.1
+-G/W Mac		 - 00-1B-21-8C-14-9C
+-Web Server	 - 220.95.233.171
+-DNS Server	 - 168.126.63.1
+=====================================
+
+$PC -> DNS server
+               Layer 2		       Layer 3 	   Layer 4		DNS
+
+-SA  : 00-E0-4C-14-05-30	-SA : 172.16.1.5		-SA : UDP 1413	www.naver.com
+-DA : 00-1B-21-8C-14-9C	-DA : 168.126.63.1	-DA : UDP 53	
+
+
+$PC <- DNS server
+               Layer 2		       Layer 3 	   Layer 4		DNS
+
+-SA : 00-1B-21-8C-14-9C	-SA : 168.126.63.1	-SA : UDP 53	www.naver.com
+-DA : 00-E0-4C-14-05-30	-DA : 172.16.1.5		-DA : UDP 1413	220.95.233.171
+
+
+=====================================
+
+$PC -> Web server
+               Layer 2		       Layer 3 	   	    Layer 4
+
+-SA  : 00-E0-4C-14-05-30	-SA : 172.16.1.5		-SA : TCP 3189	[Seq = 0]
+-DA : 00-1B-21-8C-14-9C	-DA : 220.95.233.171	-DA : TCP 80	[Syn]
+
+
+$PC <- Web server
+               Layer 2		       Layer 3 	     	  Layer 4
+
+-SA : 00-1B-21-8C-14-9C	-SA : 220.95.233.171	-SA : TCP 80	[Seq = 0 , Ack = 1]
+-DA : 00-E0-4C-14-05-30	-DA : 172.16.1.5		-DA : TCP 3189	[Syn , Ack]
+ 
+
+$PC -> Web server
+               Layer 2		       Layer 3 	     	  Layer 4
+
+-SA  : 00-E0-4C-14-05-30	-SA : 172.16.1.5		-SA : TCP 3189	[Seq = 1 , Ack = 1]
+-DA : 00-1B-21-8C-14-9C	-DA : 220.95.233.171	-DA : TCP 80	[Ack]
+
+=====================================
+
+
+$ IP
+
+-IPv4 : 10진수 32 bit	: 2^32 = 4294967296
+-IPv6 : 16진수 128 bit 	: 2^128
+
+
+
+
+000 000 00
+
+           -- ECN
+
+-IP Precedence	: 앞의 3bit / 트래픽 분류 / 차등화 서비스
+-DSCP		: IP Precedence 의 3bit + 3bit / 트래픽 분류 / 차등화 서비스
+
+
+-111 : 7
+-110 : 6
+------------예약된 우선순위 값
+-101 : 5
+-100 : 4
+-011 : 3
+-010 : 2
+-001 : 1
+------------
+-000 : 0 = Default 우선순위 값
+
+=====================================
+
+-MTU Size : 1500Byte ( 한번에 전송할수있는 최대 용량 )
+
+-TTL : Hop 단위( 256 )
+
+
+-Protocol = 8 bit ( 0~255 )
+.1	=ICMP
+.6	=TCP
+.17	=UDP
+.88	=EIGRP
+.89	=OSPF
+
+
+=========================================
+
+-ICMP : IP 연결상태 확인 ( ping )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

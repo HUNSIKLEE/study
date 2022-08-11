@@ -1,0 +1,55 @@
+                    # CDP (Cisco Discovery Protocol)
+
+-자신에게 직접 연결된 장비의 기본적인 사항을 확인할수 있다.
+
+-CDP를 사용하기위한 조건
+ .Cisco장비간 연결시에만 사용할수있다.
+ .Layer 2가 활성화 상태일경우 확인이 가능하다.
+ .직접 연결된 장비의 정보만 확인이 가능하다.
+
+
+-확인 가능한 정보
+ .CDP Message는 60초 단위로 전파하며 180초간 유지된다.  [show cdp]
+ .Version : IOS Version
+ .Divice ID : 연결된 장비의 Hostname
+ .Local Interface : 자신의 Interface
+ .Port ID : 연결된 장비의 Interface
+ .Platform : 연결된장비의 Platform
+ .Capability : Router/Switch
+ .Next-hop IP : 연결된 Interface의 IP
+
+RTX# show cdp
+RTX# show cdp neighbor  [장비간 연결된 Interface를 확인]
+RTX# show cdp neighbor detail
+
+RTX(config)# no cdp run  [CDP기능 해제]
+
+RTX(config)# cdp timer  [CDP Message 교환 주기 변경]
+
+RTX(config)# cdp holdtime  [holdtime 변경]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

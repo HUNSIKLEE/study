@@ -1,0 +1,788 @@
+
+
+                                     [ EIGRP_Pre-config사용 ]
+
+
+
+  172.16.10.0/24  			                      172.16.30.0/24
+                        13.13.12.0/24               13.13.23.0/24
+              R1---------------------R2---------------------R3
+              |                                 |                                 |
+         13.13.10.0/24             13.13.20.0/24                13.13.30.0/24
+
+-EIGRP를 사용하여 모든 네트워크 구간에 통신이 실시되도록 설정을 실시하시오
+ .AS = 100
+ .자동요약 기능은 사용하지 않는다.
+
+   # R1
+R1(config)# router eigrp 100
+R1(config-router)# no auto-summary
+R1(config-router)# network 13.0.0.0
+R1(config-router)# network 172.16.0.0
+*Mar  1 00:06:56.927: %DUAL-5-NBRCHANGE: IP-EIGRP(0) 100: Neighbor 13.13.12.2 (Serial1/0) is up: 
+new adjacency
+
+
+   # R2
+R2(config)# router eigrp 100
+R2(config-router)# no auto-summary
+R2(config-router)# network 13.0.0.0
+*Mar  1 00:07:02.255: %DUAL-5-NBRCHANGE: IP-EIGRP(0) 100: Neighbor 13.13.12.1 (Serial1/1) is up: 
+new adjacency
+
+*Mar  1 00:07:03.675: %DUAL-5-NBRCHANGE: IP-EIGRP(0) 100: Neighbor 13.13.23.3 (Serial1/0) is up: 
+new adjacency
+
+
+   # R3
+R3(config)# router eigrp 100
+R3(config-router)# no auto-summary
+R3(config-router)# network 13.0.0.0
+R3(config-router)# network 172.16.0.0
+*Mar  1 00:07:00.187: %DUAL-5-NBRCHANGE: IP-EIGRP(0) 100: Neighbor 13.13.23.2 (Serial1/1) is up: 
+new adjacency
+
+
+            정보확인
+
+RX# show ip route
+RX# show ip route eigrp
+RX# show ip protocol
+RX# show ip eigrp neighbor
+RX# show ip eigrp topology
+RX# debug eigrp packet [hello | update | query | reply | ack]
+
+R1# ping 13.13.20.254 source 13.13.10.254
+R1# ping 13.13.30.254 source 13.13.10.254
+
+R2# ping 13.13.10.254 source 13.13.20.254
+R2# ping 13.13.30.254 source 13.13.20.254
+
+R3# ping 13.13.10.254 source 13.13.30.254
+R3# ping 13.13.20.254 source 13.13.30.254
+
+
+
+
+
+
+EX1) 아래의 조건에 맞게 설정을 실시하시오
+ .R1에 Loopback 100을 생성한후 172.16.100.0/24를 설정을 실시하시오
+ .172.16.100.0/24 네트워크는 R2 , R3에게 업데이트가 실시되어서는 안된다.
+
+   # R1
+interface loopback 100
+ ip address 172.16.100.1 255.255.255.0
+!
+
+
+
+-설정을 실시한후 R2 , R3에서 Routing table을 확인하게되면 172.16.100.0/24 네트워크가
+  EIGRP로 확인되어진다.
+
+-R1에서 'network 172.16.0.0' command를 사용하여 업데이트를 실시했기때문에
+  172.16.100.0/24도 172.16.0.0범위에 포함되기때문에 업데이트가 실시된다.
+
+-이문제를 해결하기위해서는 'network' command 사용시 Wildcardmask를 사용하여 
+ 네트워크의 범위를 최소화 할수 있다.
+
+              ## Wildcardmask를 사용한 EIGRP설정
+
+   # R1
+router eigrp 100
+ no auto-summary
+ network 172.16.1.0  0.0.0.255
+ network 13.13.10.0  0.0.0.255
+ network 13.13.12.0  0.0.0.255
+!
+
+   # R2
+router eigrp 100
+ no auto-summary
+ network 13.13.20.0  0.0.0.255
+ network 13.13.12.0  0.0.0.255
+ network 13.13.23.0  0.0.0.255
+!
+
+   # R3
+router eigrp 100
+ no auto-summary
+ network 172.16.3.0  0.0.0.255
+ network 13.13.30.0  0.0.0.255
+ network 13.13.23.0  0.0.0.255
+!
+
+-설정을 실시한후 R2 , R3에서 Routing table을 확인하게되면 172.16.100.0/24 네트워크가
+  EIGRP로 확인되지 않는다.
+
+   ------------ OR ------------
+
+   # R1
+router eigrp 100
+ no auto-summary
+ network 172.16.1.1  0.0.0.0
+ network 13.13.10.254  0.0.0.0
+ network 13.13.12.1  0.0.0.0
+!
+
+   # R2
+router eigrp 100
+ no auto-summary
+ network 13.13.20.254  0.0.0.0
+ network 13.13.12.2  0.0.0.0
+ network 13.13.23.2  0.0.0.0
+!
+
+   # R3
+router eigrp 100
+ no auto-summary
+ network 172.16.3.3  0.0.0.0
+ network 13.13.30.254  0.0.0.0
+ network 13.13.23.3  0.0.0.0
+!
+
+-Host지정 방식을 사용할경우에는 Interface할당된 주소를 Wildcardmask로 지정해야한다.
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------
+
+                                   ## Passive-interface
+
+-특정 Interface로의 Multicast/Broadcast를 차단하는 기능
+
+EX1) R1 , R2 , R3에서 EIGRP PDU가 필요한 Interface로만 EIGRP 정보를 전송하도록 설정을 실시하시오
+
+                  [설정방법]
+
+   # RX
+router eigrp 100
+ passive-interface [Fast , Serial , Loopback] [Portnumber]
+!
+
+   # R1 , R3
+router eigrp 100
+ passive-interface loopback 172
+ passive-interface fastethernet 0/0
+!
+
+   # R2
+router eigrp 100
+ passive-interface fastethernet 0/0
+!
+
+
+             정보확인
+
+R1# debug eigrp packet hello     [Passive-interface  설정 전]
+EIGRP Packets debugging is on
+    (HELLO)
+*Mar  1 00:17:47.987: EIGRP: Sending HELLO on FastEthernet0/0
+*Mar  1 00:17:48.959: EIGRP: Sending HELLO on Loopback172
+*Mar  1 00:17:49.367: EIGRP: Sending HELLO on Serial1/0
+
+
+R1# debug eigrp packet hello     [Passive-interface  설정 후]
+EIGRP Packets debugging is on
+    (HELLO) 
+*Mar  1 00:28:45.175: EIGRP: Sending HELLO on Serial1/0
+*Mar  1 00:28:49.843: EIGRP: Sending HELLO on Serial1/0
+
+
+
+
+-----------------------------------------------------------------------------------------
+
+                                   ## 'Debug' command를 사용한 정보확인 실시
+
+EX1) 각 Router에서 'Debug' command를 사용하여 Hello , Update , Query , Reply , Ack를 확인하시오
+
+               ## Hello
+
+R1# debug eigrp packet hello
+EIGRP Packets debugging is on
+    (HELLO)
+*Mar  1 00:39:17.395: EIGRP: Sending HELLO on Serial1/0
+*Mar  1 00:39:21.843: EIGRP: Sending HELLO on Serial1/0
+
+*Mar  1 00:39:20.523: EIGRP: Received HELLO on Serial1/0 nbr 13.13.12.2
+*Mar  1 00:39:25.147: EIGRP: Received HELLO on Serial1/0 nbr 13.13.12.2
+
+
+R1# debug ip packet detail
+IP packet debugging is on (detailed)
+*Mar  1 00:40:03.399: IP: s=13.13.12.2 (Serial1/0), d=224.0.0.10, len 60, rcvd 2, proto=88
+
+*Mar  1 00:40:03.439: IP: s=13.13.12.1 (local), d=224.0.0.10 (Serial1/0), len 60, 
+sending broad/multicast, proto=88
+
+
+
+
+
+               ## Update , ACK
+
+R1# debug eigrp packet update ack
+EIGRP Packets debugging is on
+    (UPDATE, ACK)
+
+R1# conf t
+!
+R1(config)# router eigrp 100
+R1(config-router)# network 172.16.100.1  0.0.0.0
+
+*Mar  1 00:41:07.383: EIGRP: Sending UPDATE on Serial1/0 nbr 13.13.12.2	: R1 ---> R2
+*Mar  1 00:41:07.439: EIGRP: Received ACK on Serial1/0 nbr 13.13.12.2	: R1 <--- R2
+
+
+
+               ## Query , Reply , ACK
+
+
+       172.16.100.0/24 (shutdown)
+                    13.13.12.1        13.13.12.2    13.13.23.2        13.13.23.3
+                 R1------------------------R2------------------------R3
+                        -----1.Query----->
+                        <----2. Ack-------
+                                                            -----3.Query----->
+                                                            <----4. Ack-------
+                                                            <----5. Reply-----
+                                                            -----6.Ack------->
+                        <----7. Reply-----
+                        -----8.Ack------->
+
+R2# debug eigrp packet query reply ack
+EIGRP Packets debugging is on
+    (QUERY, REPLY, ACK)
+
+R1# configure terminal
+!
+R1(config)# interface loopback 100
+R1(config-if)# shutdown
+
+   ----- R2에서 Debug정보 확인 실시 ----- 
+*Mar  1 00:26:22.835: EIGRP: Received QUERY on Serial1/1 nbr 13.13.12.1	: R1 ---> R2 (1)
+*Mar  1 00:26:22.851: EIGRP: Sending ACK on Serial1/1 nbr 13.13.12.1		: R1 <--- R2 (2)
+*Mar  1 00:26:22.887: EIGRP: Sending QUERY on Serial1/0 nbr 13.13.23.3	: R2 ---> R3 (3)
+*Mar  1 00:26:22.959: EIGRP: Received ACK on Serial1/0 nbr 13.13.23.3	: R2 <--- R3 (4)
+*Mar  1 00:26:22.967: EIGRP: Received REPLY on Serial1/0 nbr 13.13.23.3	: R2 <--- R3 (5)
+*Mar  1 00:26:22.987: EIGRP: Sending ACK on Serial1/0 nbr 13.13.23.3		: R2 ---> R3 (6)
+*Mar  1 00:26:23.023: EIGRP: Sending REPLY on Serial1/1 nbr 13.13.12.1	: R1 <--- R2 (7)
+*Mar  1 00:26:23.071: EIGRP: Received ACK on Serial1/1 nbr 13.13.12.1	: R1 ---> R2 (8)
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------
+
+                                   ## EIGRP Hello/Hold-interval 변경
+
+-Hello/Hold Interval
+ .Hello-Interval : Hello Packet을 교환하는 주기
+ .Hold-Interval : 정해진 Hold Interval안에 Hello를 수신하지 못하게되면 EIGRP인접성을 단절한다.
+
+                                                                                               Hello-Interval       Hold-Interval
+-LAN : Ethernet , FastEthernet                                         :		5초                   15초
+-WAN : PPP , HDLC , F/R P2P 대역폭이 T1이상인 구간           		5초                   15초
+-WAN : F/R Multipoint , NBMA구간 , 대역폭이 T1 이하인 구간 :		60초                 180초
+
+                     [설정 방법]
+RTX(config)# interface serial , Fastethernet [Port Number]
+RTX(config-if)# ip hello-interval eigrp [AS Number] [Sec]
+RTX(config-if)# ip hold-time eigrp [AS Number] [Sec]
+
+
+EX1) R2와  R3구간 사이에서 Hello/Hold interval을 10/30초로 변경을 실시하려고 한다.
+
+                        13.13.12.0/24               13.13.23.0/24
+                 S1/0                 S1/1    S1/0                 S1/1
+              R1---------------------R2---------------------R3
+
+   # R2
+interface serial 1/0
+ ip hello-interval eigrp 100 10
+ ip hold-time eigrp 100 30
+!
+
+   # R3
+interface serial 1/1
+ ip hello-interval eigrp 100 10
+ ip hold-time eigrp 100 30
+!
+
+
+             정보확인
+
+R1# debug eigrp packet hello
+EIGRP Packets debugging is on
+    (HELLO)
+*Mar  1 00:33:28.443: EIGRP: Sending HELLO on Serial1/0
+*Mar  1 00:33:33.035: EIGRP: Sending HELLO on Serial1/0
+
+
+R3# debug eigrp packet hello
+EIGRP Packets debugging is on
+    (HELLO)
+*Mar  1 00:32:43.807: EIGRP: Sending HELLO on Serial1/1
+*Mar  1 00:32:53.715: EIGRP: Sending HELLO on Serial1/1
+
+
+
+-----------------------------------------------------------------------------------------
+
+                               ## EIGRP Summary
+
+-EIGRP Summary는 다수의 네트워크 정보를 하나의 네트워크로 요약하여 업데이트를 실시하므로써
+  Router의 메모리 절약및 Delay를 최소화 할수있으며 Flapping현상으로인한 문제를 해결할수 있다.
+
+-EIGRP Summary 설정은 Outbound Interface에서 실시
+
+
+
+EX1-1) R1에 Loopback interface 128을 생성한후 128.28.8.0/24 ~ 128.28.15.0/24를 설정한후
+          EIGRP를 사용하여 업데이트를 실시해야 한다.
+          [단 'network' command는 한줄만 사용하여 업데이트를 실시하시오]
+
+   # R1
+router eigrp 100
+ network 128.28.8.0  0.0.7.255
+!
+
+-128.28.00001 000
+-128.28.00001 001
+-128.28.00001 010
+-128.28.00001 011
+-128.28.00001 100
+-128.28.00001 101
+-128.28.00001 110
+-128.28.00001 111
+-----------------
+-128.28.00000 111 = 128.28.8.0  0.0.7.255
+
+
+
+
+EX1-2) R1은 자신의 Local 네트워크인 128.28.8.0/24 ~ 128.28.15.0/24
+          하나의 네트워크로 업데이트를 실시하려고한다.
+
+-128.28.00001 000
+-128.28.00001 001
+-128.28.00001 010
+-128.28.00001 011
+-128.28.00001 100
+-128.28.00001 101
+-128.28.00001 110
+-128.28.00001 111
+-----------------
+-128.28.11111 000  = 128.28.8.0  255.255.248.0
+
+
+   # R1
+interface serial 1/0
+ ip summary-address eigrp 100  128.28.8.0  255.255.248.0
+!
+
+
+                  정보확인
+
+R3# show ip route eigrp     [Summary 설정 전]
+     172.16.0.0/24 is subnetted, 2 subnets
+D       172.16.1.0 [90/2809856] via 13.13.23.2, 00:03:11, Serial1/1
+     128.28.0.0/24 is subnetted, 8 subnets
+D       128.28.12.0 [90/2809856] via 13.13.23.2, 00:00:02, Serial1/1
+D       128.28.13.0 [90/2809856] via 13.13.23.2, 00:00:02, Serial1/1
+D       128.28.14.0 [90/2809856] via 13.13.23.2, 00:00:02, Serial1/1
+D       128.28.15.0 [90/2809856] via 13.13.23.2, 00:00:02, Serial1/1
+D       128.28.8.0 [90/2809856] via 13.13.23.2, 00:00:02, Serial1/1
+D       128.28.9.0 [90/2809856] via 13.13.23.2, 00:00:02, Serial1/1
+D       128.28.10.0 [90/2809856] via 13.13.23.2, 00:00:02, Serial1/1
+D       128.28.11.0 [90/2809856] via 13.13.23.2, 00:00:02, Serial1/1
+     13.0.0.0/24 is subnetted, 5 subnets
+D       13.13.10.0 [90/2707456] via 13.13.23.2, 00:03:11, Serial1/1
+D       13.13.12.0 [90/2681856] via 13.13.23.2, 00:24:53, Serial1/1
+D       13.13.20.0 [90/2195456] via 13.13.23.2, 00:24:53, Serial1/1
+
+
+R3# show ip route eigrp     [Summary 설정 후]
+     172.16.0.0/24 is subnetted, 2 subnets
+D       172.16.1.0 [90/2809856] via 13.13.23.2, 00:05:55, Serial1/1
+     128.28.0.0/21 is subnetted, 1 subnets
+D       128.28.8.0 [90/2809856] via 13.13.23.2, 00:00:01, Serial1/1
+     13.0.0.0/24 is subnetted, 5 subnets
+D       13.13.10.0 [90/2707456] via 13.13.23.2, 00:05:55, Serial1/1
+D       13.13.12.0 [90/2681856] via 13.13.23.2, 00:27:37, Serial1/1
+D       13.13.20.0 [90/2195456] via 13.13.23.2, 00:27:37, Serial1/1
+
+
+
+R3# show ip route summary     [Summary 설정 전]
+Route Source	Networks	 Subnets	 Overhead	   Memory (bytes)
+connected       	0       	 3      	 216      	   408
+static          	0         	 0      	 0       	   0
+eigrp 100       	0       	 12     	 864  	   1632
+internal        	3                                 	   3468
+Total           	3        	 15     	 1080    	   5508
+
+
+
+R3# show ip route summary     [Summary 설정 후]
+Route Source	Networks	 Subnets	 Overhead	   Memory (bytes)
+connected       	0      	 3        	 216      	   408
+static          	0         	 0     	 0      	   0
+eigrp 100       	0        	 5   	 360     	   680
+internal        	3                              	   3468
+Total           	3         	 8    	 576     	   4556
+
+
+
+-요약을 실시한 R1에서 Routing table을 확인하게되면 자신이 요약한
+  128.28.8.0/21 네트워크 정보를 자신이 EIGRP로 수신을 실시하며 Null0에 보관을 실시한다.
+  
+-EIGRP Summary실시후 Null0가 생성되는 이유는 Loop방지를 위해서이다 
+  [자신이 요약한 범위에 대해서 상세 주소가 존재하지 않게되면 요약을 실시한 Router가 Drop을 실시]
+
+
+
+
+
+
+
+
+EX2-1) R3에 Loopback interface 130을 생성한후 130.30.0.0/24 ~ 130.30.7.0/24를 설정한후
+          EIGRP를 사용하여 업데이트를 실시해야 한다.
+          [단 'network' command는 한줄만 사용하여 업데이트를 실시하시오]
+
+   # R3
+router eigrp 100
+ network 130.30.0.0  0.0.7.255
+!
+
+-130.30.00000 000
+-130.30.00000 001
+-130.30.00000 010
+-130.30.00000 011
+-130.30.00000 100
+-130.30.00000 101
+-130.30.00000 110
+-130.30.00000 111
+-----------------
+- 0 . 0. 00000 111 = 130.30.0.0  0.0.7.255
+
+
+
+EX2-2) R3은 자신의 Local 네트워크인 130.30.0.0/24 ~ 130.30.7.0/24
+          하나의 네트워크로 업데이트를 실시하려고한다.
+
+
+   # R3
+interface serial 1/1
+ ip summary-address eigrp 100 130.30.0.0  255.255.248.0
+!
+
+-130.30.00000 000
+-130.30.00000 001
+-130.30.00000 010
+-130.30.00000 011
+-130.30.00000 100
+-130.30.00000 101
+-130.30.00000 110
+-130.30.00000 111
+-----------------
+-255.255.11111 000 = 130.30.0.0  255.255.248.0
+
+
+
+
+-----------------------------------------------------------------------------------------
+
+                                   ## EIGRP Authentication
+
+-지정된 장비와 업데이트를 실시하기위해서 인증기능을 사용할수있다.
+-업데이트 정보의 위/변조 방지
+
+-'Key chain' command를 설정한후 Interface에 적용 실시
+
+-EIGRP는 MD5인증기능만을 지원한다.
+
+                [설정 방법]
+RTX(config)# key chain [WORD1]
+RTX(config-keychain)# key <0-2147483647>
+RTX(config-keychain-key)# key-string [WROD2]
+!
+RTX(config)# interface Serial , Fa [Port Number]
+RTX(config-if)# ip authentication mode eigrp [AS Number] md5
+RTX(config-if)# ip authentication key-chain eigrp [AS Number] [WORD1]
+
+
+EX1) R1와 R2구간 사이에서 보안향상을 위해서 인증기능을 사용한 통신을 실시하려고 한다.
+       [Key = 20110117 , Key-string = CCNA1234]  
+
+                 S1/0                                 S1/1
+             R1--------------------------------R2
+
+   # R1
+key chain EIGRP_AUTH
+ key 20110117
+  key-string CCNA1234
+!
+interface serial 1/0
+ ip authentication mode eigrp 100 md5
+ ip authentication key-chain eigrp 100 EIGRP_AUTH
+!
+
+   # R2
+key chain EIGRP_AUTH
+ key 20110117
+  key-string CCNA1234
+!
+interface serial 1/1
+ ip authentication mode eigrp 100 md5
+ ip authentication key-chain eigrp 100 EIGRP_AUTH
+!
+
+                  정보확인
+
+R1# debug eigrp packet hello
+EIGRP Packets debugging is on
+    (HELLO)
+*Mar  1 00:02:14.283: EIGRP: received packet with MD5 authentication, key id = 20110117
+*Mar  1 00:02:14.287: EIGRP: Received HELLO on Serial1/0 nbr 13.13.12.2
+
+
+
+R1# show ip eigrp interface detail serial 1/0
+
+
+R1# show key chain EIGRP_AUTH
+
+
+              ## Dynagen  (Dynamips와 Wireshark 연동)
+
+=> capture R1 s1/0 EIGRP.cap HDLC	: Layer 2 Protocol이 HDLC인 경우
+=> capture R1 s1/0 EIGRP.cap PPP	: Layer 2 Protocol이 PPP인 경우
+=> capture R1 s1/0 EIGRP.cap FR	: Layer 2 Protocol이 Frame-relay인 경우
+=> capture R1 f0/0 EIGRP.cap 	: Layer 2 Protocol이 Ethernet인 경우
+
+-실습 / tmp / EIGRP.cap
+
+
+
+--------------------------------------------------------------------------------------------
+
+                                   ## EIGRP Unicast통신
+
+-EIGRP는 출발지 주소는 출구 Interface를 사용하며
+  목적지 주소는 Unicast , Multicast(224.0.0.10)를 병행하여 사용한다.
+
+-하지만 신뢰적인 통신을 실시하기위해서 Unicast로의 전환이 가능하다.
+
+
+EX1) R1와 R2구간 사이에서 신뢰적인 통신을 위해서 Unicast통신을 실시해야한다.
+
+                S1/0                                S1/1
+             R1--------------------------------R2
+                13.13.12.1                   13.13.12.2
+
+            [설정방법]
+
+   # R1
+router eigrp 100
+ neighbor 13.13.12.2 serial 1/0
+!
+
+   # R2
+router eigrp 100
+ neighbor 13.13.12.1 serial 1/1
+!
+
+             정보확인
+
+R1# debug ip packet detail    [Unicast 설정 전]
+IP packet debugging is on (detailed)
+
+*Mar  1 00:06:49.651: IP: s=13.13.12.1 (local), d=224.0.0.10 (Serial1/0), len 100, 
+sending broad/multicast, proto=88
+
+
+R1# debug ip packet detail    [Unicast 설정 후]
+IP packet debugging is on (detailed)
+
+*Mar  1 00:07:52.115: IP: s=13.13.12.1 (local), d=13.13.12.2 (Serial1/0), len 100, sending, proto=88
+
+
+               ## Dynagen
+
+=> capture R1 s1/0 EIGRP_R1.cap HDLC
+
+=> capture R3 s1/1 EIGRP_R3.cap HDLC
+
+
+
+
+-----------------------------------------------------------------------------------------
+
+                                        ## Load-Balancing
+
+-Router는 하나의 목적지에 대해서 Routing table에 최적경로 하나만 지원하는 장비이다.
+-로드분산 : 하나의 목적지에 대해서 복수개의 경로를 지원하는 기능
+-EIGRP는 균등로드분산/비균등 로드분산 기능을 지원한다. [Default 4개]
+
+
+
+       [로드분산 갯수 조정]
+RTX(config)# router eigrp x
+RTX(config-router)# maximum-paths <1-16>
+ : IOSv12.2 = 1~6개 , IOSv12.4 = 1~16개이며 Default값은 4개이다.
+
+-균등 로드분산 : 최적경로와 동일한 metric을 가진 경로에 대해서 복수개의 경로를 지원하는 기능
+-비균등 로드분산 : 최적경로와 동일하지 않은 Metric을 가진 경로에 대해서도 복수개의 경로를 지원하는 기능
+
+-로드분산을 실습하기위해서는 하나의 목적지에 대해서 복수개의 경로가 필요하다.
+  [R1와 R3의 Serial구간 연결을 실시]
+
+
+                          # 균등 로드분산
+
+   # R1 [DCE]
+interface serial 1/1
+ no shutdown
+ encapsulation hdlc
+ bandwidth 1544
+ clock rate 1612800
+ ip address 13.13.13.1  255.255.255.0
+ ip summary-address eigrp 100 128.28.8.0  255.255.248.0
+!
+router eigrp 100
+ network 13.13.13.1  0.0.0.0
+!
+
+
+
+   # R3 [DCE]
+interface serial 1/0
+ no shutdown
+ encapsulation hdlc
+ bandwidth 1544
+ ip address 13.13.13.3  255.255.255.0
+!
+router eigrp 100
+ network 13.13.13.3  0.0.0.0
+!
+
+
+               정보확인
+
+R1# show ip route eigrp 
+     13.0.0.0/24 is subnetted, 6 subnets
+D       13.13.20.0 [90/2172416] via 13.13.12.2, 00:05:27, Serial1/0
+D       13.13.23.0 [90/2681856] via 13.13.13.3, 00:05:27, Serial1/1 <-- 균등로드분산 [Metric값이 동일]
+                       [90/2681856] via 13.13.12.2, 00:05:27, Serial1/0 <-- 균등로드분산 [Metric값이 동일]
+D       13.13.30.0 [90/2172416] via 13.13.13.3, 00:05:27, Serial1/1
+
+R2# show ip route eigrp 
+     13.0.0.0/24 is subnetted, 6 subnets
+D       13.13.10.0 [90/2172416] via 13.13.12.1, 00:05:49, Serial1/1
+D       13.13.13.0 [90/2681856] via 13.13.23.3, 00:05:49, Serial1/0 <-- 균등로드분산 [Metric값이 동일]
+                       [90/2681856] via 13.13.12.1, 00:05:49, Serial1/1 <-- 균등로드분산 [Metric값이 동일]
+D       13.13.30.0 [90/2172416] via 13.13.23.3, 00:05:49, Serial1/0
+
+R3# show ip route eigrp 
+D       13.13.10.0 [90/2172416] via 13.13.13.1, 00:06:01, Serial1/0
+D       13.13.12.0 [90/2681856] via 13.13.23.2, 00:06:01, Serial1/1 <-- 균등로드분산 [Metric값이 동일]
+                       [90/2681856] via 13.13.13.1, 00:06:01, Serial1/0 <-- 균등로드분산 [Metric값이 동일]
+D       13.13.20.0 [90/2172416] via 13.13.23.2, 00:06:01, Serial1/1
+
+
+
+
+
+                          # 비균등 로드분산
+
+-비균등 로드분산 : 최적경로와 동일하지 않은 Metric을 가진 경로에 대해서도 복수개의 경로를 지원하는 기능
+
+-비균등 로드분산을 실시하기위해서는 하나의 목적지에 대해서 Metric이 동일하지 않아야하므로
+  Metric조건을 변경 실시  [Bandwidth변경]
+
+   # R1
+interface serial 1/0
+ bandwidth 256
+!
+interface serial 1/1
+ bandwidth 256
+!
+
+   # R2
+interface serial 1/0
+ bandwidth 64
+!
+interface serial 1/1
+ bandwidth 256
+!
+
+   # R3
+interface serial 1/0
+ bandwidth 256
+!
+interface serial 1/1
+ bandwidth 64
+!
+
+
+-R1 , R2 , R3에서 Routing table을 확인하게되면
+  R1은 균등로드분산이 유지되며 R2 , R3은  균등 로드분산이 실시되지 않는다.
+  [R2 , R3은 Metric조건이 변경되었기때문에 로드분산 해제]
+
+
+-비균등 로드분산을 실시하기우해서 Topology table참조
+
+R2#show ip eigrp topology 
+IP-EIGRP Topology Table for AS(100)/ID(13.13.23.2)
+Codes: P - Passive, A - Active, U - Update, Q - Query, R - Reply,
+       r - reply Status, s - sia Status 
+
+---------[중간 생략]---------
+P 13.13.13.0/24, 1 successors, FD is 11023872
+        via 13.13.12.1 (11023872/10511872), Serial1/1  <-- FD(Metric) 값 확인
+        via 13.13.23.3 (41024000/10511872), Serial1/0  <-- FD(Metric) 값 확인
+
+
+              ## 비균등 로드분산을 실시하기위한 "Variance" commnad 설정
+
+R2(config)# router eigrp 100
+R2(config-router)# variance 4 이상
+
+-Variance값 설정후 R2에서 Routing table을 확인하게되면 비균등 로드분산이 실시된다.
+
+
+R2#show ip route eigrp
+    13.0.0.0/24 is subnetted, 6 subnets
+D     13.13.10.0 [90/10514432] via 13.13.12.1, 00:00:11, Serial1/1
+D     13.13.13.0 [90/41024000] via 13.13.23.3, 00:00:11, Serial1/0 <-- Metric값이 다르지만 로드분산이 실시
+                     [90/11023872] via 13.13.12.1, 00:00:11, Serial1/1 <-- Metric값이 다르지만 로드분산이 실시
+D     13.13.30.0 [90/40514560] via 13.13.23.3, 00:00:11, Serial1/0
+                     [90/11026432] via 13.13.12.1, 00:00:11, Serial1/1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

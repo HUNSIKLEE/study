@@ -1,0 +1,646 @@
+
+
+                        13.13.12.0/24                  13.13.23.0/24
+              R1---------------------R2---------------------R3
+                |                              |                               |
+         13.13.10.0/24               13.13.20.0/24               13.13.30.0/24
+
+-Process = 100
+-Area = 0
+-Router-ID = Router번호 사용
+
+   # R1
+router ospf 100
+ router-id 1.1.1.1
+ network 172.16.1.1 0.0.0.0 area 0
+ network 13.13.12.1 0.0.0.0 area 0
+ network 13.13.10.254 0.0.0.0 area 0
+!
+*Mar  1 00:04:27.099: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on 
+Serial1/0 from LOADING to FULL, Loading Done
+
+
+
+   # R2
+router ospf 100
+ router-id 2.2.2.2
+ network 13.13.12.2 0.0.0.0 area 0
+ network 13.13.23.2 0.0.0.0 area 0
+ network 13.13.20.254 0.0.0.0 area 0
+!
+*Mar  1 00:04:33.159: %OSPF-5-ADJCHG: Process 100, Nbr 1.1.1.1 on 
+Serial1/1 from LOADING to FULL, Loading Done
+
+*Mar  1 00:04:33.719: %OSPF-5-ADJCHG: Process 100, Nbr 3.3.3.3 on 
+Serial1/0 from LOADING to FULL, Loading Done
+
+
+
+   # R3
+router ospf 100
+ router-id 3.3.3.3
+ network 172.16.3.3 0.0.0.0 area 0
+ network 13.13.23.3 0.0.0.0 area 0
+ network 13.13.30.254 0.0.0.0 area 0
+!
+*Mar  1 00:04:45.107: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on 
+Serial1/1 from LOADING to FULL, Loading Done
+
+
+      정보확인
+
+RTX# show ip route
+RTX# show ip protocol
+RTX# show ip ospf neighbor
+RTX# show ip ospf database
+RTX# show ip ospf interface serial , fastethernet [port number]
+
+
+
+R1# ping 13.13.20.254 source 13.13.10.254  
+R1# ping 13.13.30.254 source 13.13.10.254
+
+R2# ping 13.13.10.254 source 13.13.20.254
+R2# ping 13.13.30.254 source 13.13.20.254
+
+R3# ping 13.13.10.254 source 13.13.30.254
+R3# ping 13.13.20.254 source 13.13.30.254
+
+
+
+
+=================================================================================================
+
+                                   ## Passive-interface
+
+-특정 Interface로 Broadcast/Multicast를 차단하는 기능
+
+
+EX1) 각 Router는 OSPF업데이트가 필요한 Interface로만 OSPF PDU를 전송해야한다.
+
+   # R1 , R3
+router ospf 100
+ passive-interface loopback 172
+ passive-interface fastethernet 0/0
+!
+
+   # R2
+router ospf 100
+ passive-interface fastethernet 0/0
+!
+
+
+
+                  정보확인
+
+R1# debug ip ospf hello    [Passive-interface 설정 전]
+OSPF hello events debugging is on
+*Mar  1 00:12:16.559: OSPF: Send hello to 224.0.0.5 area 0 on FastEthernet0/0 from 13.13.10.254
+*Mar  1 00:12:16.563: OSPF: Send hello to 224.0.0.5 area 0 on Serial1/0 from 13.13.12.1
+
+
+R1# debug ip ospf hello    [Passive-interface 설정 후]
+OSPF hello events debugging is on
+*Mar  1 00:12:26.567: OSPF: Send hello to 224.0.0.5 area 0 on Serial1/0 from 13.13.12.1
+
+
+
+
+
+
+=================================================================================================
+
+                                        ### 기준대역폭 변경
+
+-기본적으로 OSPF는 Metric계산시 기준대역폭을 10^8을 사용한다
+  [OSPF Meteric = Cost : 10^8/Link당 Bandwidth를 사용]
+
+-FastEthernet : 100000000/100000000 = Cost 1
+-Ethernet       : 100000000/10000000 = Cost 10
+-Serial          : 100000000/1544000 = Cost 64
+-GigaEthernet : 100000000/1000000000 = Cost 0.1이지만 Router는 소숫점을 계산하지 못하므로
+  가장 작은 Metric인 Cost 1로 계산되어진다. 
+  즉 OSPF는 FastEthernet과 GigaEthernet을 동급으로 인식하게된다.
+
+-Router에서 FastEthernet과 GigaEthernet을 사용하여 이중화를 구현하게되면
+ 두 경로의 Metric 1로 계산되기때문에 균등로드분산이 실시된다.
+
+-단 기준 대역폭변경시 OSPF로 여결된 모든 Router에서 공통으로 설정을 실시해야한다.
+
+
+EX1) R3에 추후 R4가 추가될예정이다 (R3과 R4는 GigaEthenet으로 연결을 실시할 예정이다.)
+       OSPF에서 정확한 Metric이 계산되로록 설정을 실시하시오 
+        (GigaEthenet이 가장 작은 Metric으로 계산되어져야 한다.)
+
+   # R1 , R2 , R3
+
+router ospf 100
+ auto-cost reference-bandwidth 1000  <--단위 Mbps [1000Mbps = 1000000000 = 10^9]
+!
+
+          [기준대역폭 변경 전]
+-FastEthernet : 100000000/100000000 = Cost 1
+-Ethernet       : 100000000/10000000 = Cost 10
+-Serial          : 100000000/1544000 = Cost 64
+
+
+          [기준대역폭 변경 전]
+-FastEthernet  : 100000000/100000000 = Cost 10
+-Ethernet       : 1000000000/10000000 = Cost 100
+-Serial          :  1000000000/1544000 = Cost = 647
+
+
+
+
+
+
+
+
+
+=================================================================================================
+
+                                        ### Loopback interface
+
+-OSPF에 Loopback interface의 주소는 하나의 Host로 인식되어지며 업데이트시 /32로 보여진다.
+
+-해당 네트워크를 원래의 Subnet으로 업데이트를 실시하기위해서는
+  네트워크 Type 을 변경해야한다.
+
+
+EX1) OSPF의 모든 Router는 업데이트시 모든 네트워크가 원래의 Subnet으로 보여져야 한다.
+
+   # R1
+interface loopback 172
+ ip ospf network point-to-point 
+!
+
+   # R3
+interface loopback 172
+ ip ospf network point-to-point 
+!
+
+            정보확인
+
+R1# show ip ospf interface loopback 172   [Network Type 변경 전]
+Loopback172 is up, line protocol is up 
+  Internet Address 172.16.1.1/24, Area 0 
+  Process ID 100, Router ID 1.1.1.1, Network Type LOOPBACK, Cost: 1
+  Loopback interface is treated as a stub Host
+
+
+
+R1# show ip ospf interface loopback 172   [Network Type 변경 후]
+Loopback172 is up, line protocol is up 
+  Internet Address 172.16.1.1/24, Area 0 
+  Process ID 100, Router ID 1.1.1.1, Network Type POINT_TO_POINT, Cost: 1
+  Transmit Delay is 1 sec, State POINT_TO_POINT
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+     ------------------ 중간 생략 ------------------
+
+
+
+=================================================================================================
+
+
+                           ## OSPF 인접성 단계
+
+-Down State (나는 헬로우를 보냇으나 상대방은 못받은 상태)
+ : OSPF의 시작 단계이며 자신은 Hello를 전송한후 수신을 기다리는 상태
+
+-Init State(나는 헬로우를 받았는데 내가 헬로우를 주지못한 상태)
+ : 자신은 Hello를 수신하고 송신하지 않은 상태
+
+-2Way State
+ : Hello Packet의 송/수신이 완료된 상태이며 상호간 Neighbor table에 Router-ID가 출력된다.
+
+-Exstart State(마스터 라우터랑 슬레이브라우터를 조회함.마스터가 먼저 준다. 숫자가 높은거가 마스터,ex3.3.3.3 마스터>1.1.1.1)
+ : Master Router와 Slave Router를 선출하는 단계이다.
+  Master Router가 DBD를 먼저 전송하며 Slave Router가 DBD를 전송한다.
+  큰 Router-ID를 가진 Router가 Master Router로 선출된다.
+
+-Exchange State
+ : DBD교환후 자신에게 없는 네트워크 정보를 LSR을 사용하여 해당 네트워크에 대한
+   상세 정보를 요청하게된다.
+
+-Loading State
+ : LSR을 수신한 Router는 해당 네트워크에 대한  LSA(Link-State Advertisement)를 생성하여
+   LSU를 사용하여 업데이트를 실시
+
+-Full State
+ : 인접성이 완료된 상태이며 비정상적인 활동으로인해 인접성이 단절되면 Down State로 전환된다.
+
+
+-Attempt State [NBMA구간에서만 확인가능]
+ : 'Neighbor' command를 사용하는 구간에서만 확인이 가능하며
+   Full State에서 비정상적인 활동으로 인해 인접성이 단절되만 Attempt State로 전환된다.
+  
+
+
+                       [인접성 단계 확인]
+
+R1# debug ip ospf adj
+
+R1# clear ip ospf process
+Reset ALL OSPF processes? [no]: y 
+
+*Mar  1 00:15:44.687: OSPF: 2 Way Communication to 2.2.2.2 on Serial1/0, state 2WAY
+
+*Mar  1 00:15:44.715: OSPF: NBR Negotiation Done. We are the SLAVE
+
+*Mar  1 00:15:44.799: OSPF: Rcv DBD from 2.2.2.2 on Serial1/0 seq 0x1FFE opt 0x52 flag 0x1 len 32
+  mtu 1500 state EXCHANGE
+
+*Mar  1 00:15:44.843: %OSPF-5-ADJCHG: Process 100, Nbr 2.2.2.2 on Serial1/0 from LOADING to FULL, 
+Loading Done
+
+
+
+
+
+
+=================================================================================================
+
+                                        ### Router-ID변경
+
+-OSPF에서 관리를 목적으로 사용하며
+ OSPF내에서 식별자로 사용되는 값이므로 유일한 값을 가져야한다.
+
+-Router-ID 선출시 우선순위
+ 1. 'Router-ID' command를 직접사용
+ 2. 해당 Router에 loopback interface가 존재하면  loopback interface안의 IP가 
+     Router-ID로 등록된다.
+ 3. 해당 Router 에서 가장 큰 IP가 Router-ID로 등록된다.
+
+
+-한번 선출된 Router-ID는 OSPF Process가 재시작되지 않는한  변경되지 않는다.
+
+
+EX1) 아래의 조건에 맞게 설정을 실시하시오
+ .R1의 Router-ID를 10.10.10.10으로 변경을 실시하시오
+ .R2의 Router-ID를 20.20.20.20으로 변경을 실시하시오
+ .R3의 Router-ID를 30.30.30.30으로 변경을 실시하시오
+
+
+   # R1
+R1(config)# router ospf 100
+R1(config-router)# router-id 10.10.10.10
+Reload or use "clear ip ospf process" command, for this to take effect
+!
+R1#clear ip ospf process
+Reset ALL OSPF processes? [no]: y
+
+
+   # R2
+R2(config)# router ospf 100
+R2(config-router)# router-id 20.20.20.20
+Reload or use "clear ip ospf process" command, for this to take effect
+!
+R2#clear ip ospf process
+Reset ALL OSPF processes? [no]: y
+
+
+   # R3
+R3(config)# router ospf 100
+R3(config-router)# router-id 30.30.30.30
+Reload or use "clear ip ospf process" command, for this to take effect
+!
+R3#clear ip ospf process
+Reset ALL OSPF processes? [no]: y
+
+
+
+                       정보확인
+
+R1# show ip ospf neighbor
+Neighbor ID     Pri   State            Dead Time   Address          Interface
+20.20.20.20       0   FULL/  -        00:00:34      13.13.12.2       Serial1/1
+
+
+R2# show ip ospf neighbor
+Neighbor ID     Pri   State            Dead Time   Address          Interface
+10.10.10.10       0   FULL/  -        00:00:34      13.13.12.1       Serial1/1
+30.30.30.30       0   FULL/  -        00:00:35      13.13.23.3       Serial1/0
+
+
+R3# show ip ospf neighbor
+Neighbor ID     Pri   State            Dead Time   Address          Interface
+20.20.20.20       0   FULL/  -        00:00:34      13.13.23.2       Serial1/1
+
+
+
+
+
+
+=================================================================================================
+
+                        ### LSA-Type  (Link-State Advertisement-Type)
+
+-O	: Intra Area - 자신과 동일한 Area에 포함된 네트워크 
+-O IA	: Inter Area - 자신과 다른 Area에 포함된 네트워크
+-O E1	: External - 외부 네트워크가 OSPF로 재분배되어진 네트워크 (누적 Metric)
+-O E2	: External - 외부 네트워크가 OSPF로 재분배되어진 네트워크 (고정 Metric , Default Metric 20)
+
+
+                         생성                       용도                   전파범위             R/T표기         D/T표기
+-LSA-Type1 -  All Router      동일 Area간 통신시 사용         동일 Area               O              Router
+
+-LSA-Type2 -     DR                DR의 정보를 전파         DR이 포함된 Area        표기X            Net
+
+-LSA-Type3 -   ABR          다른 Arear간 통신시 사용     ABR이 포함된 Area      O IA         Summary Net
+
+-LSA-Type4 -   ABR               ASBR의 정보를 전파      ABR이 포함된 Area       표기X       Summary ASB
+
+-LSA-Type5 - ASBR         외부 네트워크를 OSPF전파     ASBR이 포함된 Area  O E1 , O E2      Type-5
+
+
+
+
+
+=================================================================================================
+
+                        ### Virtual-Link
+
+-특정 Area가 Backbone Area를 경유하지 못할경우
+ .해당 Area를 물리적으로 area  0에 인접하게 연결실시
+ .해당 Area를 Backbone Area에 연결된 Area로 통합
+ .Virtual-link를 사용하여 해당 Area를 Backbone Area에 논리적으로 연결
+ 을 통해서 해결이 가능하다.
+
+-Virtual-Link는 ABR간 논리적인 연결을 실시하여 Backbone area에 연결되지 못한
+  Area를 논리적으로 연결하는 기능
+
+
+   # R2
+router ospf 100
+ area 13 virtual-link 3.3.3.3
+!
+
+   # R3
+router ospf 100
+ area 13 virtual-link 2.2.2.2
+!
+
+             정보확인
+
+R2# show ip ospf neighbor    [Virtual-link 연결 전]
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+1.1.1.1             0   FULL/  -       00:00:30     13.13.12.1       Serial1/1
+3.3.3.3             0   FULL/  -       00:00:36     13.13.23.3       Serial1/0
+
+R2# show ip ospf neighbor    [Virtual-link 연결 후]
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+3.3.3.3             0   FULL/  -           -          13.13.23.3       OSPF_VL0
+1.1.1.1             0   FULL/  -       00:00:29     13.13.12.1       Serial1/1
+3.3.3.3             0   FULL/  -       00:00:39     13.13.23.3       Serial1/0
+
+
+R2# show ip ospf virtual-link
+Virtual Link OSPF_VL0 to router 3.3.3.3 is up
+  Run as demand circuit
+  DoNotAge LSA allowed.
+  Transit area 13, via interface Serial1/0, Cost of using 64
+  Transmit Delay is 1 sec, State POINT_TO_POINT,
+  Timer intervals configured, Hello 10, Dead 40, Wait 40, Retransmit 5
+      ------------------ 중간 생략 ------------------
+
+
+-R1 , R2에서 Area 113 네트워크 정보인 172.16.3.0/24 네트워크가 확인되어진다.
+
+
+
+
+====================================================================================================
+
+
+                              ### OSPF Authentication 
+
+-OSPF는 지정된 장비와 업데이트시 정보의 위/변조를 방지하기 위해서 인증기능을 사용하여
+  업데이트를 실시할수 있다.
+
+-OSPF는 Router와 Router간 실시하는 Neighbor Authentication기능과
+  해당 Area내의 모든 장비에서 실시하는 Area Authentication으로 구성이 가능하다.
+
+
+
+                        ## Neighbor Authentication
+
+-OSPF Router간 1:1로 인증 기능을 실시하는 기능
+
+             # Neighbor Authentication  [Plain Text]
+
+                    S1/0                           S1/1
+                R1-----------------------------R2
+
+   # R1
+interface serial 1/0
+ ip ospf authentication
+ ip ospf authentication-key cisco
+!
+
+
+   # R2
+interface serial 1/1
+ ip ospf authentication
+ ip ospf authentication-key cisco
+!
+
+             정보확인
+
+R1# show ip ospf interface serial 1/0
+    ---------- 중간 생략 ----------
+  Simple password authentication enabled
+
+
+
+R1# debug ip ospf packet
+OSPF packet debugging is on
+*Mar  1 00:17:42.527: OSPF: rcv. v:2 t:1 l:48 rid:2.2.2.2
+      aid:0.0.0.0 chk:E693 aut:1 auk: from Serial1/0
+
+-aut : 0 = 인증기능을 사용하지 않은 상태
+-aut : 1 = OSPF Text 인증 기능 사용
+-aut : 2 = OSPF MD5 인증 기능 사용
+
+
+
+
+
+
+             # Neighbor Authentication  [MD5]
+
+                    S1/0                           S1/1
+                R1-----------------------------R2
+
+
+   # R1
+interface serial 1/0
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 100 md5 cisco
+!
+
+   # R2
+interface serial 1/1
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 100 md5 cisco
+!
+
+             정보확인
+
+R1# show ip ospf interface serial 1/0
+    ---------- 중간 생략 ----------
+  Message digest authentication enabled
+    Youngest key id is 100
+
+
+R1# debug ip ospf packet
+OSPF packet debugging is on
+*Mar  1 00:18:02.627: OSPF: rcv. v:2 t:1 l:48 rid:2.2.2.2
+      aid:0.0.0.0 chk:0 aut:2 keyid:100 seq:0x3C7EC86E from Serial1/0
+
+
+-aut : 0 = 인증기능을 사용하지 않은 상태
+-aut : 1 = OSPF Text 인증 기능 사용
+-aut : 2 = OSPF MD5 인증 기능 사용
+
+
+
+
+
+
+            ----------------------------------------------------------
+
+                        ## Area Authentication
+
+-해당 Area내의 모든 Router가 실시하는 인증 기능
+  [Authentication을 실시하는 Area내의 모든 Router에서 인증설정을 실시해야 한다.]
+
+             # Area Authentication  [Plain Text]
+
+                    S1/0                  S1/1    S1/0                  S1/1
+                R1----------------------R2----------------------R3
+                |---------Area 0-------|   |------Area 13--------|
+
+   # R1
+interface serial 1/0
+ ip ospf authentication
+ ip ospf authentication-key cisco
+!
+router ospf 100
+ area 0 authentication
+!
+
+
+   # R2
+interface serial 1/1
+ ip ospf authentication
+ ip ospf authentication-key cisco
+!
+router ospf 100
+ area 0 authentication
+!
+
+             정보확인
+
+R1# show ip ospf interface serial 1/0
+    ---------- 중간 생략 ----------
+  Simple password authentication enabled
+
+
+
+R1# debug ip ospf packet
+OSPF packet debugging is on
+*Mar  1 00:17:42.527: OSPF: rcv. v:2 t:1 l:48 rid:2.2.2.2
+      aid:0.0.0.0 chk:E693 aut:1 auk: from Serial1/0
+
+-aut : 0 = 인증기능을 사용하지 않은 상태
+-aut : 1 = OSPF Text 인증 기능 사용
+-aut : 2 = OSPF MD5 인증 기능 사용
+
+
+
+
+
+
+
+
+             # Area Authentication  [MD5]
+
+                    S1/0                  S1/1    S1/0                  S1/1
+                R1----------------------R2----------------------R3
+                |---------Area 0-------|   |------Area 13--------|
+
+   # R1
+interface serial 1/0
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 100 md5 cisco
+!
+router ospf 100
+ area 0 authentication message-digest
+!
+
+   # R2
+interface serial 1/1
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 100 md5 cisco
+!
+router ospf 100
+ area 0 authentication message-digest
+!
+
+             정보확인
+
+R1# show ip ospf interface serial 1/0
+    ---------- 중간 생략 ----------
+  Message digest authentication enabled
+    Youngest key id is 100
+
+
+R1# debug ip ospf packet
+OSPF packet debugging is on
+*Mar  1 00:18:02.627: OSPF: rcv. v:2 t:1 l:48 rid:2.2.2.2
+      aid:0.0.0.0 chk:0 aut:2 keyid:100 seq:0x3C7EC86E from Serial1/0
+
+
+-aut : 0 = 인증기능을 사용하지 않은 상태
+-aut : 1 = OSPF Text 인증 기능 사용
+-aut : 2 = OSPF MD5 인증 기능 사용
+
+
+
+-만약 Area 0 인증시 Virtual-link가 존재하게되면 Virtual-link인증도 실시해야한다.
+  [Virtual-link도 논리적으로 Area  0에 연결되어있기때문에 인증을 실시해야한다.]
+
+   # R3
+router ospf 100
+ area 0 authentication message-digest
+!
+
+R2# show ip ospf neighbor 
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+3.3.3.3             0   FULL/  -           -         13.13.23.3       OSPF_VL0
+1.1.1.1             0   FULL/  -       00:00:37    13.13.12.1       Serial1/1
+3.3.3.3             0   FULL/  -       00:00:39    13.13.23.3       Serial1/0
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

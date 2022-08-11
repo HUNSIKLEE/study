@@ -1,0 +1,254 @@
+                            ### RIPv1 (Routing Information Protocol Version 1)
+
+-Distance Vector
+ .주기적으로 Neighbor Router간 라우팅 업데이트를 실시한다.
+ .전제 정보의 업데이트를 실시한다.
+ .네트워크에 변경사항이 없어도 업데이트를 실시한다.
+ .소규모 네트워크 환경에 적합하며 확장성이 떨어진다.
+ .Split-horizon에 의해 Loop를 방지한다.
+  [Split-horizon : Distance Vector의 Loop방지 알고리즘으로 
+                         수신한 Interface로 동일한 정보를 송신할수 없다.]
+
+-RIP Timer
+ .Update Time : 30초 [RIP은 한번에 많은 양의 업데이트를 방지하기위해서 업데이트 시간의
+                     15%의 편차를 두어 업데이트를 실시한다 이를 RIP Jitter라고 한다.]
+
+ .Invalid Time : 180초 [특정 네트워크를 수신하지 못하게되면 RIP은 해당 네트워크 정보를 
+                     바로 삭제하지 않고 180초의 유예시간을 두어 해당 시간 내에 네트워크 정보를
+                     수신하게되면 정상적으로 동작을 실시하며 해당 시간내에 네트워크 정보를
+                      수신하지 못하게되면 Holddown상태로 전환된다.]
+
+ .Holddown Time : 180초 [Holddown상태로 전환되면 RIP은 해당 네트워크 정보가 업데이트 되어도
+                         해당 네트워크 정보를 수신하지 않는다 : Loop방지]
+
+ .Flushed Time : 240초 [네트워크 정보를 수신하지 않을 시간으로부터 240초가 지나면
+                                Routing table에서 삭제된다.]
+
+
+13.13.1.0/24
+13.13.2.0/24
+13.13.3.0/24
+
+-Update	  |---30초---|
+
+-Invalie	  |-------------- 180초 --------------|
+
+-Holddown                                                    |-------------- 180초 --------------|
+
+-Flushed	  |-------------------240초-------------------|
+
+
+
+-Classfull
+ .업데이트 정보안에 SubnetMask가 포함되지 않는다.
+ .IP에 대해서 Class로만 구분한다.
+ .Class가 단절되면 업데이트가 실시되지 않는다.
+ .VLSM , CIDR기능을 지원하지 않는다.
+ .IP환경에서 확장성이 제한된다.
+
+
+-AD (Administrative Diatance) : 120
+ .Router는 하나의 목적지에 대해서 하나의 경로만을 지원하는 장비이다.
+ .만약 하나의 네트워크 정보를 서로 다른 Protocol을 사용하여 수신할경우
+  AD값을 비교하여 낮은 AD값을 가진 Protocol을 사용하여 통신을 실시한다.
+ .Connected : 0 
+ .Static       : 1
+ .RIP          : 120
+
+-Metric
+ .Router는 하나의 목적지에 대해서 하나의 경로만을 지원하는 장비이다.
+ .하나의 목적지에 대해서 복수개의 경로가 존재할경우 Metric이 가장 작은
+  경로를 사용하여 통신이 실시된다 
+ .RIP은 Hop-count를 사용하여 최적경로를 선출한다. [0~15]
+ .RIP은 Metric 16에 대해서 장애발생으로 인식된다.
+
+
+-Load-Balancing [로드분산]
+ .Router는 하나의 목적지에 대해서 하나의 경로만을 지원하는 장비이다.
+ .로드분산 : 하나의 목적지에 대해서 복수개의 경로를 지원하는 기능
+ .RIP은 균등 로드분산을 지원한다. [Default = 4개]
+  : 최적경로와 동일한  Metric을 가진 경로에 대해서 복수개의 경로를 지원하는 기능이다.
+
+-업데이트 : RIP은 UDP 520번 , Broadcast방식 사용 [255.255.255.255]
+ .출발지 주소는 출구 Interface의 IP를 사용하며
+  목적지 주소는 Broadcast (255.255.255.255)를 사용하여 업데이트를 실시한다.
+
+
+---------------------------------------------------------------------------------------
+
+
+                          13.13.12.0/24            13.13.23.0/24
+                 R1---------------------R2---------------------R3
+                  |                                |                                |
+         13.13.10.0/24                  13.13.20.0/24                 13.13.30.0/24
+
+
+   # [R1]
+router rip
+ version 1
+ network 13.0.0.0
+!
+
+   # [R2]
+router rip
+ version 1
+ network 13.0.0.0
+!
+
+   # [R3]
+router rip
+ version 1
+ network 13.0.0.0
+!
+            정보확인
+
+-show ip route
+-show ip route rip
+-show ip protocol
+-debug ip rip
+
+
+
+R1# debug ip rip
+RIP protocol debugging is on
+
+RIP: sending  v1 update to 255.255.255.255 via FastEthernet0/0 (13.13.1.254)
+RIP: build update entries
+      network 172.16.0.0 metric 1
+      network 13.13.2.0 metric 2
+      network 13.13.3.0 metric 3
+      network 13.13.12.0 metric 1
+      network 13.13.23.0 metric 2
+
+RIP: sending  v1 update to 255.255.255.255 via Serial1/0 (13.13.12.1)
+RIP: build update entries
+      network 172.16.0.0 metric 1
+      network 13.13.1.0 metric 1
+
+RIP: sending  v1 update to 255.255.255.255 via Loopback172 (172.16.1.1)
+RIP: build update entries
+      network 13.13.1.0 metric 1
+      network 13.13.2.0 metric 2
+      network 13.13.3.0 metric 3
+      network 13.13.12.0 metric 1
+      network 13.13.23.0 metric 2
+
+RIP: received v1 update from 13.13.12.2 on Serial1/0
+      13.13.2.0 in 1 hops
+      13.13.3.0 in 2 hops
+      13.13.23.0 in 1 hops
+
+
+
+---------------------------------------------------------------------------------------
+
+                          ### Passive-interface
+
+-특정 Interface로의 Broadcast/Multicast를 차단하는 기능
+
+
+                          13.13.12.0/24            13.13.23.0/24
+                 R1---------------------R2---------------------R3
+                  |                               |                               |
+         13.13.1.0/24                13.13.2.0/24               13.13.3.0/24
+
+
+EX1) 각 Router는 RIP업데이트가 필요한 Interface로만 RIP Packet이 전송되어야 한다.
+
+   # R1 , R2 , R3
+router rip
+ passive-interface fastethernet 0/0
+!
+
+                   정보확인
+
+R1#debug ip rip    [Passive-interface설정 전]
+RIP protocol debugging is on
+
+RIP: sending  v1 update to 255.255.255.255 via FastEthernet0/0 (13.13.1.254)
+RIP: build update entries
+      network 13.13.2.0 metric 2
+      network 13.13.3.0 metric 3
+      network 13.13.12.0 metric 1
+      network 13.13.23.0 metric 2
+
+RIP: sending  v1 update to 255.255.255.255 via Serial1/0 (13.13.12.1)
+RIP: build update entries
+      network 13.13.1.0 metric 1
+
+
+
+
+R1#debug ip rip    [Passive-interface설정 후]
+RIP protocol debugging is on
+
+RIP: sending  v1 update to 255.255.255.255 via Serial1/0 (13.13.12.1)
+RIP: build update entries
+      network 172.16.0.0 metric 1
+      network 13.13.1.0 metric 1
+
+
+
+
+
+
+
+
+EX2) 아래의 조건에 맞게 설정을 실시하시오
+ .RTX에는 아래와 같은  Interface를 가지고 있다
+ .해당 네트워크 정보를  RIPv1을 사용하여 업데이트를 실시해야하며
+  172.16.15.0/24 네트워크가 포함된 Interface로만 RIPv1업데이트가 실시되어져야 한다.
+
+ 
+       [RTX]
+-Fastet 0/0 : 172.16.0.0/24
+-Fastet 0/1 : 172.16.1.0/24
+-Fastet 0/2 : 172.16.2.0/24
+-Fastte 0/3 : 172.16.3.0/24
+-Serial 1/0 : 172.16.14.0/24
+-Serial 1/1 : 172.16.15.0/24
+-Serial 1/2 : 172.16.16.0/24
+-Serial 1/3 : 172.16.17.0/24
+
+
+   # RTX
+router rip
+ version 1
+ network 172.16.0.0
+ passive-interface default
+ no passive-interface serial 1/1
+!
+
+
+
+
+
+
+
+
+
+kdskim2694
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

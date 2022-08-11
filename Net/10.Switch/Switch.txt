@@ -1,0 +1,1179 @@
+                               ## Switch
+
+              # Hub
+-Layer 1의 대표장비
+-자신과 동일 네트워크에 존재하는 장비와 통신시 사용되는 장비
+-전기적인 신호를 사용하여 데이터를 Forwarding실시
+-Collision Domain을 공유하는 장비이다.
+ (충돌 영역)
+
+              # Switch
+-Layer 2의 대표장비
+-자신과 동일 네트워크에 존재하는 장비와 통신시 사용되는 장비
+-Mac-address를 사용하여 통신을 실시 (48bit HH-HH-HH-HH-HH-HH)
+-Layer2 Header의 목적지주소를 근거로 Mac-address Table을 참조하여 Forwarding실시
+-Collision Domain을 분할하며  Broadcast Domaind을 공유하는 장비이다.
+-Cisco IOS에 의존하는 하드웨어 기반 장비
+
+
+              # Router
+-Layer 3의 대표장비
+-자신이 포함되지 않은 다른 네트워크로 통신시 사용되는 장비
+-IP Address를 사용하여 통신을 실시 (32bit)
+-Layer3 Header의 목적지주소를 근거로 Routing Table을 참조하여 Forwarding실시
+-Broadcast Domain을 분할하는 장비
+-Cisco IOS에 의존하는 소프트웨어 기반 장비
+
+
+
+
+===============================================================================================
+
+
+                               ## Switch의 동작원리
+
+-Unknown Unicast Frame
+-Unknown Multicast Frame (Multicast Frame)
+-Broadcast Frame에 대해서 Flooding을 실시
+ .Learning
+ .Flooding
+ .Filtering
+ .Forwarding
+
+
+
+=============================================================================================== 
+
+                               ## VLAN (Virtual-LAN)
+
+-Switch는 Collision Domain을 분할하지만 Broadcast Domain을 공유한다.
+-문제 : Host가 증가할수록 Broadcast Traffic도 함께증가.
+-이유 : 해당 Switch의 모든 Port는 하나의 VLAN에 포함되어진다. (Default VLAN : VLAN 1)
+-해결 : VLAN을 사용하여 물리적인 분할이 아닌 논리적으로 네트워크를 분할할수있다.
+-장점
+ .Broadcast Traffic을 분할하여 효율적인 LAN을 구성하여 통신이 가능
+ .위치적 , 물리적으로 제한이 적다.
+
+-VLAN의 범위는 0~4095까지이지만 0 , 4095는 System에서 사용되도록 예약되어져있기때문에
+  사용가능한 VLAN은 1~4094까지이다.
+ [장비에따라서 0~4095 , 0~1005까지 지원한다.]
+
+-VLAN은 용도에따라서 Standard VLAN과 Extended VLAN으로 사용이 가능
+ .Standard VLAN : 1~1005 (1,1002,1003,1004,1005은 예약된 VLAN)
+ .Extended VLAN : 1006 ~ 4094
+
+
+
+
+
+---------------------------------------------------------------------------------------
+
+                    ## VLAN 생성
+
+EX1) SW1에 VLAN 10을 생성하시오
+
+SW1(config)# vlan 10
+
+
+               정보확인
+
+SW1#show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- ------------
+1    default              	active	Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                	Fa0/5, Fa0/6, Fa0/7, Fa0/8
+10   VLAN0010               	active    <--- VLAN 10 생성확인
+
+
+
+
+
+
+EX2) SW1에 VLAN 10,20,30을 생성하시오
+
+SW1(config)# vlan 10,20,30
+
+               정보확인
+
+SW1# show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -----------
+1    default                    	active    	Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                	Fa0/5, Fa0/6, Fa0/7, Fa0/8
+10   VLAN0010                	active    <--- VLAN 10 생성확인
+20   VLAN0020               	active    <--- VLAN 20 생성확인
+30   VLAN0030               	active    <--- VLAN 30 생성확인
+
+
+
+
+
+
+
+EX3) SW1에 VLAN 10~30을 생성하시오
+
+SW1(config)# vlan 10-30
+
+               정보확인
+
+SW1# show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -----------
+1    default                    	active    	Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                	Fa0/5, Fa0/6, Fa0/7, Fa0/8
+10   VLAN0010                	active    <--- VLAN 10 생성확인
+11   VLAN0011                	active    <--- VLAN 11 생성확인
+       .................................
+       .................................
+29   VLAN0029               	active    <--- VLAN 29 생성확인
+30   VLAN0030               	active    <--- VLAN 30 생성확인
+
+
+
+
+
+
+EX4) 아래의 조건에 맞게 설정을 실시하시오
+ .VLAN 10 , 20 , 30을 생성하시오
+ .VLAN 10의 Name을 VLAN_A로 설정하시오
+ .VLAN 20의 Name을 VLAN_B로 설정하시오
+ .VLAN 30의 Name을 VLAN_C로 설정하시오
+
+SW1(config)# vlan 10
+SW1(config-vlan)# name VLAN_A
+!
+SW1(config)# vlan 20
+SW1(config-vlan)# name VLAN_B
+!
+SW1(config)# vlan 30
+SW1(config-vlan)# name VLAN_C
+!
+
+               정보확인
+
+SW1# show vlan brief
+
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -----------
+1    default                    	active    	Fa0/1, Fa0/2, Fa0/3, Fa0/4
+                                                	Fa0/5, Fa0/6, Fa0/7, Fa0/8
+10   VALN_A                 	active    
+20   VLAN_B                  	active    
+30   VLAN_C                	active    
+
+
+
+---------------------------------------------------------------------------------------
+
+               # Switchport
+-Access Mode : 하나의 Port에 하나의 VLAN을 사용하여 통신하는 기능
+   (PC, Server와 같은 단말장비가 연결되거나 VLAN 지원하지 않는 장비가 연결되는 Port)
+
+-Trunk Mode : 하나의 Port에 복수개의 VLAN을 사용하여 통신을 실시하는 기능
+   (Switch, IP phone과 같은 VLAN을 지원하지 않는 장비가 연결되는 Port)
+
+
+
+
+---------------------------------------------------------------------------------------
+
+                    ## Switchport에 VLAN할당
+
+EX1) 아래의 조건에 맞게 설정을 실시하시오
+ .VLAN 10,20을 생성하시오
+ .FastEthernet 0/1을 VLAN 10에 할당하시오
+ .FastEthernet 0/2를 VLAN 20에 할당하시오
+
+
+SW1(config)# vlan 10
+SW1(config)# vlan 20
+!
+SW1(config)# interface fastethernet 0/1
+SW1(config-if)# switchport mode access
+SW1(config-if)# switchport access vlan 10
+!
+SW1(config)# interface fastethernet 0/2
+SW1(config-if)# switchport mode access
+SW1(config-if)# switchport access vlan 20
+!
+
+               정보확인
+
+SW1# show vlan brief
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                  	active    	Fa0/3, Fa0/4, Fa0/5, Fa0/6
+                                                	Fa0/7, Fa0/8, Fa0/9, Fa0/10
+                                                	Fa0/11, Fa0/12, Fa0/13, Fa0/14
+                                               	Fa0/15, Fa0/16, Fa0/17, Fa0/18
+                                                	Fa0/19, Fa0/20, Fa0/21, Fa0/22
+                                                	Fa0/23, Fa0/24
+10   VLAN0010            	active    	Fa0/1
+20   VLAN0020                 	active    	Fa0/2
+
+
+---------------------------------------------------------------------------------------
+
+                    ## 'Range' Command
+
+-동일한 설정을 다수의  Interface에 공통을 설정을 실시할경우
+  'Range'command를 사용하여 동시에 다수의 Interface에 접속하여 설정을 실시하는 기능
+
+
+EX1) 아래의 조건에 맞게 설정을 실시하시오
+ .VLAN 10 : Fa 0/1 , Fa 0/2 , Fa 0/3 , Fa 0/4 , Fa 0/5
+ .VLAN 20 : Fa 0/6 , Fa 0/7 , Fa 0/8 , Fa 0/9 , Fa 0/10
+
+
+SW(config)# vlan 10
+SW(config)# vlan 20
+!
+SW(config)# interface range fa0/1 - 5
+SW(config-if)# switchport mode access
+SW(config-if)# switchport access vlan 10
+!
+SW(config)# interface range fa0/6 - 10
+SW(config-if)# switchport mode access
+SW(config-if)# switchport access vlan 20
+!
+
+                     정보확인
+
+SW# show vlan brief
+VLAN Name		Status    Ports
+---- -------------------------------- --------- --------------
+1    default		active	Fa0/11, Fa0/12, Fa0/13, Fa0/14
+				Fa0/15, Fa0/16, Fa0/17, Fa0/18
+				Fa0/19, Fa0/20, Fa0/21, Fa0/22
+				Fa0/23, Fa0/24
+10   VLAN0010		active	Fa0/1, Fa0/2, Fa0/3, Fa0/4, Fa0/5
+20   VLAN0020		active	Fa0/6, Fa0/7, Fa0/8, Fa0/9, Fa0/10
+
+
+
+
+
+
+
+
+EX2) 아래의 조건에 맞게 설정을 실시하시오
+ .VLAN 30 : Fa 0/1 , Fa 0/3 , Fa 0/5 , Fa 0/7
+ .VLAN 40 : Fa 0/2 , Fa 0/4 , Fa 0/6 , Fa 0/8
+
+SW(config)# vlan 30
+SW(config)# vlan 40
+!
+SW(config)# interface range fa0/1 , fa0/3 , fa0/5 , fa0/7
+SW(config-if)# switchport mode access
+SW(config-if)# switchport access vlan 30
+!
+SW(config)# interface range fa0/2 , fa0/4 , fa0/6 , fa0/8
+SW(config-if)# switchport mode access
+SW(config-if)# switchport access vlan 40
+!
+
+                     정보확인
+
+SW# show vlan brief
+VLAN Name		Status	Ports
+---- -------------------------------- --------- ------------
+1    default		active	Fa0/9, Fa0/10, Fa0/11, Fa0/12
+				Fa0/13, Fa0/14, Fa0/15, Fa0/16
+				Fa0/17, Fa0/18, Fa0/19, Fa0/20
+                                                	Fa0/21, Fa0/22, Fa0/23, Fa0/24
+30   VLAN0030		active	Fa0/1, Fa0/3, Fa0/5, Fa0/7
+40   VLAN0040		active	Fa0/2, Fa0/4, Fa0/6, Fa0/8
+
+
+
+
+
+
+
+EX3) 아래의 조건에 맞게 설정을 실시하시오
+ .VLAN 50 = Fa 0/1 , Fa 0/2 , Fa 0/3 , Fa 0/4 , Fa 0/9 , Fa 0/10 , Fa 0/11 , Fa 0/12
+ .VLAN 60 = Fa 0/5 , Fa 0/6 , Fa 0/7 , Fa 0/8 , Fa 0/13 , Fa 0/14 , Fa 0/15 , Fa 0/16
+
+
+SW(config)# vlan 50
+SW(config)# vlan 60
+!
+SW(config)# interface range fa0/1 - 4 , fa0/9 - 12
+SW(config-if)# switchport mode access
+SW(config-if)# switchport access vlan 50
+!
+SW(config)# interface range fa0/5 - 8 , fa0/13 - 16
+SW(config-if)# switchport mode access
+SW(config-if)# switchport access vlan 60
+!
+
+                     정보확인
+
+SW#sh vlan br
+VLAN Name		Status    Ports
+---- -------------------------------- --------- -------------
+1    default		active	Fa0/17, Fa0/18, Fa0/19, Fa0/20
+				Fa0/21, Fa0/22, Fa0/23, Fa0/24
+50   VLAN0050		active	Fa0/1, Fa0/2, Fa0/3, Fa0/4
+				Fa0/9, Fa0/10, Fa0/11, Fa0/12
+60   VLAN0060		active	Fa0/5, Fa0/6, Fa0/7, Fa0/8
+				Fa0/13, Fa0/14, Fa0/15, Fa0/16
+
+
+
+
+
+==================================================================================================
+
+                               ## Switchport Mode
+
+-Access Mode : 하나의 Port에 하나의 VLAN을 사용하여 통신시 사용되는 Mode
+-Trunk Mode  : 하나의 Port에 복수개의 VLAN을 사용하여 통신시 사용되는 Mode
+
+-Dynamic Mode : DTP(Dynamic Trunking Protocol) Message를 사용하여 Switch간 협상에의해 Trunk연결
+ .desirable : DTP Message를 송/수신을 실시하는 Mode이다.
+ .auto       : DTP Message를 송신은 실시하지 않으며 수신만 실시하는 Mode
+
+
+==================================================================================================
+
+                               ## Trunk
+
+IEEE.802.1Q  	: IEEE에서 지정한 LAN 구간 표준 Trunk Protocol
+ISL		: CISCO 에서 개발한 CICO전용 Trunk  protocol
+
+
+
+ #SW1, SW2 	[IEEE.802.1Q]
+
+
+
+ #SW1, SW2 	[ISL]
+
+
+ #SW1, SW2 	[2950시리즈 이하급 장비는 ISL을 지원하지 않는다.]
+
+
+-하나의 Port에 다수의 VLAN을 사용하여 통신시 사용되는 Mode
+
+-Switch와 Switch간 연결시 Access mode를 사용하게되면 사용하는 VLAN수만큼의
+  Link를 연결하여 사용해야하기때문에 비 효율적인 연결을 하게된다
+  하지만 Trunk Mode를 사용하여 연결하게되면 하나의 Link를 사용하여
+  다수의 VLAN을 사용한 통신이 가능하다.
+
+-Trunk는 IEEE.802.1Q와 ISL의 두가지 Trunk로 구성이 가능하다.
+ .IEEE.802.1Q : 표준 Protocol
+ .ISL             : Cisco전용 Protocol
+
+-Dot1q와 ISL의 가장큰 차이점은 Native VLAN의 지원 유/무이다.
+  입력되는 트래픽에 VLAN정보가 포함되지 않게되면
+  Dot1q는 해당 정보를 Native VLAN(Default = VLAN 1)으로 처리하는 반면
+  ISL은 자신의 내부 정보가 아닌걸로 간주하여 해당 정보를 Drop실시
+
+
+                  Fa 0/20                           Fa 0/20
+            SW1------------------------------SW2
+
+
+   # SW1 , SW2  [Dot1q]
+SW(config)# interface fastethernet 0/20
+SW(config-if)# switchport trunk encapsulation dot1q
+SW(config-if)# switchport mode trunk
+
+
+   # SW1 , SW2  [ISL]
+SW(config)# interface fastethernet 0/20
+SW(config-if)# switchport trunk encapsulation isl
+SW(config-if)# switchport mode trunk
+
+
+   # SW1 , SW2  [CISCO 2950시리즈 이하급장비 : ISL을 지원하지 않는다.]
+SW(config)# interface fastethernet 0/20
+SW(config-if)# switchport mode trunk [Dot1q로 구성]
+
+
+
+----------------------------------------------------------------------------------------
+
+                     ## 'Allowed' command
+
+-Switch간 Trunk로 연결을 실시하게되면 해당 Switch가 지원하는 모든 VLAN이 Forwarding되어진다.
+  하지만 특정 VLAN만을 Forwarding하거나 또는 특정  VLAN을 제외한 나머지
+  VLAN만을 Forwarding할경우에는 'Allowed' command를 사용할수 있다.
+
+interface fa 0/x
+ switchport trunk encapsulation [dot1q | isl]
+ switchport mode trunk
+ switchport trunk allowed vlan all  [Default로 Enable되어있다.]
+!
+
+
+
+
+EX1) SW1 , SW2구간 사이에서는 VLAN 1,10,20,30만을 사용하고 있다.
+       SW1 , SW2구간 사이에서 현재 사용하는 VLAN 만 Forwarding되도록 설정을 실시하시오
+
+                        <VLAN 1,10,20,30>
+               Fa 0/23                   Fa 0/23     Fa 0/21                   Fa 0/21
+          SW1------------------------SW2------------------------SW3
+
+   # SW1 , SW2
+vlan 10,20,30
+!
+interface fa 0/23
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 1,10,20,30
+!
+
+               정보확인
+
+SW1#show interface trunk    [Allowed 설정 전]
+
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/23      on           802.1q          trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/23      1-4094
+
+
+SW1#show interface trunk    [Allowed 설정 후]
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/23      on           802.1q          trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/23      1,10,20,30  <--- 설정후 VLAN 1,10,20,30으로 제한
+
+
+
+
+
+
+
+EX2) SW1 , SW2구간 사이에서는 VLAN 40을 추가적으로 사용할 예정이다.
+       SW1 , SW2구간 사이에서는 VLAN 1,10,20,30,40만 Trunk Port로 Forwarding이 실시되어져야 한다.
+
+
+                     <VLAN 1,20,30,40>
+               Fa 0/20                   Fa 0/20     Fa 0/21                   Fa 0/21
+          SW1------------------------SW2------------------------SW3
+
+
+   # SW1 , SW2
+interface fa 0/23
+ switchport trunk allowed vlan add 40
+!
+
+
+               정보확인
+
+SW1#show interface trunk
+
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/23      on           802.1q          trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/23      1,10,20,30,40  <--- 위에서 허용된 VLAN에 40이 추가
+
+Port        Vlans allowed and active in management domain
+Fa0/23      1,10,20,30
+
+
+
+
+
+
+EX3) SW1 , SW2구간 사이에서는 VLAN 1,10,20,30,40을 사용하고있다
+       SW1 , SW2구간 사이에서 VLAN10을 사용하지 않을 예정이다.
+       사용되는 VLAN만 허용되도록 설정을 실시하시오
+
+                     <VLAN 1,20,30,40>
+               Fa 0/20                   Fa 0/20     Fa 0/21                   Fa 0/21
+          SW1------------------------SW2------------------------SW3
+
+
+   # SW1 , SW2
+interface fa 0/23
+ switchport trunk allowed vlan remove 10
+!
+
+
+               정보확인
+
+SW1#show interface trunk
+
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/23      on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/23      1,20,30,40  <--- 위에서 허용된 VLAN중 VLAN 10이 삭제
+
+Port        Vlans allowed and active in management domain
+Fa0/23      1,20,30
+
+
+
+
+
+
+
+
+
+
+
+EX4) SW2 , SW3구간 사이에서는 VLAN 100을 제외한 나머지 모든 VLAN에 대해서
+       Forwarding을 실시하려고 한다. 
+
+                     <VLAN 1,20,30,40>                    <1-99,101-1005>
+               Fa 0/20                   Fa 0/20     Fa 0/21                   Fa 0/21
+          SW1------------------------SW2------------------------SW3
+
+
+   # SW2 , SW3
+interface fa 0/21
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 1-99,101-4094
+!
+
+           ------ OR -------
+
+   # SW2 , SW3
+interface fa 0/21
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan except 100
+!
+
+               정보확인
+
+SW2#sh interfaces trunk 
+
+Port        Mode         Encapsulation  Status        Native vlan
+Fa0/21      on           802.1q         trunking      1
+Fa0/23      on           802.1q         trunking      1
+
+Port        Vlans allowed on trunk
+Fa0/21      1-99,101-4094
+Fa0/23      1,20,30,40
+
+Port        Vlans allowed and active in management domain
+Fa0/21      1,10,20,30
+Fa0/23      1,20,30
+
+Port        Vlans in spanning tree forwarding state and not pruned
+Fa0/21      1,10,20,30
+Fa0/23      1,20,30
+
+
+
+
+EX4-1) SW2 , SW3구간 사이에서는 VLAN 100,200을 제외한 나머지 모든 VLAN에 대해서
+          Forwarding을 실시하려고 한다. 
+
+                     <VLAN 1,20,30,40>                    <1-99,101-1005>
+               Fa 0/20                   Fa 0/20     Fa 0/21                   Fa 0/21
+          SW1------------------------SW2------------------------SW3
+
+   # SW2 , SW3
+interface fa 0/21
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan 1-99,101-199,201-1005
+!
+
+           ------ OR -------
+
+   # SW2 , SW3
+interface fa 0/21
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ switchport trunk allowed vlan except 100,200
+!
+
+
+
+
+==============================================================================================
+
+
+                               ## VTP (VLAN Trunking Protocol)
+
+-Cisco에서 VLAN Database 공유를 목적으로 개발된 Protocol
+
+-다수의 Switch나 VLAN을 사용할경우 각각의 Switch에서 VLAN을 생성,수정,삭제하는
+  번거로움을 해결하기위해서 개발된 Protocol이다
+  즉 하나의 Switch에서 VLAN을 생성하거나 수정 또는 삭제를 실시하게되면
+  연결된 모든 Switch에서 VLAN Database table을 동기화하게된다.
+
+-VTP를 사용하기위한 조건
+ .Switch간 ★Trunk★로 연결되어야한다.
+ .VTP Domain일치
+ .VTP Password일치
+
+-VTP의 Mode
+ .Server mode : VLAN 생성(O) , 수정(O) , 삭제(O) , 전파(O) , 일치(O) , 중계(O) :Default
+ .Client Mode  : VLAN 생성(X) , 수정(X) , 삭제(X) , 전파(X) , 일치(O) , 중계(O)
+ .Transparent  : VLAN 생성(O) , 수정(O) , 삭제(O) , 전파(X) , 일치(X) , 중계(O)(Vlan동기화 안함)
+   (Transparent 외부와 절대 통신을 하면안되는구간에 사용한다.)
+		R:0			     R:0			 R:0
+		Server		 	    Client			Server
+		 SW1------------------------SW2------------------------SW3
+		vlan 10			   vlan 10			vlan 10
+		vlan 20			   vlan 20 			vlan 20
+
+리드넘버:(동기화됬을때만 올라감)	
+	
+
+-VLAN의 범위는 0~4095까지이지만 0,4095는 System에서 사용되도록 예약되어져있기때문에
+  사용가능한 VLAN은 1~4094까지이다.
+ [장비에따라서 0~4095 , 0~1005까지 지원한다.]
+
+-VLAN은 용도에따라서 Standard VLAN과 Extended VLAN으로 사용이 가능
+ .Standard VLAN : 1~1005 (1,1002,1003,1004,1005은 예약된 VLAN)
+ .Extended VLAN : 1006 ~ 4094  (Transparent Mode에서만 생성 가능)
+
+
+-VTP Mode 변경
+Switch(config)# vtp mode server [Default mode]
+Switch(config)# vtp mode client
+Switch(config)# vtp mode transparent
+
+
+-VTP Domain 설정
+Switch(config)# vtp domain [WORD]
+ : VTP Domain은 하나의 Switch에서 설정을 실시하게되면 모든 Switch로 전파된다.
+
+
+-VTP Password 설정
+Switch(config)# vtp password [WORD]
+ : VTP Password는 모든 Switch에서 각각의 설정을 실시해야한다.
+
+
+
+      # VTP가 사용하는 Message
+
+-Summary-Advertise
+ .VTP Server가 자신의 VLAN Database 변경시에 Revision Number를 전파 실시
+  VLAN Database에 변경이 없게되면 Revision Number를 5분을 주기로 전파를 실시
+
+-Advertise-Request
+ .Summary-Advertise를 수신한 Switch는 자신보다 높은 Revision Number를 확인하게되면
+  해당 VLAN에 대한 상세 정보를 Advertise-Request를 사용하여 요청을 실시
+ 
+-Subset-Advertise
+ .Subset-Advertise는 VLAN Database정보로써 Advertise-Request 송신한 Swtich에게
+  Subset-Advertise를 사용하여 VLAN Database 정보 전파를 실시한다.
+
+
+
+
+
+
+==============================================================================================
+
+
+
+                                   ### STP (Spanning-Tree Protocol)
+
+-망의 안정화를 위해서 장비간의 이중화를 구현하는것이 효율적이다.
+
+-하지만 Switch간 이중화 이상을 연결하게되면 통신의 특성상 Loop가 발생하게된다
+ .Broadcast-Storm
+ .중복된 Frame 수신
+ .불안정한 Mac-address Table생성 현상에의해 Loop가 발생한다.
+
+-이러한 Loop를 방지하는 알고리즘이 STP이다.
+
+
+                         ## IEEE.802.1D (PVST : Per-VLAN Spanning-Tree)
+
+
+-PVST는 하나의 VLAN당 하나의 STP를 지원하는 기능이다.
+
+                Spanning-Tree 동작순선
+
+                    Fa 0/20 [DP]              Fa 0/20 [RP]
+              SW1============================SW2
+                    Fa 0/21 [DP]              Fa 0/21 [AP]
+                    32768                          32768
+            1111.1111.1111                2222.2222.2222
+
+-Switch간 Connect되면 상호간 BPDU를 송/수신하게된다.
+ *BPDU
+  .Bridge-ID (Priority , Mac-address)
+  .Cost (10M = 100 , 100M = 19 , 1G = 4 , 10G = 2)
+  .Hello-time : 2초
+  .Forward-delay : 15초
+  .Max-age : 20초
+  .Port-prioriyt : 128.x (x = port번호)
+
+
+1.Root-bridge를 선출 (선출기준 : Bridge-ID)
+ a.Priority (32768 + VLAN 번호)가 낮은 Switch가 Root-bridge로 선출
+ b.Mac-address가 낮은 Switch가 Root-bridge로 선출
+
+2.Port 선출
+ .DP(Designated Port) : BPDU를 송신하는 Port
+ .RP(Root Port)         : BPDU를 수신하는 Port
+   * Root-bridge의 모든 Port는 DP로 선출되어지며 모든 Switch는 하나의 Segment당 하나의 DP를 갖는다.
+   * Root-brige를 제외한 나머지 모든 Switch는 한개의  RP(Root Port)를 갖게된다.
+     : 해당 Switch에서 Root-bridge로가는 가장 빠른경로를 의미하며 실제 통신이 실시되는 Port이다.
+
+3.AP(Alternated Port)선출 (Block Port)
+ a.Cost값이 큰 Port가 Blockport로 선출된다.
+ b.Sender Bridge-ID값이큰 Port가 Blockport로 선출
+ c.Port-priority값이 큰 Port가 Blockport로 선출 [Root-bridge의 Port-Priority기준]
+
+
+
+
+-----------------------------------------------------------------------------------------
+
+                        ## Priority값을 사용한 Root-bridge변경
+
+                                 <VLAN 10,20,30,40>
+                   Fa 0/23                                    Fa 0/23
+              SW1=======================================SW2
+                   Fa 0/24                                     Fa 0/24
+
+                     32768                                    32768
+                1111.1111.1111                        2222.2222.2222
+
+                           [설정방법]
+
+SWX(config)# vlan 10,20,30,40
+!
+SWX(config)# interface range fa 0/23 - 24
+SWX(config-if)# switchport trunk encapsulation dot1q
+SWX(config-if)# switchport mode trunk
+!
+SWX(config)# spanning-tree vlan x priority [4096의 배수]
+
+
+
+
+
+
+EX1) SW2가  VLAN 10,20,30,40에 대해서 Root-bridge를 수행해야 한다.
+
+                       # SW2
+SW2(config)# spanning-tree vlan 10,20,30,40 priority 4096
+
+
+                         정보확인
+
+SW1# show spanning-tree vlan 1,10,20,30,40   [설정후 Blockport가 SW1으로 변경]
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --
+Fa0/23           Root FWD 19        128.20   P2p
+Fa0/24           Altn  BLK 19        128.21   P2p
+
+
+
+                ## 다음 실습을 위해서 VLAN Priority설정 삭제 실시
+
+SW2(config)# no spanning-tree vlan 10,20,30,40 priority 4096
+
+
+
+
+
+
+
+EX2) SW1은 VLAN 10,20에 대해서 Root-bridge를 수행해야 하며
+       SW2는 VLAN 30,40에 대해서 Root-bridge를 수행해야 한다.
+
+
+                       # SW1
+SW1(config)# spanning-tree vlan 10,20 priority 4096
+
+
+                       # SW2
+SW2(config)# spanning-tree vlan 30,40 priority 4096
+
+
+
+                         정보확인
+
+-SW1에서 'show spanning-tree vlan 10,20'command를 사용하여
+ 정보확인을 실시하게되면 Fa0/23 , Fa0/24 Port가 모든 FWD로 확인되어지며
+ 'show spanning-tree vlan 30,40'command를 사용하여
+ 정보확인을 실시하게되면 Fa0/24 Port가 BLK로 확인되어진다.
+
+SW1#show spanning-tree vlan 10,20
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- 
+Fa0/23           Desg FWD 19        128.23   P2p
+Fa0/24           Desg FWD 19        128.24   P2p
+
+SW1# show spanning-tree vlan 30,40
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- --------
+Fa0/23           Root FWD 19        128.23   P2p
+Fa0/24           Altn  BLK 19        128.24   P2p
+
+
+
+
+-SW2에서 'show spanning-tree vlan 30,40'command를 사용하여
+ 정보확인을 실시하게되면 Fa0/23 , Fa0/24 Port가 모든 FWD로 확인되어지며
+ 'show spanning-tree vlan 10,20'command를 사용하여
+ 정보확인을 실시하게되면 Fa0/24 Port가 BLK로 확인되어진다.
+
+SW2# show spanning-tree vlan 30,40
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- --------
+Fa0/23           Desg FWD 19        128.23   P2p
+Fa0/24           Desg FWD 19        128.24   P2p
+
+SW2# show spanning-tree vlan 10,20
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- --------
+Fa0/23           Root FWD 19         128.23   P2p
+Fa0/24           Altn  BLK 19         128.24   P2p
+
+
+
+
+
+---------------------------------------------------------------------------------------
+
+
+                              ## Cost값을 사용한 Block Port변경
+
+-Cost값을 설정할경우에는 Block port를 가진 Swithc, Root-bridge에서 더 멀리떨어진 Switch에서 설정
+  Cost값은 송신시에는 0으로 전송되며 수신시 해당 Cost값이 더해진다.
+
+                                 <VLAN 10,20,30,40>
+                   Fa 0/23                                     Fa 0/23
+              SW1=======================================SW2
+                   Fa 0/24                                     Fa 0/24
+
+                     32768                                    32768
+                1111.1111.1111                        2222.2222.2222
+
+
+EX1) SW1이 VLAN 10,20,30,40에 대해서  Root-bridge를 수행하며
+       VLAN 10,20은 Fa 0/23Port를 사용하여 통신을 해당 Port에 장애 발생시 Fa 0/24경로를 사용해야하며
+       VLAN 30,40은 Fa 0/24Port를 사용하여 통신을 해당 Port에 장애 발생시 Fa 0/23경로를 사용해야한다.
+
+
+   # SW2
+interface fastethernet 0/23
+ spanning-tree vlan 30,40 cost 100
+!
+
+   ----- OR ------
+
+   # SW2
+interface fastethernet 0/24
+ spanning-tree vlan 30,40 cost 10
+!
+
+                    정보확인
+
+SW2#sh spanning-tree vlan 10,20    (Block port를 갖은 Switch에서 확인)
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- 
+Fa0/23           Root FWD 19        128.23   P2p 
+Fa0/24           Altn  BLK 19        128.24   P2p 
+
+
+SW2#sh spanning-tree vlan 30,40    (Block port를 갖은 Switch에서 확인)
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- --------
+Fa0/23           Altn BLK  100       128.23   P2p 
+Fa0/24           Root FWD 19        128.24   P2p 
+
+
+
+
+
+
+---------------------------------------------------------------------------------------
+
+
+                              ## Port-priority값을 사용한 Block Port변경
+
+-Port-priority설정은 Root-bridge에서 설정을 실시
+-Blockport선출시 Port-priority값은 Root-brige의 Port-priority값에의해 결정되어진다.
+  Block port변경시에는 Root-bridge이 Port-priority값을 변경해야한다.
+
+                                 <VLAN 10,20,30,40>
+                   Fa 0/23                                     Fa 0/23
+              SW1=======================================SW2
+                   Fa 0/24                                     Fa 0/24
+
+                     32768                                    32768
+                1111.1111.1111                        2222.2222.2222
+
+
+                     [설정방법]
+SWX(config)# interface fastethernet 0/x
+SWX(config-if)# spanning-tree vlan x port-priority [16의 배수]
+
+
+EX1) SW1이 VLAN 10,20,30,40에 대해서  Root-bridge를 수행하며
+       VLAN 10,20은 Fa 0/23Port를 사용하여 통신을 해당 Port에 장애 발생시 Fa 0/24경로를 사용해야하며
+       VLAN 30,40은 Fa 0/24Port를 사용하여 통신을 해당 Port에 장애 발생시 Fa 0/23경로를 사용해야한다.
+
+
+
+
+   # SW1
+interface fastethernet 0/23
+ spanning-tree vlan 30,40 port-priority 192
+!
+
+   ----- OR ------
+
+   # SW1
+interface fastethernet 0/24
+ spanning-tree vlan 30,40 port-priority 64
+!
+
+                정보확인
+
+-설정완료후 'show spanning-tree'command를 사용하여 정보확인을 실시
+-SW1에서는 VLAN 30,40에 대해서 Fa0/23 port의 Port-priority값이 192.23으로 확인되어진다.
+
+SW1# show spanning-tree vlan 30
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- 
+Fa0/23           Desg FWD 19        192.25   P2p   <--- Port-priority변경 확인
+Fa0/24           Desg FWD 19        128.26   P2p 
+
+
+-SW2에서는 Block port가 Fastethernet 0/23으로 변경 확인
+
+SW2# show spanning-tree vlan 30
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa0/23           Altn  BLK 19        128.25   P2p 
+Fa0/24           Root FWD 19        128.26   P2p 
+
+
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+           # Spanning-Tree의 5가지 상태
+
+-Disable
+ .Interface가 비활성화상태인 경우 [해당 Port를 shutdown시키거나 동작이 불가능한 상태]
+ .데이터 전송 X
+ .Mac-address 학습 X
+ .BPDU 수신 X
+
+-Blocking
+ .Spanning-tree에 의해 해당 Port가 Blocking된 상태
+ .데이터 전송 X
+ .Mac-address 학습 X
+ .BPDU 수신 O
+
+-Listening
+ .Blocking상태인 Port가 Designated Port , Root-port로 전환시 Listening상태로 전환되어진다.
+ .해당 Port에 통신장비가 연결되는 경우에도 역시 Listening상태로 전환되어진다.
+ .데이터 전송 X
+ .Mac-address 학습 X
+ .BPDU 수신 O
+
+-Learning
+ .Listening에서 15초의 시간을 유지한후 Learning 상태로 전환되어지며 Mac-addree를 학습하여
+  Mac-address table에 등록이 가능한 상태이다.
+ .데이터 전송 X
+ .Mac-address 학습 O
+ .BPDU 수신 O
+
+-Forwarding
+ .Disable , Blocking상태에서 Listening , Learning상태를 거쳐 Forwarding상태로 전환되어지며
+  통신이 가능한 상태이다.
+ .데이터 전송 O
+ .Mac-address 학습 O
+ .BPDU 수신 O
+
+
+
+----------------------------------------------------------------------------------------------------
+
+
+                   #### Root-brige와 Non Root-bridge 구간 장애 발생시 동작과정
+
+
+          ## 장애 발생시 동작과정 확인
+
+-Block  (장애발생시) [BLK]
+-Listening : (15초) [LIS]
+-Learning  : (15초) [LRN]
+-Forward : 총 30초 소요 [FWD]
+
+SW1# debug spanning-tree events
+Spanning Tree event debugging is on
+
+
+SW1(config)# interface fa0/24
+SW1(config-if)# shutdown
+
+
+        **** SW1에서 Debug 정보 확인 ****
+03:15:40: STP: VLAN0001 new root port Fa0/20, cost 38   <-- Fa0/24장애 발생시 Fa0/20가 Root-port로 전환
+03:15:40: STP: VLAN0001 Fa0/20 -> listening   <--- Blockport가 해당 Port를 Forwarding실시전 Loop체크
+
+03:15:55: STP: VLAN0001 Fa0/20 -> learning   <--- 데이터 통신을위한 Mac-address 학습
+
+03:16:10: STP: VLAN0001 Fa0/20 -> forwarding   <--- 해당 Port가 Forwarding상태로 전환
+
+
+
+
+
+
+
+          ## 장애 복구시 동작과정 확인
+
+SW1(config)# interface fa0/24
+SW1(config-if)# no shutdown
+
+
+        **** SW1에서 Debug 정보 확인 ****
+00:46:46: set portid: VLAN0001 Fa0/24: new port id 801A
+00:46:46: STP: VLAN0001 Fa0/24 -> listening
+
+00:46:47: STP: VLAN0001 new root port Fa0/24, cost 19
+00:46:47: STP: VLAN0001 sent Topology Change Notice on Fa0/24
+00:46:47: STP: VLAN0001 Fa0/20 -> blocking
+
+00:47:01: STP: VLAN0001 Fa0/24 -> learning
+
+00:47:16: STP: VLAN0001 Fa0/24 -> forwarding
+
+
+
+=========================================================================================================
+
+         # Root-brige와 Backup Root-bridge 구간 장애 발생시 동작과정
+
+-Block (20간 유지 : Max-age) [BLK]
+-Listening : (15초) [LIS]
+-Learning  : (15초) [LRN]
+-Forward : 총 50초 소요 [FWD]
+
+
+
+
+SW1# debug spanning-tree events
+Spanning Tree event debugging is on
+
+
+SW2(config)# interface fa0/22
+SW2(config-if)# no shutdown
+
+
+        **** SW1에서 Debug 정보 확인 ****
+00:58:08: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:10: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:12: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:14: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:16: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:18: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:20: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:22: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:24: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+
+00:58:26: STP: VLAN0001 Fa0/20 -> listening
+00:58:26: STP: VLAN0001 heard root 16385-000f.248a.3480 on Fa0/20
+00:58:26: STP: VLAN0001 Topology Change rcvd on Fa0/20
+00:58:26: STP: VLAN0001 sent Topology Change Notice on Fa0/24
+
+00:58:41: STP: VLAN0001 Fa0/20 -> learning
+
+00:58:56: STP: VLAN0001 sent Topology Change Notice on Fa0/24
+00:58:56: STP: VLAN0001 Fa0/20 -> forwarding
+
+
+
+
+
+Switch(config)# spanning-tree vlan x hello-time [초 : Default 2초]
+Switch(config)# spanning-tree vlan x forward-time [초 : Default 15초]
+Switch(config)# spanning-tree vlan x max-age [초 : Default 20초]
+
+
+======================================================================================================
+
+자동으로 할당.
+
+spanning-tree vlan 13 root primary
+
+spanning-tree vlan 13 root secondary 
+
+
+수동으로 할당.
+
+
+spanning-tree vlan 11 priority 4096
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,446 @@
+                         ## RIPv2 (Routing Information Protocol Version 2)
+
+-Classless
+ .라우팅 업데이트 정보에 Subnetmask가 포함된다.
+ .Class가 단절되어도 업데이트가 실시
+ .VLSM , CIDR기능을 지원한다.
+ .IP환경에서 확장성이 좋다.
+
+-업데이트 방식 : UDP 520번을 사용하며 , Multicast [224.0.0.9]
+ .출발지 주소는 업데이트시 출구 Interface의주소를 사용하며
+  목적지 주소는 Multicast [224.0.0.9]를 사용한다.
+
+-MD5인증 기능을 지원한다.
+
+-위의 사항을 제외한 나머지 모든 기능은 RIPv1과 동일하다.
+
+
+-Distance Vector Routing protocol은 기본적으로
+  'auto-summary' command가 동작
+
+
+
+
+-auto-summary : 해당 네트워크 정보를 원래의 Class로 요약하여 업데이트를 실시하는 기능
+
+
+
+
+
+
+
+립버전 1과 립버전 2 의 차이점
+	클래스 풀에서 클래스 레스로 봐뀐다.
+	udp 520 번 쓰는것 똑같다.
+	목적지가 멀티퀘스트로 전환된다.
+
+===================================================================================================
+
+                          ## RIPv2 실습   [RIPv2 Copy&Paste 실시후 RIPv2설정]
+
+     # R1
+router rip
+ version 2
+ no auto-summary
+ network 13.0.0.0
+ network 172.16.0.0
+ passive-interface loopback 172
+ passive-interface fastethernet 0/0
+!
+
+     # R2
+router rip
+ version 2
+ no auto-summary
+ network 13.0.0.0
+ passive-interface fastethernet 0/0
+!
+
+     # R3
+router rip
+ version 2
+ no auto-summary
+ network 13.0.0.0
+ network 172.16.0.0
+ passive-interface loopback 172
+ passive-interface fastethernet 0/0
+!
+
+
+               정보확인
+
+RX# show ip route
+RX# show ip route rip
+RX# show ip protocol
+
+R1# ping 172.16.3.3 source 13.13.10.254
+R1# ping 13.13.20.254 source 13.13.10.254
+R1# ping 13.13.30.254 source 13.13.10.254
+
+R2# ping 172.16.1.1 source 13.13.20.254
+R2# ping 172.16.3.3 source 13.13.20.254
+R2# ping 13.13.20.254 source 13.13.20.254
+R2# ping 13.13.30.254 source 13.13.20.254
+
+R3# ping 172.16.1.1 source 13.13.30.254
+R3# ping 13.13.10.254 source 13.13.30.254
+R3# ping 13.13.20.254 source 13.13.30.254
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+
+                     # 'Debug'command를 사용한 정보확인 실시
+
+R1#show ip interface brief
+Interface           	IP-Address      	OK? Method   Status                Protocol
+Ethernet0/0   	13.13.10.254 	YES manual   up                    up      
+Serial0/0              	13.13.12.1   	YES manual   up                    up      
+Loopback172        	172.16.10.1     	YES manual   up                    up      
+
+
+R1# debug ip rip
+RIP protocol debugging is on
+
+*Mar  1 00:38:10.169: RIP: sending v2 update to 224.0.0.9 via Loopback13 (13.13.10.254)
+
+*Mar  1 00:38:16.564: RIP: sending v2 update to 224.0.0.9 via Serial0/0 (13.13.12.1)
+
+*Mar  1 00:38:17.902: RIP: sending v2 update to 224.0.0.9 via Loopback172 (172.16.1.1)
+
+
+
+-R1의 Serial interface에 R2가 연결되어있기때문에 RIPv2업데이트를 실시해야하지만
+  Ethernet , Loopback interface에는 RIPv2 Routing 업데이트를 실시하지 않아야 한다.
+  [Ethernet interface에는 Switch가 연결되며 Loopback interface는 장비가 연결될수 없는 논리적 interface이다.]
+
+            # Dynamips
+=> Capture R1 s1/0 RIP.cap PPP	: Layer 2 Protocol이 PPP인 경우
+=> Capture R1 s1/0 RIP.cap HDLC	: Layer 2 Protocol이 HDLC인 경우
+=> Capture R1 s1/0 RIP.cap FR	: Layer 2 Protocol이 Frame-relay인 경우
+=> Capture R1 f0/0 RIP.cap		: Layer 2 Protocol이 Ethernet인 경우
+
+
+------------------------------------------------------------------------------------------------
+
+                     ## Passive-interface
+
+-특정 interface로의 Broadcast/Multicast를 차단하는 기능
+
+      Loopback 172                                                   Loopback 172
+                S 0/0               S 0/1    S 0/0               S 0/0
+             R1---------------------R2---------------------R3
+              |                               |                             |
+           Fa 0/0                       Fa 0/0                       Fa 0/0
+
+
+EX1) R1 , R2 , R3에서 RIPv2 라우팅업데이트가 실시되는 Interface로만 RIP Packet이 전송되어야 한다.
+
+   # R1
+router rip
+ passive-interface fastethernet 0/0
+ passive-interface loopback 172
+!
+
+   # R2
+router rip
+ passive-interface fastethernet 0/0
+!
+
+   # R3
+router rip
+ passive-interface fastethernet 0/0
+ passive-interface loopback 172
+!
+
+               정보확인 
+
+R1# debug ip rip       [Passive-interface 설정 전]
+RIP protocol debugging is on
+
+*Mar  1 00:38:10.169: RIP: sending v2 update to 224.0.0.9 via Loopback13 (13.13.10.254)
+
+*Mar  1 00:38:16.564: RIP: sending v2 update to 224.0.0.9 via Serial0/0 (13.13.12.1)
+
+*Mar  1 00:38:17.902: RIP: sending v2 update to 224.0.0.9 via Loopback172 (172.16.10.1)
+
+
+
+R1# debug ip rip       [Passive-interface 설정 후]
+RIP protocol debugging is on
+
+*Mar  1 00:47:15.828: RIP: sending v2 update to 224.0.0.9 via Serial0/0 (13.13.12.1)
+
+
+
+R1# show ip protocol
+Routing Protocol is "rip"
+ ------[중간 생략]------
+  Passive Interface(s):
+    Loopback13
+    Loopback172
+
+
+
+------------------------------------------------------------------------------------------------
+
+                                 ## RIP Authentication 
+
+-RIP은 지정된 특정 장비와 업데이트를 송/수신하기위해서 업데이트시
+  인증 기능을 사용할수 있다.
+
+-RIP은 평문 인증 기능과 MD5인증 기능을 지원한다. (MD5인증 기능은 RIPv2만 지원한다.)
+
+                 [설정방법]
+
+RX(config)# key chain [WORD_1]
+RX(config-key-chain)# key <0-2147483647>  : 연결된 상호간 Key값은 동일해야 한다.
+RX(config-key-chain-key)# key-string [WORD_2]  : 연결된 상호간 Key-string 값은 동일해야 한다.
+!
+RX(config)# interface serial , ethernet x
+RX(config-if)# ip rip authentication mode [text | md5]
+RX(config-if)# ip rip authentication key-chain [WORD_1]
+
+
+                     13.13.12.0/24               13.13.23.0/24
+                S 1/0                 S 1/1    S 1/0               S 1/0
+             R1---------------------R2---------------------R3
+              |                                |                                 |
+       13.13.10.0/24             13.13.20.0/24                13.13.30.0/24
+
+
+EX1) R1과 R2사이 구간에 보안향상을 위해서 Authentication기능을 사용한 업데이트를 실시해야한다.
+       [Key = 20110117 , Key-string = cisco1234 , MD5 인증기능 사용
+
+   # R1
+key chain RIP_AUTH
+ key 20110117
+  key-string cisco1234
+!
+interface serial 1/0
+ ip rip authentication mode md5
+ ip rip authentication key-chain RIP_AUTH
+!
+
+   # R2
+key chain RIP_AUTH
+ key 20110117
+  key-string cisco1234
+!
+interface serial 1/1
+ ip rip authentication mode md5
+ ip rip authentication key-chain RIP_AUTH
+!
+
+            정보확인
+
+R1# debug ip rip       [R1에서만 인증을 설정시]
+*Mar  1 00:26:45.387: RIP: ignored v2 packet from 13.13.12.2 (invalid authentication)
+
+
+R1# debug ip rip       [R1 , R2 에서 인증 설정시]
+*Mar  1 00:27:11.379: RIP: received packet with MD5 authentication
+*Mar  1 00:27:11.383: RIP: received v2 update from 13.13.12.2 on Serial1/0
+
+
+
+R1# show ip protocol
+  ----- 중간 생략 -----
+  Default version control: send version 2, receive version 2
+    Interface             Send  Recv  Triggered RIP  Key-chain
+    Serial1/0             2       2                          RIP_AUTH      
+
+
+
+
+-------------------------------------------------------------------------------------------
+
+
+EX2) R2와 R3구간 사이에 보안향상을 위해서 Authentication기능을 사용한 업데이트를 실시해야한다.
+       [Key = 292513 , Key-string = cisco4321 , MD5 인증기능 사용]
+
+   # R2
+key chain RIP_MD5_AUTH
+ key 292513
+  key-string cisco4321
+!
+interface serial 1/0
+ ip rip authentication mode md5
+ ip rip authentication key-chain RIP_MD5_AUTH
+!
+
+   # R3
+key chain RIP_MD5_AUTH
+ key 292513
+  key-string cisco4321
+!
+interface serial 1/1
+ ip rip authentication mode md5
+ ip rip authentication key-chain RIP_MD5_AUTH
+!
+
+              정보확인
+
+R2# debug ip rip
+
+R2# show ip protocol
+
+R2# show key chain 
+
+
+
+------------------------------------------------------------------------------------------------
+
+                                 ## RIP Triggered
+
+-RIP은 Distance Vector Routing protocol 이기때문에 주기적인
+  라우팅 업데이트를 실시한다.
+
+-자신의 네트워크 환경에 변경사항이 일어날 경우에만 업데이트를 실시하기위해서
+  Triggered 기능을 특정 Interface에서 실시할수있다.
+  [단 RIP Triggered는 WAN구간 Point-to-point구간에서만 사용이 가능하다.]
+
+EX1) R1와 R2구간 사이에서 네트워크에 변경이 있는경우에만 업데이트가 실시되어야 한다.
+
+                S 1/0                 S 1/1    S 1/0               S 1/1
+             R1---------------------R2---------------------R3
+
+   # R2
+interface serial 1/0
+ ip rip triggered
+!
+
+   # R3
+interface serial 1/1
+ ip rip triggered
+!
+
+              정보확인
+
+R3# debug ip rip      [Triggered 전]
+RIP protocol debugging is on
+*Mar  1 00:31:10.787: RIP: sending v2 update to 224.0.0.9 via Serial1/1 (13.13.23.3)
+
+
+R3# debug ip rip      [Triggered 후]
+RIP protocol debugging is on
+-해당 Router에 네트워크가 추가되거나 삭제되지 않으면 업데이트가 실시되지 않는다.
+
+
+R3#show ip protocol
+Routing Protocol is "rip"
+------중간 생략-----------
+  Default version control: send version 2, receive version 2
+    Interface             Send  Recv  Triggered RIP  Key-chain
+    Serial0/0   	      2       2         Yes     
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+                                 ## RIPv2 Unicast통신
+
+-RIPv1은 출발지 주소는 출구 Interface의 주소를 사용하며 목적지 주소는 Broadcast [255.255.255.255]
+-RIPv2는 출발지 주소는 출구 Interface의 주소를 사용하며 목적지 주소는 Multicast [224.0.0.9]
+-RIP은 신뢰적인 업데이트를 실시하기위해서 Unicast기능을 지원한다.
+
+                     S 1/0                         S 1/1   S 1/0                         S 1/1
+                     13.13.12.1             13.13.12.2    13.13.23.2             13.13.23.3
+                  R1----------------------------R2----------------------------R3
+
+
+   # R1 ---> R2  [Multicast]
+-SA : 13.13.12.1
+-DA : 224.0.0.9
+
+
+   # R1 ---> R2  [Unicast]
+-SA : 13.13.12.1
+-DA : 13.13.12.2
+
+
+   # R1
+router rip
+ passive-interface serial 1/0
+ neighbor 13.13.12.2
+!
+
+   # R2
+router rip
+ passive-interface serial 1/1
+ neighbor 13.13.12.1
+!
+
+              정보확인
+
+R1# debug ip rip     [Unicast 설정 전]
+RIP protocol debugging is on
+*Mar  1 00:36:23.571: RIP: sending v2 update to 224.0.0.9 via Serial1/0 (13.13.12.1) <--Multicast 224.0.0.9
+
+
+R1# debug ip rip     [Unicast 설정 후]
+RIP protocol debugging is on
+*Mar  1 00:36:49.687: RIP: sending v2 update to 13.13.12.2 via Serial1/0 (13.13.12.1) <--Unicast 13.13.12.2
+
+
+
+
+
+
+   # R1
+
+R1# debug ip rip
+!
+R1# conf t
+!
+R1(config)# interface loopback 172
+R1(config-if)# shutdown
+
+*Mar  1 00:39:56.955: RIP: sending v2 flash update to 13.13.12.2 via Serial1/0 (13.13.12.1)
+*Mar  1 00:39:56.955: RIP: build flash update entries
+*Mar  1 00:39:56.959:   172.16.1.0/24 via 0.0.0.0, metric 16, tag 0
+
+
+
+
+                     S 1/0                         S 1/1   S 1/0                         S 1/1
+                     13.13.12.1             13.13.12.2    13.13.23.2             13.13.23.3
+                  R1----------------------------R2----------------------------R3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,177 @@
+                                  #### OSPF Authentication
+
+-OSPF는 Router와 Router간 인증을 실시하는Neighbor 인증기능과
+  해당 Area내의 모든 Router에서 공통으로 인증기능을 사용하는 Area인증기능을 사용할수 있다.
+
+
+                     ## Neighbor authentication 
+
+-Router와 Router사이간의 인증기능
+
+
+       # Plain Text authentication 
+
+                  S1/0                   S1/1    S1/0                  S1/1
+               R1----------------------R2----------------------R3
+
+   # R1
+interface serial 1/0
+ ip ospf authentication
+ ip ospf authentication-key cisco
+!
+
+   # R2
+interface serial 1/1
+ ip ospf authentication
+ ip ospf authentication-key cisco
+!
+
+           정보확인
+
+R1# debug ip ospf packet
+*Mar  1 03:17:30.895: OSPF: rcv. v:2 t:1 l:48 rid:2.2.2.2
+      aid:0.0.0.0 chk:E693 aut:1 auk: from Serial1/0
+
+-aut:0 = Authentication X
+-aut:1 = Text Authentication
+-aut:2 = MD5 Authentication
+
+
+
+
+
+
+
+       # MD5 authentication 
+
+                  S1/0                   S1/1    S1/0                  S1/1
+               R1----------------------R2----------------------R3
+
+   # R1
+interface serial 1/0
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 100 md5 cisco
+!
+
+   # R2
+interface serial 1/1
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 100 md5 cisco
+!
+
+           정보확인
+
+R1#debug ip ospf packet 
+
+*Mar  1 03:19:40.887: OSPF: rcv. v:2 t:1 l:48 rid:2.2.2.2
+      aid:0.0.0.0 chk:0 aut:2 keyid:100 seq:0x3C7EF2B9 from Serial1/0
+
+-aut:0 = Authentication X
+-aut:1 = Text Authentication
+-aut:2 = MD5 Authentication
+
+
+
+---------------------------------------------------------------------------------
+
+
+                     ## Area authentication 
+
+-해당 Area내에 포함된 모든 Router에서 공통을 설정을 실시해야한다.
+
+
+       # Plain Text authentication 
+
+                  S1/0                   S1/1    S1/0                  S1/1
+               R1----------------------R2----------------------R3
+
+    R1--R2
+
+   # R1
+interface serial 1/0
+ ip ospf authentication
+ ip ospf authentication-key cisco
+!
+router ospf 100 
+ area 0 authentication 
+!
+
+   # R2
+interface serial 1/1
+ ip ospf authentication
+ ip ospf authentication-key cisco
+!
+router ospf 100 
+ area 0 authentication 
+!
+
+
+       # MD5 authentication 
+
+                  S1/0                   S1/1    S1/0                  S1/1
+               R1----------------------R2----------------------R3
+
+   # R1
+interface serial 1/0
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 100 md5 cisco
+!
+router ospf 100 
+ area 0 authentication message-digest
+!
+
+   # R2
+interface serial 1/1
+ ip ospf authentication message-digest
+ ip ospf message-digest-key 100 md5 cisco
+!
+router ospf 100 
+ area 0 authentication message-digest
+!
+
+   # R3  [R2와 Virtual-link를 연결하기위한 인증]
+router ospf 100 
+ area 0 authentication message-digest
+!
+
+           정보확인
+
+R1#debug ip ospf packet 
+
+
+
+-aut:0 = Authentication X
+-aut:1 = Text Authentication
+-aut:2 = MD5 Authentication
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

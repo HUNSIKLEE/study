@@ -1,0 +1,109 @@
+               # R1
+ 
+en
+ter le 0
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname R1
+!
+interface loopback 211
+ ip address 211.241.228.18 255.255.255.0
+!
+interface serial 1/0
+ no shutdown
+ ip address 121.160.70.1 255.255.255.0
+!
+router rip
+ version 2
+ no auto-summary
+ network 121.0.0.0
+ network 211.241.228.0
+!
+
+
+
+
+
+
+
+               # R2
+
+en
+ter le 0
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname R2
+!
+interface fa 0/1
+ no shutdown
+ ip address 192.168.10.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ ip address 121.160.70.2 255.255.255.0
+ clock rate 1612800
+!
+router rip
+ version 2
+ no auto-summary
+ network 121.0.0.0
+!
+
+
+
+
+
+
+
+               # R3
+
+
+en
+ter le 0
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname R3
+!
+interface fa 0/1
+ no shutdown
+ ip address 192.168.10.3 255.255.255.0
+!
+ip route 0.0.0.0 0.0.0.0 192.168.10.254
+!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+Dynamips
+
+
+실제 시스코라우터 를 vmware 처럼 가상으로 시스코라우터를 만든다.
+
+
+
+운영체제를 .bin으로 끝난다.
+
+
+
+실습 유틸에서 11.0 설치한다음  net에 들어가서 ccna 메모장으로 실행
+
+
+[localhost] = RAS(리모트 엑세스 서버) = 127.0.0.1 = PC
+
+
+
+
+console = 2001 ( 라스 번호다)
+
+-RAS 	:127.0.0.1
+port	:2001 = R1
+
+
+-RAS 	:127.0.0.1
+port	:2002 = R2
+
+
+-RAS 	:127.0.0.1
+port	:2003 = R3
+
+   [[2691]] 여기에 설정을 했다는건 모든 라우터에다가 다 설정하겠다.
+
+
+    [[router R1]] R1 이설정안에다가 설정을하면 이 라우터에게만 설정하겠다.
+
+
+..\ios\C2691-AD.BIN ( ..여기 위에있는 ios 폴더 아래 c2691-ad.bin 이라는 운영체제가 있습니다.)
+
+모든 설정정보는 tmp 에저장된다.
+
+
+
+list
+
+
+
+start R1 
+	(원인 메세지.피씨마다 다 장비가 다르니까 최적화를 시켜줘야한다.)
+
+
+idlepc get R1 (1번과 2번이 운영체제가 다르다면 둘다 찾아줘야한다. 
+		운영체제 마다 최적화된 pc의 값을 찾아주는것.)
+
+접속시켜주는 툴일뿐이다.
+
+ -> 저거를 하면 * 표시가 나오는데 이거를  net 에 ccna     [[2691]] 	idlepc = 0x6154a43c( 최적화된 값을  넣어준다.)
+
+그러고 다시 켜서 start R1 R2 R3  해주면 잘된다 워링이 안뜬다.
+
+ 그러고나서 SecureCRT 5.0 설치하고 라이센스번호 넣어준다
+
+
+CRT 들어가서 폴더 만들고 버튼(뉴 쎼션) 누르면 
+
+이름은 R1 프로토콜은 텔넷 
+텔넷 누르고 127.0.0.1
+포트번호 2001
+
+
+
+
+
+
+#R1
+
+R1(config) router rip
+R3(config-router)version 1
+R1(config-router)network 192.168.1.0
+R1(config-router)network 192.168.12.0
+
+
+
+
+
+#R2
+
+R1(config) router rip
+R3(config-router)version 1
+R1(config-router)network 192.168.1.0
+R1(config-router)network 192.168.12.0
+
+
+
+
+
+#R3
+
+R1(config) router rip
+R3(config-router)version 1
+R1(config-router)network 192.168.1.0
+R1(config-router)network 192.168.12.0
+
+
+
+
+debug ip rip
+
+
+립버전 1과 립버전 2 의 차이점
+	

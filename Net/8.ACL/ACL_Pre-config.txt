@@ -1,0 +1,153 @@
+               # R1
+
+en
+ter le 0
+conf t 
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname R1
+!
+interface loopback 0
+ ip address 1.1.1.1 255.255.255.0
+!
+interface fa 0/0
+ no shutdown
+ ip address 13.13.10.254 255.255.255.0
+!
+interface serial 1/0
+ no shutdown
+ ip address 13.13.12.1 255.255.255.0
+!
+router rip
+ version 2
+ no auto-summary
+ network 1.0.0.0
+ network 13.0.0.0
+!
+line vty 0 4
+ password cisco
+ login
+!
+enable secret cisco
+!
+
+
+
+
+
+
+
+               # R2
+
+en
+ter le 0
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname R2
+!
+interface loopback 0
+ ip address 2.2.2.2 255.255.255.0
+!
+interface fa 0/0
+ no shutdown
+ ip address 13.13.20.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ ip address 13.13.12.2 255.255.255.0
+ clock rate 1612800
+!
+interface serial 1/0
+ no shutdown
+ ip address 13.13.23.2 255.255.255.0
+ clock rate 1612800
+!
+router rip
+ version 2
+ no auto-summary
+ network 2.0.0.0
+ network 13.0.0.0
+!
+line vty 0 4
+ password cisco
+ login
+!
+enable secret cisco
+!
+
+
+
+
+
+
+               # R3
+
+en
+ter le 0
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname R3
+!
+interface loopback 0
+ ip address 3.3.3.3 255.255.255.0
+!
+interface fa 0/0
+ no shutdown
+ ip address 13.13.30.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ ip address 13.13.23.3 255.255.255.0
+!
+router rip
+ version 2
+ no auto-summary
+ network 3.0.0.0
+ network 13.0.0.0
+!
+line vty 0 4
+ password cisco
+ login
+!
+enable secret cisco
+!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

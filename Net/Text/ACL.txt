@@ -1,0 +1,657 @@
+                                            ### Access Control-List
+
+
+       # ACL 구성시 주의사항
+-ACL은 "Permit/Deny" command를 사용하여 트래픽을 제어한다.
+-ACL은 마지막 Line에 "deny any" command가 자동실행된다.
+-ACL은 첫번째 Line부터 순서대로 실행되기때문에 작은 범위의 트래픽부터 지정해야 한다.
+-ACL은 부분 추가 , 부분삭제되지 않는다.
+
+
+       # ACL의 유형
+-Numberd  ACL , Named ACL , Dynamic ACL , Reflective ACL , Ethernet ACL...
+
+
+
+                     ## Numbered Standard ACL
+-범위 : 1 ~ 99
+-특징 : Source IP address를 사용하여 트래픽을 제어한다.
+          Router에서 방화벽구축보다는 다른 Filtering 기능 구성시 네트워크의 범위를 지정시 사용된다.
+-형식 : access-list [1-99] [Permit/Deny] [Source IP address] [W/M]
+-적용 : Interface , VTY등에 적용 실시
+
+-----------------------------------------------------------------------------------------------------
+
+               ## Standard ACL
+
+EX1) R1은 출발지 주소가 192.168.3.0/24트래픽이 192.168.1.0/24 네트워크로
+        접근하는것을을 허용하려고 한다 이외의 나머지 모든 트래픽은 차단해야한다.
+
+                                   S1/0                         S 1/1     S 1/0                        S 1/1
+                               R1-------------------------R2-------------------------R3
+                                |                                          |                                         |
+                            Fa 0/0                                    Fa 0/0                                  Fa 0/0
+                                |                                          |                                         |
+                                |                                          |                                         |
+                       192.168.1.0/24                        192.168.2.0/24                      192.168.3.0/24
+
+    # R1
+access-list 1 permit  192.168.3.0  0.0.0.255
+!
+interface serial 1/0
+ ip access-group 1 in
+!
+
+   ------ OR -------
+
+    # R1
+access-list 1 permit  192.168.3.0  0.0.0.255
+!
+interface fastethernet 0/0
+ ip access-group 1 out
+!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------
+
+
+EX2) R3은 출발지 주소가 192.168.1.0/24트래픽이 192.168.3.0/24 네트워크로
+        접근하는것을을 차단하려고 한다 이외의 나머지 모든 트래픽은 허용해야한다.
+
+
+
+                                   S1/0                         S 1/1     S 1/0                        S 1/1
+                               R1-------------------------R2-------------------------R3
+                                |                                          |                                         |
+                            Fa 0/0                                    Fa 0/0                                  Fa 0/0
+                                |                                          |                                         |
+                                |                                          |                                         |
+                       192.168.1.0/24                        192.168.2.0/24                      192.168.3.0/24
+
+
+    # R3
+access-list 2 deny 192.168.1.0  0.0.0.255
+access-lsit 2 permit any
+!
+interface fastethernet 0/0
+ ip access-group out
+!
+
+
+
+=============================================================================================================================
+
+                           ### Standard ACL 실습
+
+EX1) R1은 13.13.30.0/24 네트워크트래픽이 13.13.10.0/24 네트워크로 접근치 차단하고
+        나머지 모든 트래픽은 허용하려고한다.  (설정은 R1에서 실시하며 Serial interface에적용 실시)
+
+        Loopback 0                                          Loopback 0                                       Loopback 0
+         1.1.1.0/24                                          2.2.2.0/24                                        3.3.3.0/24
+
+                   S1/0        13.13.12.0/24         S 1/1    S 1/0         13.13.23.0/24          S 1/1
+               R1-------------------------------R2---------------------------------R3
+                |                                                   |                                                      |
+        13.13.10.0/24                                   13.13.20.0/24                                    13.13.30.0/24
+
+    # R1
+access-list 1 deny 13.13.30.0  0.0.0.255
+access-list 1 permit any
+!
+interface serial 1/0
+ ip access-group 1 in
+!
+
+         정보 확인
+
+R1# show access-lists 
+Standard IP access list 1
+    10 deny   13.13.30.0, wildcard bits 0.0.0.255
+    20 permit any
+
+
+R3# ping 13.13.10.254 source 13.13.30.254 
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 13.13.10.254, timeout is 2 seconds:
+Packet sent with a source address of 13.13.30.254 
+U.U.U
+
+
+
+
+
+                           #### 정보 확인 실시후 ACL 삭제 실시
+
+   # R1
+no access-list 1
+!
+interface serial 1/0
+ no ip access-group 1 in
+!
+
+-----------------------------------------------------------------------------------------------
+
+EX2) R3은 13.13.10.0/24 , 1.1.1.0/24 네트워크트래픽이 13.13.30.0/24 네트워크로 접근치 차단하고
+        나머지 모든 트래픽은 허용하려고한다.
+         (R3에서 설정하며 Serial interface에 적용되어야 한다.)
+
+        Loopback 0                                          Loopback 0                                       Loopback 0
+         1.1.1.0/24                                          2.2.2.0/24                                        3.3.3.0/24
+
+                   S1/0        13.13.12.0/24         S 1/1    S 1/0         13.13.23.0/24          S 1/1
+               R1-------------------------------R2---------------------------------R3
+                |                                                   |                                                      |
+        13.13.10.0/24                                   13.13.20.0/24                                    13.13.30.0/24
+
+    # R3
+access-list 2 deny 1.1.1.0  0.0.0.255
+access-list 2 deny 13.13.10.0  0.0.0.255
+access-list 2 permit any
+!
+interface serial 1/1
+ ip access-group 2 in
+!
+
+           정보 확인
+
+R3# show access-list
+
+R1# ping 13.13.30.254 source 1.1.1.1  [통신 X]
+R1# ping 13.13.30.254 source 13.13.10.254  [통신 X]
+
+R2# ping 13.13.30.254 source 2.2.2.2  [통신 O]
+R2# ping 13.13.30.254 source 13.13.20.254  [통신 O]
+
+
+
+                           #### 정보 확인 실시후 ACL 삭제 실시
+
+   # R3
+no access-list 2
+!
+interface serial 1/1
+ no ip access-group 2 in
+!
+
+
+-----------------------------------------------------------------------------------------------
+
+EX3) R1은 2.2.2.0/24 , 3.3.3.0/24 네트워크트래픽이 접근시 허용하고 나머지 모든 트래픽은 차단되어야한다.
+       R1에서 설정을 실시하며 Serial interface에적용 실시
+
+        Loopback 0                                          Loopback 0                                       Loopback 0
+         1.1.1.0/24                                          2.2.2.0/24                                        3.3.3.0/24
+
+                   S1/0        13.13.12.0/24         S 1/1    S 1/0         13.13.23.0/24          S 1/1
+               R1-------------------------------R2---------------------------------R3
+                |                                                   |                                                      |
+        13.13.10.0/24                                   13.13.20.0/24                                    13.13.30.0/24
+
+                                           ## R1 <---- R2
+         Layer 3              Layer 4	                 RIP
+-SA : 13.13.12.2	-SA : UDP 520	13.13.20.0/24   13.13.30.0/24
+-DA : 224.0.0.9	-DA : UDP 520	13.13.23.0/24   2.2.2.0/24	3.3.3.0/24
+
+   # R1
+access-list 3 permit 2.2.2.0  0.0.0.255
+access-list 3 permit 3.3.3.0  0.0.0.255
+!
+interface serial 1/0
+ ip access-group 3 in
+!
+
+-문제 : ACL설정후 R1의 Routing table에 RIP 정보가 확인되지 않는다.
+-원인 : R1은 출발지 주소가 2.2.2.0/24 , 3.3.3.0/24인 트래픽만 허용하므로 RIP업데이트를 수신하지 못한다.
+          (R2가 R1에게 라우팅 업데이트시 출발지 주소는 13.13.12.2이므로 ACL에 의해 차단)
+-해결 : RIPv2 라우팅 업데이트를 수신하기위한 ACL을 추가해야 한다.
+
+   # R1
+access-list 3 permit 2.2.2.0  0.0.0.255
+access-list 3 permit 3.3.3.0  0.0.0.255
+access-list 3 permit 13.13.12.2  0.0.0.0   <--- RIPv2를 수신하기위한 ACL 추가
+!
+interface serial 1/0
+ ip access-group 3 in
+!
+
+          정보 확인
+
+R2# ping 13.13.10.254 source 2.2.2.2  [통신 O]
+R3# ping 13.13.10.254 source 3.3.3.3  [통신 O]
+
+R2# ping 13.13.10.254 source 13.13.20.254  [통신 X]
+R3# ping 13.13.10.254 source 13.13.30.254  [통신 X]
+
+
+
+
+==============================================================================================
+
+                           ## Numbered  Extended ACL
+
+-범위 : 100 ~ 199
+
+-특징 : Source IP address와 Destination IP address를 사용하여 트래픽을 제어하며
+          Port number를 사용하여 특정 어플리케이션까지 제어가 가능하다.
+         
+-형식 : 
+
+access-list [100-199] [Permit/Deny] [Protocol] [SA] [W/M] [DA] [W/M]
+
+access-list [100-199] [Permit/Deny] [Protocol] [SA] [W/M] eq [Source Port] [DA] [W/M] eq [Destination Port]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+==============================================================================================
+
+EX1-1) RTA의 FastEthernet 0/0에 Server인 192.168.100.112가 있다
+          RTA는 210.114.56.0/24 네트워크가 Telnet접속하는것을 허용하려고 한다.
+          이외의 나머지 모든 트래픽은 차단
+
+           RTA----------------210.114.56.0/24
+             |
+           fa0/0
+             |
+     192.168.100.112
+
+access-list [100-199] [permit/deny] [protocol] [SA] [W/M] [DA] [W/M]
+
+access-list [100-199] [permit/deny] [protocol] [SA] [W/M] eq [Source port] [DA] [W/M] eq [Destination port]
+
+    # RTA
+access-list 101 permit tcp 210.114.56.0  0.0.0.255  192.168.100.112  0.0.0.0 eq 23
+access-list 101 deny ip any any   <--- 자동 생략
+!
+interface fastehernet 0/0
+ ip access-group 101 out
+!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EX1-2) RTA의 FastEthernet 0/0에  Server인 192.168.100.112가 있다
+          RTA는 210.114.56.0/24 네트워크가 Telnet접속하는것을 차단하려고 한다.
+          이외의 나머지 모든 트래픽은 허용
+
+           RTA----------------210.114.56.0/24
+             |
+           fa0/0
+             |
+     192.168.100.112
+
+access-list [100-199] [permit/deny] [protocol] [SA] [W/M] [DA] [W/M]
+
+access-list [100-199] [permit/deny] [protocol] [SA] [W/M] eq [Source port] [DA] [W/M] eq [Destination port]
+
+    # RTA
+access-list 102 deny tcp 210.114.56.0  0.0.0.255  host 192.168.100.112 eq 23
+access-list 102 permit ip any any
+!
+interface fastethernet 0/0
+ ip access-group 102 out
+!
+
+
+
+
+EX1-3) RTA의 FastEthernet 0/0에 Server인 192.168.100.112가 있다
+          RTA는 210.114.56.0/24 네트워크로 부터의 ICMP 트래픽을 차단하려고 한다.
+          이외의 나머지 모든 트래픽은 허용
+
+           RTA----------------210.114.56.0/24
+             |
+           fa0/0
+             |
+     192.168.100.112
+
+
+access-list [100-199] [permit/deny] [protocol] [SA] [W/M] [DA] [W/M]
+access-list [100-199] [permit/deny] [protocol] [SA] [W/M] eq [Source port] [DA] [W/M] eq [Destination port]
+
+   # RTA
+access-list 103 deny icmp 210.114.56.0  0.0.0.255 host 192.168.100.112
+access-list 103 permit ip any any
+!
+interface fastethernet 0/0
+ ip access-group 103 out
+!
+
+
+
+
+
+
+==============================================================================================
+
+
+                          ### Extended ACL 실습
+
+EX1) R1은 출발지 주소가 3.3.3.3 이고 목적지 주소가 1.1.1.1인 Telnet트래픽을 차단하려고 한다
+       이외의 나머지 모든 트래픽은 허용 R1에서 설정하며 Serial에 적용
+
+        Loopback 0                                          Loopback 0                                       Loopback 0
+         1.1.1.0/24                                          2.2.2.0/24                                        3.3.3.0/24
+
+                   S1/0        13.13.12.0/24         S 1/1    S 1/0         13.13.23.0/24          S 1/1
+               R1-------------------------------R2---------------------------------R3
+                |                                                   |                                                      |
+        13.13.10.0/24                                   13.13.20.0/24                                    13.13.30.0/24
+
+    # R1
+access-list 101 deny tcp host 3.3.3.3  host 1.1.1.1  eq 23
+access-list 101 permit ip any any
+!
+interface serial 1/0
+ ip access-group 101 in
+!
+
+           정보 확인
+
+R3# telnet 1.1.1.1		<---- ACL 101번 첫번째 Line에에 Match되지 않기때문에 두번째 Line인 permit any에의해 허용된다.
+Trying 1.1.1.1 ... Open
+User Access Verification
+Password: 
+R1> exit | logout      <--- Telnet 접속 해제는 "exit" , "logout" command를 사용
+
+
+R3# telnet 1.1.1.1 /source-interface loopback 0          <---- Source IP address를 R3의 Loopback 0으로 변경하여 Telnet접속 실시
+Trying 1.1.1.1 ... 
+% Destination unreachable; gateway or host down
+
+
+R3# ping 1.1.1.1  source 3.3.3.3
+Type escape sequence to abort.
+Sending 5, 100-byte ICMP Echos to 1.1.1.1, timeout is 2 seconds:
+Packet sent with a source address of 3.3.3.3 
+!!!!!
+
+-출발지 IP address가 3.3.3.3이고 목적지 IP address인 Telnet Traffic만 차단했기때문에 ICMP Traffic은 허용된다.
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+
+EX2) R1은 출발지 주소가 3.3.3.3이고 목적지 주소가 13.13.10.0/24인 ICMP , Telnet를 
+       차단하려고 한다. 나머지 모든 트래픽에 대해서 허용하려고 한다.
+       설정은 R1에서 설정하며 Serial interface에서 적용
+
+        Loopback 0                                          Loopback 0                                       Loopback 0
+         1.1.1.0/24                                          2.2.2.0/24                                        3.3.3.0/24
+
+                   S1/0        13.13.12.0/24         S 1/1    S 1/0         13.13.23.0/24          S 1/1
+               R1-------------------------------R2---------------------------------R3
+                |                                                   |                                                      |
+        13.13.10.0/24                                   13.13.20.0/24                                    13.13.30.0/24
+
+access-list [100-199] [permit/deny] [protocol] [SA] [W/M] [DA] [W/M]
+access-list [100-199] [permit/deny] [protocol] [SA] [W/M] eq [Source port] [DA] [W/M] eq [Destination port]
+
+    # R1
+access-list 102 deny icmp host 3.3.3.3  13.13.10.0  0.0.0.255
+access-list 102 deny tcp host 3.3.3.3  13.13.10.0  0.0.0.255 eq 23
+access-list 102 permit ip any any
+!
+interface serial 1/0
+ ip access-group 102 in
+!
+
+            정보 확인
+
+R3# ping 13.13.10.254  source 3.3.3.3  [통신 X]
+R3# telnet 13.13.10.254  /source-interface lo 0  [접속 X]
+
+R3# ping 13.13.10.254  source 13.13.30.254  [통신 O]
+R3# telnet 13.13.10.254  /source-interface fa0/0  [접속 O]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+
+EX3) R1은 출발지 주소가 13.13.30.0/24인 트래픽이 1.1.1.1로의 
+       Telnet접속과 ICMP트래픽을 허용하려고 한다 이외의 나머지 트래픽은 차단
+       설정은 R1에서 설정하며 Serial interface에서 적용
+
+        Loopback 0                                          Loopback 0                                       Loopback 0
+         1.1.1.0/24                                          2.2.2.0/24                                        3.3.3.0/24
+
+                   S1/0        13.13.12.0/24         S 1/1    S 1/0         13.13.23.0/24          S 1/1
+               R1-------------------------------R2---------------------------------R3
+                |                                                   |                                                      |
+        13.13.10.0/24                                   13.13.20.0/24                                    13.13.30.0/24
+
+                                           ## R1 <---- R2
+         Layer 3              Layer 4	                 RIP
+-SA : 13.13.12.2	-SA : UDP 520	13.13.20.0/24   13.13.30.0/24
+-DA : 224.0.0.9	-DA : UDP 520	13.13.23.0/24   2.2.2.0/24	3.3.3.0/24
+
+   # R1
+access-list 103 permit icmp 13.13.30.0  0.0.0.255  host 1.1.1.1
+access-list 103 permit tcp 13.13.30.0  0.0.0.255  host 1.1.1.1 eq 23
+!
+interface serial 1/0
+ ip access-group 103 in
+!
+
+-문제 : ACL설정후 R1의 Routing table에 RIP 정보가 확인되지 않는다.
+-원인 : R1은 출발지 주소가 13.13.30.0/24인 트래픽이 1.1.1.1로의 
+          Telnet접속과 ICMP 트래픽만 허용하므로 RIP업데이트를 수신하지 못한다.
+-해결 : RIPv2 라우팅 업데이트를 수신하기위한 ACL을 추가해야 한다.
+
+   # R1
+access-list 103 permit icmp 13.13.30.0  0.0.0.255  host 1.1.1.1
+access-list 103 permit tcp 13.13.30.0  0.0.0.255  host 1.1.1.1 eq 23
+access-list 103 permit udp host 13.13.12.2 eq 520 host 224.0.0.9 eq 520  <--- RIPv2를 수신하기위한 ACL 추가
+!
+interface serial 1/0
+ ip access-group 103 in 
+!
+
+            정보 확인
+
+R3# ping 1.1.1.1  source 13.13.30.254  [통신 O]
+R3# telnet 1.1.1.1  /source-interface fa 0/0  [접속 O]
+
+R3# ping 1.1.1.1  source 3.3.3.3  [통신 X]
+R3# telnet 1.1.1.1  /source-interface loop 0  [접속 X]
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+             ISP---------------[S1/0]-RTA-[Fa 0/0]--------------SW1 (Host A,B,C,D)
+			      [Fa 0/1]
+			           |
+			           |
+			           |
+			         SW2
+                                        K-Web , J-Web , FTP
+
+      [조건]
+
+Host A : 192.168.100.10
+Host B : 192.168.100.11
+Host C : 192.168.100.12
+Host D : 192.168.100.13
+
+K-Web : 210.112.40.250
+J-Web : 210.112.40.251
+FTP     : 210.112.40.252
+
+ISP : 220.56.42.254
+
+-오직 Host D만 K-Web로 접속이 가능하다
+-모든 Host는 나머지 모든 네트워크로 접속이 가능해야한다.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

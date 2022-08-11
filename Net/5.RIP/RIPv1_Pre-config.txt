@@ -1,0 +1,316 @@
+                                      ## [ RIPv1 Pre-config I ]
+
+
+           # R1
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R1
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 192.168.1.254 255.255.255.0
+!
+interface serial 1/0 
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ ip address 192.168.12.1 255.255.255.0
+!
+
+
+
+           # R2
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R2
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 192.168.2.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ encapsulation hdlc
+ bandwidth 64
+ clock rate 128000
+ ip address 192.168.12.2 255.255.255.0
+!
+interface serial 1/0
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ clock rate 128000
+ ip address 192.168.23.2 255.255.255.0
+!
+
+
+
+
+
+           # R3
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R3
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 192.168.3.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ ip address 192.168.23.3 255.255.255.0
+!
+
+
+
+
+-----------------------------------------------------------------------------------------------------
+ 
+
+                                      ## [ RIPv1 Pre-config II ]
+
+
+
+
+
+           # R1
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R1
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 10.1.1.254 255.255.255.0
+!
+interface serial 1/0 
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ ip address 192.168.12.1 255.255.255.0
+!
+
+
+
+           # R2
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R2
+!
+interface serial 1/1
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ clock rate 128000
+ ip address 192.168.12.2 255.255.255.0
+!
+interface serial 1/0
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ clock rate 128000
+ ip address 192.168.23.2 255.255.255.0
+!
+
+
+
+
+
+           # R3
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R3
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 10.1.2.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ ip address 192.168.23.3 255.255.255.0
+!
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------
+ 
+
+                                      ## [ RIPv1 Pre-config III ]
+
+
+           # R1
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R1
+!
+interface loopback 172
+ ip address 172.16.1.1 255.255.255.0
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 13.13.10.254 255.255.255.0
+!
+interface serial 1/0 
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ ip address 13.13.12.1 255.255.255.0
+!
+
+
+
+           # R2
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R2
+!
+interface loopback 172
+ ip address 172.16.2.2 255.255.255.0
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 13.13.20.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ encapsulation hdlc
+ bandwidth 64
+ clock rate 128000
+ ip address 13.13.12.2 255.255.255.0
+!
+interface serial 1/0
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ clock rate 128000
+ ip address 13.13.23.2 255.255.255.0
+!
+
+
+
+
+
+           # R3
+
+enable
+configure terminal
+!
+no ip domain-lo
+!
+line console 0
+ logging sy
+ exec-timeout 0 0
+!
+hostname R3
+!
+interface loopback 172
+ ip address 172.16.3.3 255.255.255.0
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 13.13.30.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ encapsulation hdlc
+ bandwidth 128
+ ip address 13.13.23.3 255.255.255.0
+!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,270 @@
+﻿Dynamips
+
+
+실제 시스코라우터 를 vmware 처럼 가상으로 시스코라우터를 만든다.
+
+
+
+운영체제를 .bin으로 끝난다.
+
+
+
+실습 유틸에서 11.0 설치한다음  net에 들어가서 ccna 메모장으로 실행
+
+
+[localhost] = RAS(리모트 엑세스 서버) = 127.0.0.1 = PC
+
+
+
+
+console = 2001 ( 라스 번호다)
+
+-RAS 	:127.0.0.1
+port	:2001 = R1
+
+
+-RAS 	:127.0.0.1
+port	:2002 = R2
+
+
+-RAS 	:127.0.0.1
+port	:2003 = R3
+
+   [[2691]] 여기에 설정을 했다는건 모든 라우터에다가 다 설정하겠다.
+
+
+    [[router R1]] R1 이설정안에다가 설정을하면 이 라우터에게만 설정하겠다.
+
+
+..\ios\C2691-AD.BIN ( ..여기 위에있는 ios 폴더 아래 c2691-ad.bin 이라는 운영체제가 있습니다.)
+
+모든 설정정보는 tmp 에저장된다.
+
+
+
+list
+
+
+
+start R1 
+	(원인 메세지.피씨마다 다 장비가 다르니까 최적화를 시켜줘야한다.)
+
+
+idlepc get R1 (1번과 2번이 운영체제가 다르다면 둘다 찾아줘야한다. 
+		운영체제 마다 최적화된 pc의 값을 찾아주는것.)
+
+접속시켜주는 툴일뿐이다.
+
+ -> 저거를 하면 * 표시가 나오는데 이거를  net 에 ccna     [[2691]] 	idlepc = 0x6154a43c( 최적화된 값을  넣어준다.)
+
+그러고 다시 켜서 start R1 R2 R3  해주면 잘된다 워링이 안뜬다.
+
+ 그러고나서 SecureCRT 5.0 설치하고 라이센스번호 넣어준다
+
+
+CRT 들어가서 폴더 만들고 버튼(뉴 쎼션) 누르면 
+
+이름은 R1 프로토콜은 텔넷 
+텔넷 누르고 127.0.0.1
+포트번호 2001
+
+
+
+
+
+
+			#R1
+
+	R1(config) router rip
+	R1(config-router)version 1
+	R1(config-router)network 13.0.0.0
+	R1(config-router)network 172.16.0.0
+	passive-interface fa 0/0
+	passive-interface lo 172
+
+
+
+
+			#R2
+
+	R2(config) router rip
+	R2(config-router)version 1
+	R2(config-router)network 13.0.0.0
+	passive-interface fa 0/0
+	passive-interface lo 172	
+
+
+
+
+
+			#R3
+
+	R3(config) router rip
+	R3(config-router)version 1
+	R3(config-router)network 13.0.0.0
+	R3(config-router)network 172.16.0.0
+	passive-interface fa 0/0
+	passive-interface lo 172
+
+
+
+
+
+
+			#R1
+
+	R1(config) router rip
+	R1(config-router)version 2
+	R1(config-router)no auto-summary(립 기본 설정에 오토매틱 썸머라는아이가 동작되서, 이걸 꺼줘야 업데이트가 재대로된다.)
+	R1(config-router)network 13.0.0.0
+	R1(config-router)network 172.16.0.0
+	passive-interface fa 0/0
+	passive-interface lo 172
+
+
+
+
+			#R2
+
+	R2(config) router rip
+	R2(config-router)version 2
+	R2(config-router)no auto-summary
+	R2(config-router)network 13.0.0.0
+	passive-interface fa 0/0
+	passive-interface lo 172	
+
+
+
+
+
+			#R3
+
+	R3(config) router rip
+	R3(config-router)version 2
+	R3(config-router)no auto-summary
+	R3(config-router)network 13.0.0.0
+	R3(config-router)network 172.16.0.0
+
+
+
+   debug ip rip
+
+
+
+
+
+
+립버전 1과 립버전 2 의 차이점
+	클래스 풀에서 클래스 레스로 봐뀐다.
+	udp 520 번 쓰는것 똑같다.
+	목적지가 멀티퀘스트로 전환된다.(inia.com)
+	‌224 부터는 RIP2 에 할당 주어져있다. 멀티퀘스트 
+
+
+클레스 풀 방식은 클래스로 보기때문에 양쪽 R1 과 R3 가 같은 172.16.0.0 그래서 R2에서 업데이트할려고 받았는데 
+양쪽에서 같은주소라 드랍 시켜버린다.
+근데 클래스 레스 방식은 224.0.0.9(멀티퀘스트)로 주기때문에  서브넷 마스크가 
+붙어서 서로다른 네트워크로 인식하고 업데이트 됨.
+
+디스턴스 백터의 고유의 오토매틱 네트워크 썸머 가 실행됨. 그래서 요약된 주소로 나오는데 no 오톰틱 썸머를 해주면
+해당 업데이트 주소로 나온다
+
+
+
+R1과 R2구간 사이에서 인증 기능을 사용한 라우팅 업데이트를 실시해야 한다.
+.Key = 20120118, Key-string = CCNA1234 , MD5 HASH 알고리즘 사용
+
+
+
+		Serial 1/0						Serial 1/1				
+		R1----------------------------------------------------------R2
+
+	#R1
+key chain RIP
+key 20120118
+Key-string CCNA1234
+!
+interface serial 1/0
+ip rip authentication mode md5
+ip rip authentication key-chain RIP
+
+
+
+key chain RIP
+key 20120118
+Key-string CCNA1234
+!
+
+interface serial 1/1
+ip rip authentication mode md5
+ip rip authentication key-chain RIP
+
+
+
+ 
+	정보 확인
+
+debug ip rip [R1 에서만 인증 기능 설정후 정보 확인]
+protocol debugging is on
+
+
+트리거드 업데이트 ( 변경사항이 있을때만 업데이트한다)
+
+
+
+Serial 1/0		 Serial 1/1 Serial 1/0			Serial 1/1		
+R1-------------------------------R2-------------------------------R3
+
+
+
+
+
+# R2
+
+interface serial 1/0
+ ip rip triggered
+!
+
+
+
+# R3
+
+interface serial 1/1
+ ip rip triggered
+!
+
+
+정보 확인
+
+
+debug ip rip
+
+
+립의 단점  매트릭 0 에서 15 	매트릭 16은 무한대(장애발생)
+		한 홉은 
+
+루스포이즌- 경로에 독약을 뿌리겠다.
+
+포이즌 리버스- 경로가 없어 라고 전달.
+
+
+
+
+Serial 1/0		 Serial 1/1 Serial 1/0			Serial 1/1		
+R1-------------------------------R2-------------------------------R3
+
+
+
+스프릿 호라이즌 
+
+디스턴스 백터 라우팅 프로토콜 환경에서 발생하는 라우팅 루프를 막기 위해서
+모든 디스턴스 백터 라우팅에는 스프릿 호라이즌이 있다.
+
+
+스프릿 호라이즌을 끄면 계속 루프백이 돌기때문에 끄지말자는 얘기이다.
+
+RIP 는 거의 안쓰인다.
+
+EIGRP 를 많이쓴다.
+
+

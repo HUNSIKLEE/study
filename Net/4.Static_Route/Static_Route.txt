@@ -1,0 +1,262 @@
+ConnectedConnectedConnectedConnectedConnectedConnectedConnectedConnectedConnectedConnected
+                                      ## Static Route          [바탕 / 굵게 / 16]
+
+
+-해당 Router에 관리자가 목적지 경로를 일일히 입력하는 방식
+
+-특징
+ .일반적으로 소규모 네트워크 환경에서 사용된다.
+ .네트워크의 변경이 일어나지 않는 환경에 적합
+ .모든 네트워크의 경로를 관리자에 의해 선출되므로 신뢰적인 통신을 실시
+ .장비를 효율적으로 사용
+
+-단점
+ .대규모 네트워크 , 네트워크의 변경이 빈번히 일어나는 환경에서는 비효율적이다.
+ .사용하는 경로에 장애 발생시 해당 경로를 수정 , 복구하기전까지 통신이 실시되지 않는다.
+
+
+                             [설정 방법]
+
+Router(config)#  ip route [목적지 Network]  [SubnetMask]  [Next-hop IP]
+
+                                     OR
+
+Router(config)# ip route [목적지 Network]  [SubnetMask]  [Connected Interface]
+
+
+
+---------------------------------------------------------------------------------------
+
+                   [실습 Topology]
+
+                    192.168.12.0/24                 192.168.23.0/24  
+             R1----------------------R2----------------------R3
+              |                                |                                 |
+       192.168.1.0/24               192.168.2.0/24               192.168.3.0/24
+
+
+-Topology를 참조하여 모든 네트워크 대역에 IP를 할당하시오
+-LAN구간에서 PC는 가장 첫번째 주소부터 할당을 실시하며 Gateway는 가장 마지막 주소를 사용
+-WAN구간에서는 HDLC를 사용하며 대역폭은 64K를 사용해야한다.
+
+       # R1
+R1(config)# interface fastethernet 0/0
+R1(config-if)# no shutdown
+R1(config-if)# ip address 192.168.1.254 255.255.255.0
+!
+R1(config)# interface serial 1/0
+R1(config-if)# no shutdown 
+R1(config-if)# encapsulation hdlc
+R1(config-if)# bandwidth 128
+R1(config-if)# ip address 192.168.12.1 255.255.255.0
+
+
+       # R2
+R2(config)# interface fastethernet 0/0
+R2(config-if)# no shutdown
+R2(config-if)# ip address 192.168.2.254 255.255.255.0
+!
+R2(config)# interface serial 1/1
+R2(config-if)# no shutdown 
+R2(config-if)# encapsulation hdlc
+R2(config-if)# bandwidth 128
+R2(config-if)# clock rate 128000
+R2(config-if)# ip address 192.168.12.2 255.255.255.0
+!
+R2(config)# interface serial 1/0
+R2(config-if)# no shutdown 
+R2(config-if)# encapsulation hdlc
+R2(config-if)# bandwidth 128
+R2(config-if)# clock rate 128000
+R2(config-if)# ip address 192.168.23.2 255.255.255.0
+
+
+
+       # R3
+R3(config)# interface fastethernet 0/0
+R3(config-if)# no shutdown
+R3(config-if)# ip address 192.168.3.254 255.255.255.0
+!
+R3(config)# interface serial 1/1
+R3(config-if)# no shutdown 
+R3(config-if)# encapsulation hdlc
+R3(config-if)# bandwidth 128
+R3(config-if)# ip address 192.168.23.3 255.255.255.0
+!
+
+
+                     [Static Route 설정 : Next-hop 지정 방식]
+
+       # R1
+R1(config)# ip route 192.168.2.0  255.255.255.0  192.168.12.2
+R1(config)# ip route 192.168.3.0  255.255.255.0  192.168.12.2
+R1(config)# ip route 192.168.23.0  255.255.255.0  192.168.12.2
+
+       # R2
+R2(config)# ip route 192.168.1.0  255.255.255.0  192.168.12.1
+R2(config)# ip route 192.168.3.0  255.255.255.0  192.168.23.3
+
+       # R3
+R3(config)# ip route 192.168.1.0  255.255.255.0  192.168.23.2
+R3(config)# ip route 192.168.2.0  255.255.255.0  192.168.23.2
+R3(config)# ip route 192.168.12.0  255.255.255.0  192.168.23.2
+
+
+
+                  정보확인
+R1# show ip route
+C    192.168.1.0/24 is directly connected, FastEthernet0/0
+S    192.168.2.0/24 [1/0] via 192.168.12.2
+S    192.168.3.0/24 [1/0] via 192.168.12.2
+C    192.168.12.0/24 is directly connected, Serial1/0
+S    192.168.23.0/24 [1/0] via 192.168.12.2
+
+
+R2# show ip route
+S    192.168.1.0/24 [1/0] via 192.168.12.1
+C    192.168.2.0/24 is directly connected, FastEthernet0/0
+S    192.168.3.0/24 [1/0] via 192.168.23.3
+C    192.168.12.0/24 is directly connected, Serial1/1
+C    192.168.23.0/24 is directly connected, Serial1/0
+
+
+R3# show ip route
+S    192.168.1.0/24 [1/0] via 192.168.23.2
+S    192.168.2.0/24 [1/0] via 192.168.23.2
+C    192.168.3.0/24 is directly connected, FastEthernet0/0
+S    192.168.12.0/24 [1/0] via 192.168.23.2
+C    192.168.23.0/24 is directly connected, Serial1/1
+
+
+
+==========================================================================================
+
+
+
+                   [실습 Topology]
+
+                    192.168.12.0/24                 192.168.23.0/24  
+             R1----------------------R2----------------------R3
+              |                                |                                 |
+       192.168.1.0/24               192.168.2.0/24               192.168.3.0/24
+
+
+                     [Static Route 설정 : Interface 지정 방식]
+
+   # R1
+R1(config)# ip route 192.168.2.0  255.255.255.0  serial 1/0
+R1(config)# ip route 192.168.3.0  255.255.255.0  serial 1/0
+R1(config)# ip route 192.168.23.0  255.255.255.0  serial 1/0
+
+
+   # R2
+R2(config)# ip route 192.168.1.0  255.255.255.0  serial 1/1
+R2(config)# ip route 192.168.3.0  255.255.255.0  serial 1/0
+
+
+   # R3
+R3(config)# ip route 192.168.1.0  255.255.255.0  serial 1/1
+R3(config)# ip route 192.168.2.0  255.255.255.0  serial 1/1
+R3(config)# ip route 192.168.12.0  255.255.255.0  serial 1/1
+
+
+              정보확인
+
+R1# show ip route
+C    192.168.1.0/24 is directly connected, FastEthernet0/0
+S    192.168.2.0/24 is directly connected, Serial1/0
+S    192.168.3.0/24 is directly connected, Serial1/0
+C    192.168.12.0/24 is directly connected, Serial1/0
+S    192.168.23.0/24 is directly connected, Serial1/0
+
+R2# show ip route
+S    192.168.1.0/24 is directly connected, Serial1/1
+C    192.168.2.0/24 is directly connected, FastEthernet0/0
+S    192.168.3.0/24 is directly connected, Serial1/0
+C    192.168.12.0/24 is directly connected, Serial1/1
+C    192.168.23.0/24 is directly connected, Serial1/0
+
+R3# show ip route
+S    192.168.1.0/24 is directly connected, Serial1/1
+S    192.168.2.0/24 is directly connected, Serial1/1
+C    192.168.3.0/24 is directly connected, FastEthernet0/0
+S    192.168.12.0/24 is directly connected, Serial1/1
+C    192.168.23.0/24 is directly connected, Serial1/1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

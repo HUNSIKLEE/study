@@ -1,0 +1,281 @@
+                                ### OSPF (Open Shortest Path First)
+
+-Open : 표준 개방형 Protocol
+-Shortest Path First : SPF알고리즘을 사용하여 Loop가없는 경로를 보장한다.
+                             [Dijikstra알고리즘]
+
+				립을 대채하기 위해 만들어졌다
+
+-Link-State알고리즘
+ .인접성이 맺어진 라우터 상호간 라우팅업데이트를 실시
+ .Link변화시 변화된 부분에 대해서 부분적인 업데이트를 실시
+ .변경사항이 없으면 업데이트를 실시하지 않는다.
+
+-Classless
+ .업데이트 정보안에 SubnetMask가 포함
+ .VLSM , CIDR기능을 지원한다.
+ .IP환경에서 확장성이 좋다.
+
+-AD (Administrative Diatance)
+ .Connect	: 0
+ .Static	: 1
+ .RIP	: 120
+ .EIGRP	: Internal 90 , External 170 , Summary 5
+ .OSPF	: 110
+
+-Metric : Cost(거리비용) = 10^8/Link당 Bandwidth
+-Fastethernet : 100000000/100000000 = Cost 1
+-Ethernet      : 100000000/10000000  = Cost 10
+-Serial          : 100000000/1544000   = Cost 64
+-R1 : 13.13.20.0/24 = Cost 65
+-R1 : 13.13.23.0/24 = Cost 128
+-R1 : 13.13.30.0/24 = Cost 129
+
+
+                        13.13.12.0/24                13.13.23.0/24
+               R1--------------------R2----------------------R3
+                |                              |                               |
+         13.13.10.0/24             13.13.20.0/24                 13.13.30.0/24
+
+
+-로드분산
+ .Router는 하나의 목적지에 대해서 최적경로 하나만을 지원하는 장비이다. 
+ .로드분산 : 하나의 목적지에 대해서 복수개의 경로를 지원하는 기능
+ .균등로드분산 : 최적경로와 동일한 metric을 가진 경로에 대해서 복수개의 경로를 지원하는 기능 (Default 4)
+
+
+-업데이트 
+ .출발지주소 출구 Interface의 IP를 사용
+ .목적지 주소는 Multicast (224.0.0.5 , 224.0.0.6)를 사용
+ .Protocol 89번을 사용
+
+----------------------------------------------------------------------------------------
+
+                         ### OSPF가 사용하는 5가지 PDU (Hello , DBD , LSR , LSU , LSA)
+
+             # Hello
+-OSPF Neighbor를 찾고 인접성의 조건을 비교하여 인접성의 조건이 일치하게되면
+  인접성을 맺고 관계를 유지
+
+-OSPF Hello (* = 인접성의 조건) *표시된건 무조건 똑같아야한다.
+ .Area-ID *
+ .Hello/Dead interval *    (EIGRP에 인터벌이랑 비슷한기능)
+ .Subnet *
+ .MTU * 		   (한번에 보낼수있는 데이터량. 연결된구간의 MTU사이즈가 같아야한다)
+ .Authentication * 	   (인증)
+ .Stub *		   (주소요약보다 더 강력한 요약. 특정에어리어의 모든정보를 요약)
+ .Router-ID	
+ .OSPF Priority
+ .DR/BDR
+
+-인접성의 조건이 동일하면 Neighbor table을 생성하여 등록을 실시 : show ip ospf neighbor
+
+-Network Type                 Hello/Dead                  DR/BDR                          	Networ 환경
+ .Broadcast(BMA)		10/40			선출함(자동선출)	        	Ethernet
+ .Point-to-point		10/40			선출안함		        	PPP , HDLC , F/R P2P
+ .NBMA				30/120			선출함(수동선출)	     	 	 F/R Multipoint , NBMA구간
+ .Point-to-Multipoint		30/120			선출안함			  			  없음
+(포인투더 포인트(1:1) 멀티 엑세스(여러장비 연결)
+NBMA 브로드케스트를 지원하지않는다.
+
+
+             # DBD (DDP)
+-OSPF는 DataBase Table을 사용하여 모든 네트워크 정보를 관리한다.
+0-OSPF는 LSDB(Link-State DataBase)를 Area단위로 구분하여 관리(전화번호부 생각)
+-OSPF는 Area내에서 LSA-Type(Link-State Advettisement-Type)별로 구분하여 관리하여 관리
+-OSPF는 LSA(Link-State Advettisement)를 사용하여 LSDB(Link-State DataBase)를 동기화한다.
+-OSPF는 대형망에서 사용되는 Protocol이므로 인접성이 완료되면 모든 네트워크 정보를
+  업데이트하지 않고 Database Table의 요약본인 DBD를 교환하여 비교한후
+  자신에게 없는 네트워크정보만을 요청하여 LSDB에 저장을 실시한다.
+
+
+
+             # LSR (Link-State Request)
+-OSPF의 상세정보 요청 Packet
+-DBD교환후 자신에게 없는 네트워크 정보를 확인하거나 또는
+  자신보다 최신의 정보를 발견하게되면 LSR을 사용하여 해당 네트워크의 상세정보를 요청한다.
+
+
+
+             # LSU (Link-State Update)
+-LSR에 대한 응답 Packet
+-LSR을 수신한 Router는 해당 네트워크에대한 LSA(Link-State Advettisement)를 생성하여
+  LSU에 담아 업데이트를 실시한다.
+
+
+             # LSA (Link-State Ack)
+-DBD , LSR , LSU에 대한 확인 Packet
+
+
+
+-----------------------------------------------------------------------------------------
+
+                       ### Area
+
+-OSPF는 대형망에서 사용되는 Protocol이기때문에 네트워크의 변경은 불가피하다
+ LSA에대한 Flooding의 범위를 줄이기위해서 Area단위를 사용한다. 
+ [OSPF는 동일 Area간 LSDB를 동기화한다.]
+
+-단일 Area를 사용시 <0-4294967295>중 하나를 선택하여 사용
+
+-같은 Network은 같은 Area에 포함되어야 한다.
+
+
+-다중 Area를 사용시에는 반드시 Backbone Area를 사용해야하며
+  모든 Area는 Backbone Area를 경유해서만 통신이 가능하다.
+
+
+-Backbone Area : Area 0
+
+-ABR : Area경계사이에서 두 Aeea의 LSDB를 동기화하는 역할
+-ASBR : 외부경계사이에 외부 정보를 OSPF로 재분배하는 Router
+
+
+-----------------------------------------------------------------------------------------
+
+                       ### DR/BDR (Designated Router/Backup Designated Router)
+
+-Multi-Access : 하나의 Link를 사용하여 동일 네트워크상에서 다수의 장비와 연결되는 환경
+
+-Muti-access환경에서 효율적인 통신을 실시하기위해서 OSPF는 DR/BDR을 선출하여 통신을 실시
+   [모든 Router는 DR/BDR과 OSPF Neighbor를 형성]
+
+-OSPF내에서 가장 큰 Priority값을 가진 Router가 DR로 선출되어지며
+  두번째로 큰 Priority값을 가진 Rrouter가 BDR로 선출된다.
+
+-만약 Priority값이 동일할경우 가장 큰 Router-ID를 가진 Router가 DR로 선출되며
+  두번째로 큰 router-ID를 가진 Router가 BDR로 선출된다 (나머지는 DR other)
+
+-OSPF에서 Priority 0은 해당 장비를 DR/BDR로 선출하지 않음을 의미한다.
+
+-DR  ---->  DR other : 224.0.0.5 = OSPF All Router	
+-DR other  ---->  DR : 224.0.0.6 = DR
+
+          [설정 방법]
+interface Serial , Fa [Port number]
+ ip ospf priority [0~255 : Default = 1]
+!
+
+-DR/BDR을 선출하는 네트워크 환경
+ .Broadcast(자동선출) , NBMA(수동선출)
+
+-DR/BDR을 선출하지않는 네트워크 환경 (DR이 존재하지 않기때문에 224.0.0.5만 사용)
+ .Point-to-point , Point-to-Multipoint
+
+
+
+-----------------------------------------------------------------------------------------
+
+                       ### Router-ID
+
+-OSPF에서 관리를 목적으로 사용며 식별자로 사용되는 32bit 값이며 유일한 값을 가져야한다.
+
+
+-Router-ID 선출시 우선순위
+ 1. 'Router-ID' command를 직접사용
+ 2. 해당 Router에 loopback interface가 존재하면  loopback interface안의 IP가 
+     Router-ID로 등록된다.
+ 3. 해당 Router 에서 가장 큰 IP가 Router-ID로 등록된다.
+
+
+router ospf x
+ router-id 1.1.1.1
+
+
+-한번 선출된 Router-ID는 OSPF Process가 재시작되지 않는한  변경되지 않는다.
+
+
+
+=================================================================================================
+
+                        ### LSA-Type  (Link-State Advertisement-Type)
+
+-O	: Intra Area - 자신과 동일한 Area에 포함된 네트워크 
+-O IA	: Inter Area - 자신과 다른 Area에 포함된 네트워크
+-O E1	: External - 외부 네트워크가 OSPF로 재분배되어진 네트워크 (누적 Metric)
+-O E2	: External - 외부 네트워크가 OSPF로 재분배되어진 네트워크 (고정 Metric , Default Metric 20)
+
+
+                         생성                       용도                   전파범위             R/T표기         D/T표기
+-LSA-Type1 -  All Router      동일 Area간 통신시 사용         동일 Area               O              Router
+
+-LSA-Type2 -     DR                DR의 정보를 전파         DR이 포함된 Area        표기X            Net
+
+-LSA-Type3 -   ABR          다른 Arear간 통신시 사용     ABR이 포함된 Area      O IA         Summary Net
+
+-LSA-Type4 -   ABR               ASBR의 정보를 전파      ABR이 포함된 Area       표기X       Summary ASB
+
+-LSA-Type5 - ASBR         외부 네트워크를 OSPF전파     ASBR이 포함된 Area  O E1 , O E2      Type-5
+
+
+
+# R3router ospf 100
+redistribute eigrp 100 metric-type 1 subnet
+
+=================================================================================================
+
+                        ### Virtual-Link
+
+-특정 Area가 Backbone Area를 경유하지 못할경우
+ .해당 Area를 물리적으로 area  0에 인접하게 연결실시
+ .해당 Area를 Backbone Area에 연결된 Area로 통합
+ .Virtual-link를 사용하여 해당 Area를 Backbone Area에 논리적으로 연결
+ 을 통해서 해결이 가능하다.
+
+-Virtual-Link는 ABR간 논리적인 연결을 실시하여 Backbone area에 연결되지 못한
+  Area를 논리적으로 연결하는 기능
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------
+
+
+
+OSPF Routing protocol 을 사용하여 모든 네트워크 구간에서 통신이 되도록 설정하시오.
+OSPF Process = 100 ,Area = 0 , Router-ID = X.X.X.X (X= Router 번호)
+OSPF 라우팅 업데이트가 필요한 Interface로만 OSPF
+
+
+
+
+OSPF all Router
+224.0.0.5 = DR -> DRother
+
+
+DR만 수신
+224.0.0.6 = DR other - > DR
+
+
+OSPF priority (0에서 255)
+int  sa 0/1
+ in ospf = priority 255 가장 큰값이 DR이 된다. 기본값이 1
+ in ospf = priority 0 은 절대값 DR BDR 절대 주지 않겠다.
+
+OSPF 는 네트웍을 4가지로
+
+X	포인트 포인트(HDCD,PPP)
+O	브로드 케스트(BMA)=(Erhernet)
+O	난 브로드 케스트(NBMA) 
+X	포인트 투 멀티포인트
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

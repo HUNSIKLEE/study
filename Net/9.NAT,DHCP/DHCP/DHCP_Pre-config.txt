@@ -1,0 +1,69 @@
+               # R1
+ 
+en
+ter le 0
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname DHCP-Server
+!
+
+
+
+
+               # R2
+
+en
+ter le 0
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname PC1
+!
+
+
+
+               # R3
+
+
+en
+ter le 0
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ logging sy
+ exec-t 0 0
+ exit
+!
+hostname PC2
+!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,251 @@
+                        ### DHCP (Dynamic Host Configuration Protocol)
+
+-IP자동 할당 Protocol
+
+-통신장비는 장비초기화시  TCP/IP에 참여하기위해서 IP 주소를 찾게된다 
+  (IP , Subntmask , Gateway , DNS등..)
+
+-PC가 2000대인 내부네트워크 환경에서 IP를 할당해야할경우 수동으로 설정하는것보다
+  DHCP기능을 사용하여 IP주소및 Subnetmask , Gateway , DNS , 임대기간등을 자동으로 할당할수 있다
+  내부 네트워크 환경에서 주소 또는 Subnet이 자주 변경되는 환경에서도 효율적이다.
+
+-DHCP는 UDP 67 , 68번을 사용한다.
+ .67 : Server
+ .68 : Client
+
+
+
+
+
+-DHCP는 4가지의 Message를 사용하여 IP주소를 할당하게된다.
+   (Discover , Offer , Request , ACK)
+
+
+  # Discover : DHCP Client가 DHCP Server를 찾기위한 message
+ 	     : DHCP Client가 부팅되고 자신에게 주소가 부여되지 않게되면 TCP/IP통신을 실시하기위해
+  	       DHCP Discover를 사용하여 DHCP Server를 찾는다. (Broadcast)
+ 
+
+
+
+   # Offer   : Discover message를 수신한 DHCP Server는 IP를 할당하기전
+               ICMP Message , ARP를 사용하여 할당할 주소로 통신을 실시한후
+               ARP를 사용하여 해당 주소에 대한 Mac-address를 확인한후
+               IP및 SubnetMask , Gateway 주소 , DNS Server주소 , 임대기간을 전송한다.
+
+
+
+
+   # Request : Offer message를 수신한 Client는 DHCP 서버가 보내준 정보를 사용할 경우
+                    DHCP Request 라는 브로드캐스트를 사용하여 DHCP 서버에게 전송하게 된다
+                    (DHCP Server가 복수개일경우 자신이 할당받은 주소를 다른 DHCP Server에
+                     알려주기위해서 Broadcast를 사용하여 전송을 실시)
+
+
+
+
+
+   # ACK     : Request Message를 수신한 DHCP Server는 최종 승인을 알리는 Message이며
+               Client는 Ack를 수신한후에 할당 받은 IP를 확정적으로 사용하게된다.
+
+
+
+
+==============================================================================================
+
+-R1이 DHCP Server
+-R2 , R3 DHCP Client (PC)
+-R1 = hostname DHCP-Server
+-R2 = hostname PC1
+-R3 = hostname PC2
+
+-다음 조건에 맞게 DHCP를 설정하시오
+ .내부 네트워크 : 192.168.10.0/24를 사용한다.
+ .Gateway : 192.168.10.254를 사용
+ .DNS Server의 : 192.168.10.252 , 192.168.10.253
+ .FTP Server의 : 192.168.10.250 , 192.168.10.251
+ .임대 기간 : 무제한
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   # R1 [DHCP Server]
+interface fa 0/0
+ no shutdown
+ ip address 192.168.10.254 255.255.255.0
+!
+ip dhcp excluded-address 192.168.10.250 192.168.10.254 <-- DHCP주소 할당시 제외시킬 주소
+!
+ip dhcp pool CCNA
+ network 192.168.10.0 255.255.255.0  <--- DHCP로 할당할 네트워크 대역
+ default-router 192.168.10.254   <--- Gateway주소
+ dns-server 192.168.10.252 192.168.10.253  <--- DNS주소 [Primary , Secondary]
+ lease 10 <--- 임대기간  [infinite = 무제한  ,  Day   Hours   Minutes]
+!
+
+    # Dynagen
+=> capture R2 f0/0 DHCP1_R2.cap
+=> capture R3 f0/0 DHCP1_R3.cap
+
+
+capture R2 s1/0 CCNA.cap HDLC : Layer 2 Protocol이 HDLC인경우
+capture R2 s1/0 CCNA.cap PPP  : Layer 2 Protocol이 PPP인경우
+capture R2 s1/0 CCNA.cap FR   : Layer 2 Protocol이 Frame-relay인경우
+capture R2 s1/0 CCNA.cap      : Layer 2 Protocol이 Ethernet인경우
+
+
+   # R2 , R3 [PC : DHCP Clinet]
+interface fa 0/0
+ no shutdown  <---- PC부팅
+ ip address dhcp  <--- DHCP enable
+!
+
+
+               정보확인
+
+PC1# show ip int brief
+ 
+PC1# show dhcp lease
+
+
+-1.DHCP Client는 임대받은 시간으로부터 50%의 시간을 사용후 재요청을 실시한후 주소를 재임대한다.
+  
+-2.만약 서버로부터 응답이 없을시에는 87.5%의 시간을 사용후 재요청을 실시한다.
+
+-3.2번째 요청실시후에도 서버로부터 응답이 없을시에는 임대기간을 모두 사용한다.
+
+
+
+
+
+
+==============================================================================================
+
+-R1이 DHCP Server
+-R2 , R3 DHCP Client (PC)
+-R1 = hostname DHCP-Server
+-R2 = hostname PC1
+-R3 = hostname PC2
+
+-다음 조건에 맞게 DHCP를 설정하시오
+ .내부 네트워크는 192.168.1.0/24를 사용한다.
+ .Gateway주소는 192.168.1.254를 사용
+ .192.168.1.221 , 192.168.1.222 , 192.168.1.223 , 192.168.1.224 주소는 다른 용도로 사용되고있다
+ .DNS Server의 주소는 168.126.63.1 , 168.126.63.2
+ .임대 기간은 10일로 할당
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   # R1 [DHCP Server]
+interface fa 2/0
+ no shutdown
+ ip address 192.168.1.200 255.255.255.0
+!
+ip dhcp excluded-address 192.168.1.200
+ip dhcp excluded-address 192.168.1.254
+ip dhcp excluded-address 192.168.1.221 192.168.1.224 
+!
+ip dhcp pool CCNA
+ network 192.168.1.0 255.255.255.0
+ default-router 192.168.1.254
+ dns-server 168.126.63.1 168.126.63.2 
+ lease 10 
+!
+
+
+
+
+
+==============================================================================================
+
+
+-R1이 DHCP Server
+-R2 , R3 DHCP Client (PC)
+
+-다음 조건에 맞게 DHCP를 설정하시오
+ .내부 네트워크는 210.241.25.0/24를 사용한다.
+ .DHCP의 주소는 210.241.25.249를 사용
+ .Gateway주소는 210.241.25.254를 사용
+ .210.241.25.240 , 210.241.25.241 , 210.241.25.242 , 210.241.25.243
+  210.241.25.244 , 210.241.25.245 주소는 다른 용도로 사용되고있다
+ .DNS Server의 주소는 178.126.163.1 , 178.126.163.2
+ .임대 기간은 무제한   
+
+
+
+
+             정보확인
+
+PCX# show ip interface brief
+
+PCX# show dhcp lease
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

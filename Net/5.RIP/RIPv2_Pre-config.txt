@@ -1,0 +1,187 @@
+
+              ## R1
+
+en
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ password cisco
+ login
+ logging sy
+ exec-t 0 0
+!
+line vty 0 4
+ password cisco
+ login
+!
+hostname R1
+!
+interface loopback 172
+ ip address 172.16.1.1 255.255.255.0
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 13.13.10.254 255.255.255.0
+!
+interface serial 1/0
+ no shutdown
+ encapsulation hdlc
+ bandwidth 64
+ clock rate 64000
+ ip address 13.13.12.1 255.255.255.0
+!
+
+
+
+
+
+
+
+              ## R2
+
+
+en
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ password cisco
+ login
+ logging sy
+ exec-t 0 0
+!
+line vty 0 4
+ password cisco
+ login
+!
+hostname R2
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 13.13.20.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ bandwidth 64
+ clock rate 64000
+ ip address 13.13.12.2 255.255.255.0
+!
+interface serial 1/0
+ no shutdown
+ encapsulation hdlc
+ bandwidth 64
+ clock rate 64000
+ ip address 13.13.23.2 255.255.255.0
+!
+
+
+
+
+
+
+
+              ## R3
+
+
+en
+conf t
+!
+no ip domain-lo
+!
+line con 0
+ password cisco
+ login
+ logging sy
+ exec-t 0 0
+!
+line vty 0 4
+ password cisco
+ login
+!
+hostname R3
+!
+interface loopback 172
+ ip address 172.16.3.3 255.255.255.0
+!
+interface fastethernet 0/0
+ no shutdown
+ ip address 13.13.30.254 255.255.255.0
+!
+interface serial 1/1
+ no shutdown
+ encapsulation hdlc
+ bandwidth 64
+ clock rate 64000
+ ip address 13.13.23.3 255.255.255.0
+!
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+   # R1
+conf t
+!
+interface loopback 100
+ ip address 100.10.0.1 255.255.255.0
+ ip address 100.10.1.1 255.255.255.0 secondary
+ ip address 100.10.2.1 255.255.255.0 secondary
+ ip address 100.10.3.1 255.255.255.0 secondary
+ ip address 100.10.4.1 255.255.255.0 secondary
+ ip address 100.10.5.1 255.255.255.0 secondary
+ ip address 100.10.6.1 255.255.255.0 secondary
+ ip address 100.10.7.1 255.255.255.0 secondary
+!
+
+
+
+
+   # R3
+conf t
+!
+interface loopback 130
+ ip address 130.3.8.3 255.255.255.0
+ ip address 130.3.9.3 255.255.255.0 secondary
+ ip address 130.3.10.3 255.255.255.0 secondary
+ ip address 130.3.11.3 255.255.255.0 secondary
+ ip address 130.3.12.3 255.255.255.0 secondary
+ ip address 130.3.13.3 255.255.255.0 secondary
+ ip address 130.3.14.3 255.255.255.0 secondary
+ ip address 130.3.15.3 255.255.255.0 secondary
+!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,191 @@
+                                      ### Router의 기본 Mode
+
+                ## User Mode
+
+-해당 Router에 접속은 PC를 사용하여 직접 연결하는 Console ,모뎀을 이용하여 접속하는 AUX ,인터넷을 매개체로 원격 접속하는 VTY등(Telnet)등을 사용할수있다.
+
+-위의 방식으로 접속을 실시하게되면 기본적으로는 User mode로 접속이 실시된다.
+
+Router>  <--- User mode
+
+-User mode에서는 해당 장비의 기본적인 상태확인만 가능하다.
+-User mode로 접속을 실시하게 되면 Privilege Level 1 로 설정된다.
+-Privilege Level 1 은 해당 장비의 기본적인 상태확인만 가능하다. (Privilege Level : 0 ~ 15 까지있고 0 ~ 14까지는 권한없음 15는 관리자)
+
+
+
+                ## Privilege Mode
+
+
+-User mode에서 정보확인및 설정을 실시하기위해서는 상위 Mode로 전환을 실시해야한다.
+
+Router> enable
+Router#  <-- Privilege mode
+
+Privilege Level 15 는 관라자를 의미함 해당 장비의 모든 권한을 수행할수있다.
+Console,AUX,VTY의 방법을 사용하여 접속후,"enable" command를 사용하게되면 Privilege Level 15로 전환이 된다.
+ 
+-정보확인 : show(정적인 정보 확인) , debug (동적인 정보 확인)
+
+-저장 : Copy [Ram --> NVRAM]
+
+-삭제 : reload (RAM삭제)
+        erase  (NVRAM삭제)
+        delete (Flash삭제)
+-통신 및 접속
+-IP네트워크 구축후 ICMP를 사용하여 연결 확인(ICMP 통신)
+-Telnet접속 , ICMP등의 설정을 제외한 기능을 수행한다.
+
+
+
+
+                ##  Global Mode
+
+
+-Router는 RAM에 저장된 Command를 기반으로 동작을 실시하는 장비.해당 Router에 설정을 실시하기한 Mode이다.
+-Router의 Global Mode에서 설정한 모든 Command 는 실시간으로 RAN에 반영 된다.
+
+
+Router# configure terminal
+!
+Router(config)#   <-- Global Mode
+!
+Router(config)# exit : 이전 Mode로 전환
+
+
+
+---------------------------------------------------------------------------------------------------
+
+                                      ### RAM , NVRAM
+
+-Router는 RAM에 기반하는 장비로써 설정한 모든 Command는 RAM에 저장이 실시되며
+  해당 Router는 RAM에 설정되  Commnad에의해 동작을 실시한다.
+
+
+                                         RAM                                 NVRAM
+
+-특징:                              휘발성 정보                         비 휘발성 정보
+
+-확인:                         show running-config                 show startup-config
+
+-저장:                              실시간 저장[Enter]              copy running-config startup-config  [축약 : wr]
+
+-삭제:                                 reload                            erase startup-config
+
+-Config-register
+ .0x2102 : 장비 초기화후 NVRAM을 참조하여 RAM으로 Configuration을 Loding
+ .0x2142 : 장비 초기화후 NVRAM을 참조하지 않고 새로운 RAM으로 구성
+
+               [변경방법]
+Router(config)# config-register 0x2102
+Router(config)# config-register 0x2142
+
+
+show ip interface brief -문제해결
+
+
+
+
+=====================================================================================================
+
+
+
+                        ## Twisted-Pair Cable 	UTP 트위스트 페어 케이블
+
+
+       # UTP Straight-Through Cable (Direct) -이종간의 장비 연결시 사용되는 Cable
+ 	EX) Switch -- Router , Switch -- PC
+
+           Switch-----------Router
+	백주		백주
+	   주	   	   주
+	백초		백초
+	   파	  	   파
+	백파		백파
+	   초	   	   초
+	백빨		백빨
+	   빨	   	   빨
+
+
+
+       # UTP Crossover Cable - 동일 장비 연결시 사용되는 Cable
+	 EX) Switch -- Switch , Hub -- Hub , Router -- Router 예외[*PC에서 Route 에 직접연결할때에는 크로스오버*]
+
+           Switch-----------Switch
+	백주		백초
+	   주	   	   초
+	백초		백주
+	   파	  	   파
+	백파		백파
+	   초	   	   주
+	백빨		백빨
+	   빨	   	   빨
+
+
+
+       # UTP Roll-over Cable  (Console Cable)
+	-Router , Switch의 Console Port로 접속시 사용되는 Cable
+
+          PC-------------Switch
+	백주		   빨
+	   주	   	백빨
+	백초		   초
+	   파	  	백파
+	백파		   파
+	   초	   	백초
+	백빨		   주
+	   빨	   	백주
+
+
+
+
+시리얼- WIC-1T(시리얼 한개)
+      - Mn 모듈 (큰거)
+      - MN-8A/S(시리얼 8개)
+      - MN-4A2S(시리얼 4개)
+
+
+
+
+
+
+확인 명령어: show ip protocol
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

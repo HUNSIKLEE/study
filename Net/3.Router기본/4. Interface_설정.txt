@@ -1,0 +1,340 @@
+                                  ### Router Interface
+
+-Router의 Interface는 크게 LAN 구간을 연결하는 Ethernet Interface와
+  WAN구간을 연결하는 Serial Interface , 가상의 Interface인 Loopback interface로 구성이 가능하다.
+
+-Ethernet Interface , Serial Interface는 물리적 Interface이며 loopback interface는 가상의 Interface이다.
+
+-Cisco Router에서 물리적 interface는 [Eternet , Serial]기본적으로
+  비 활성화 상태(Shutdown)이기 때문에 수동으로 활성화 상태로 전환해야 한다.
+
+
+------------------------------------------------------------------------------------------------
+
+                        ## Ethernet Interface
+
+-LAN구간을 연결하는 Interface이며 IEEE에서 지정한 표준 Protocol이기때문에
+  통신방법 , 전송속도 , 대역폭등이 표준으로 규정되어져 있기때문에
+  연결을 실시하게되면 Layer 2까지는 기본적으로 통신이 실시되어진다.
+
+
+Router# conf t
+!
+Router(config)# hostname R1
+!
+R1(config)# interface fastethernet 0/0
+R1(config-if)# no shutdown   <--- Layer 1 활성화
+R1(config-if)# ip address 192.168.1.254 255.255.255.0  <--- Layer 3주소 할당
+
+              정보확인
+
+R1# show ip route   : Routing table 확인
+R1# show arp   : ARP Table 확인
+R1# show interface fastethernet 0/0   : 해당 Interface의 정보 확인
+R1# show running-config   : RAM 확인
+R1# ping 192.168.1.1  : PC1통신
+R1# ping 192.168.1.2  : PC2통신
+
+
+
+Router# conf t
+!
+Router(config)# hostname R2
+!
+R2(config)# interface fastethernet 0/0
+R2(config-if)# no shutdown 
+R2(config-if)# ip address 192.168.2.254 255.255.255.0
+
+              정보확인
+
+R2# show ip route
+R2# show arp
+R2# show interface fastethernet 0/0
+R2# show running-config
+R2# ping 192.168.2.1  : PC3통신
+R2# ping 192.168.2.2  : PC4통신
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+
+                        ## Serial Interface
+
+-WAN구간을 연결시 사용되는 Interface이며
+  Ethernet과는 달리 Layer 2 Protocol 및 전송속도 , 대역폭을 지정해주어야한다.
+  [근거리에서는 Back-to-back Cable을 사용하며 원거리 연결시 CSU/DSU를 사용하여 연결실시]
+
+
+   # R1    [DCE]
+R1(config)# interface serial 1/0
+R1(config-if)# no shutdown
+R1(config-if)# encapsulation hdlc   : Cisco Router의 Serial은 기본적으로 HDLC로 동작을 실시
+R1(config-if)# bandwidth 64          : 대역폭 설정 [Kilobits]
+R1(config-if)# clock rate 64000      : 전송 속도 지정 [bits per second]
+R1(config-if)# ip address 192.168.12.1 255.255.255.0  :  Layer 3주소 할당
+
+
+   # R2    [DTE]
+R2(config)# interface serial 1/1
+R2(config-if)# no shutdown
+R2(config-if)# encapsulation hdlc
+R2(config-if)# bandwidth 64
+R2(config-if)# ip address 192.168.12.2 255.255.255.0
+
+              정보확인
+
+R1# show ip route
+R1# show interface serial 1/0   : Serial interface의 기본 정보 확인
+R1# show controller serial 1/0  : Serial interface이 DCE , DTE , Clock rate값 확인
+R1# show ip interface brief      : Interface의 상태정보 확인
+R1# ping 192.168.12.2   : R2의 Serial interface [Next-hop]
+
+R2# show ip route
+R2# show interface serial 1/1
+R2# show controller serial 1/1
+R2# show ip interface brief
+R2# ping 192.168.12.1   : R1의 Serial interface [Next-hop]
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+                        ## Loopback interface
+
+-Loopback interface는 물리적으로 연결하는 Port가 존재하지 않는 논리적인 Port이다.
+-Test등을 목적으로 네트워크를 추가시 사용할수 있는 Interface이다.
+-Loopback interface는 가상의 Interface이기때문에 Layer 1 , Layer2이 활성화 상태이므로
+ IP주소만 설정을 실시하게되면 통신이 가능하다.
+ [단 'Shutdown' command를 사용하여 비활성화 상태로 전환은 가능하다.]
+
+
+Router(config)# interface loopback <0-2147483647>
+Router(config-if)# ip address [A.B.C.D] [Subnetmask]
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------------------------------------------------------------------------------
+
+
+                          ### Show ip interface brief
+
+
+R1# show ip interface brief
+Interface              IP-Address      OK? Method  Status                     Protocol
+
+Serial1/0              unassigned      YES unset    administratively down  down : 해당 장비가 Shutdown상태
+ 
+Serial1/1              unassigned      YES unset    down                       down : 연결된 장비의 Interface상태가
+             						         shutdown인 경우
+Serial1/2              unassigned      YES unset    up                          down  : Encapsulation type , Clock값
+ 
+Serial1/3              unassigned      YES unset    up                          up      : Layer1 , Layer2활성화 상태
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+
+			### Default route
+
+
+
+
+	#R1
+ip route 0.0.0.0 0.0.0.0 13.13.12.2
+
+
+	#R3
+ip route 0.0.0.0 0.0.0.0 13.13.23.2
+
+
+
+
+
+
+		너가 풀수있는 만큼 풀어 안되는건 내가해줄게.
+		172.16.1.0 루프백.
+
+
+하나의 경로는 베스트경로.
+
+
+
+매트릭(해당 되는곳에서 얼마나 떨어져있나.)이 작은 경로를 수집
+
+
+Routing protocol
+
+ 이걸 크게 나누면 Static 와 Dynamic 가있는데 Static은 CCNP과정 이고 Dynamic이 있는데 이걸또 나누면
+Distance vector 와 Link-state 가 있다!
+ 
+Distance vector에는 RIR1,R2Rv2,IGMP(옛날꺼라 없어졌다.),
+EIGRP 이것이있고Link에 OSPE 와 ISIS(CCNP과정)가 있다.
+
+Distance vector - 거리와 방향 
+
+Link-state - 연결된 모든 상태를 파악하고있는것.
+
+
+
+
+		#Classful Routing Protocol 클래스 풀 라우팅 프로토콜
+
+- 라우팅 정보안에 서브넷 마스크가 포함되지 않는다.
+- IP에 대해서 Class로만 구분한다.
+ (Subnetting, VLSM을 사용한 환경에서는 사용할수 없으며 CIDR기능을 지원하지 않는다.)
+
+-C 172.16.1.0/24 ----> 172.16.0.0/16
+-C 192.168.1.0/27 ----> 192.168.1.0/24
+
+
+
+
+
+
+		#Classless Routing Protocol 클래스 레스 라우팅 프로토콜
+
+
+
+
+
+
+-C 172.16.1.0/24 ----> 172.16.1.0/24
+-C 172.16.1.0/24 ----> 172.16.0.0/24
+
+
+
+차이점: 서브넷이 있느냐 없느냐.
+
+
+RIPv1 은 Distance Vector 알고리즘을 사용하는 대표적인 라우팅 프로토콜이다.
+
+
+클래스 풀 라우팅 프로토콜.지금은 사용하지 않는다.
+
+
+
+
+ 	#R1
+R1(config) router rip
+R3(config-router)version 1
+R1(config-router)network 192.168.1.0
+R1(config-router)network 192.168.12.0
+
+
+ 	#R2
+R2(config) router rip
+R3(config-router)version 1
+R2(config-router)network 192.168.2.0
+R2(config-router)network 192.168.12.0
+R2(config-router)network 192.168.23.0
+
+
+
+ 	#R3
+R3(config) router rip
+R3(config-router)version 1
+R3(config-router)network 192.168.1.0
+R3(config-router)network 192.168.12.0
+
+
+
+
+
+
+
+*** AD (Administrative Distance)-신뢰도
+:Router 에 다수의 Routing Protocol이 Enable 된경우 Router는 가장 작은 AD값을 갖은 Routhing Protocol을 사용하여 통신한다.
+여러개의 포로토콜이 있는데 그 여러개의 프로토콜 중에서 결정하는 값은 AD 의 값인데 그 값중에 가장 작은 값을 결정한다.
+.Connecte :0
+.Static	  :1
+.EIGRP	  :90
+.OSPF	  :110
+.RIP	  :120
+
+
+
+
+
+-Metric
+
+.Router은 하나의 목적지 네트워크에 대해서 한개의 경로만 지원한다. (최적 경로)
+.하나의 목적지 네트워크에 대해서 다수의 경로가 존재하게되면 Router은 Metric값을 사용하여 최적 경로를 선출한다.
+.RIP은 Hop-conunt를 사용하여 최적 경로를 선출한다.(0~15) 사용되는건 1부터 이다.
+.거리와 속도를 비교해서 가게되는데 속도가 더 정확하다.
+
+
+
+
+
+
+*AD의 개념 :가장빨리 전송하는것이 목적.라우터 그래서 라우터는 가장 정확한 매트릭을 쓰겠다.
+	    라우터는 프로토콜(교통 수단을 선택하는것)을 먼저 선택한다 그러고나서 매트릭(빠른길을 찾는것)을 찾아서 할당.
+	    AD는 신뢰도 매트릭에 대한 신뢰도값을 나타내는것. 신뢰도가 높을수록 숫자는 낮아진다.
+	    Ex) 네비게이션 A,B가있는데 A는 거리만 보고 안내를 해주고 B는 거리는 멀지만 차가 안막히는곳으로 안내한다.
+		그럴경우 B사를 네비를 쓰게되겠지? 그걸 선택해주는것이 AD라고 생각하면된다.
+
+
+
+-RIPv1 라우팅 업데이트(모든 프로토콜의 출발지 주소는 송신하는 인터페이스가 출발지 주소가된다.
+
+.UDP 520번을 사용한다.
+.RIPv1 라우팅 업데이트시 Source IP address는 송신하는 Interface의 IP를 사용하며
+ 목적지 주소는 Broadcast(255.255.255.255)을 사용한다.
+.Classful Routing Protocol 이므로 업데이트 정보에는 SubnetMask가 없다.
+
+
+-SA:192.168.12.1    -SA:UDP 520 
+-DA:255.255.255.255 -DA:UDP 520 
+
+
+
+
+-로드 분산
+.Router은 하나의 목적지에 대해서 한개의 경로를 지원하는 장비이다.(최적 경로)
+.하나의 목적지에 대해서 복수개의 경로를 지원하는 기능을 로드 분산이라고  한다.
+.RIP은 균등 로드분산 기능을 지원한다.
+ 균등 로드분산:최적 경로와 동일한 Meteic을 갖은 경로에 대해서 복수개의 경로를 지원하는 기능
+
+
+
+RIP 타이머
+.UPdate  :|--------30초-----------| 30초마다 업데이트 하고 받는다.
+.Invalild:|----------------180초--------------| 
+.Holddown:			|----------------180초--------------|
+				Invalild 했는데 업데이트가 안들어 올경우180초동안 update를 배우지않는다. 루프방지를 위해서.
+.Flushed :|----------------------240초-------------------| 업데이터가 되지 않고 240초가 지난뒤  라우팅테이블에서 지워버린다.
+
+
+
+passive -interface fastethernet 0/0 
+
+
+
+
+
+
+
+
