@@ -390,9 +390,14 @@ build.gradle 프로젝트 설정 파일에 dependencies 부분에  implementatio
 
 
 ## 네티워킹을 이용한 파일 공유
-  - 네트워크를 통해 파일을 공유하고 데이터 입출력을 처리하는 방법
-  - 데이터를 파일에 저장하고 꺼내는 기능을 별도의 애플리케이션으로 분리한다.
     
+    - Client / Server Application Arcgitecture
+      장점: 다중 사용자에게 동시 서비스 제공.
+      단점: 
+
+
+두 Application이 데이터를 주고 받을 수 있도록 연결
+
 
     
     
