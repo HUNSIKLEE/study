@@ -389,15 +389,47 @@ build.gradle 프로젝트 설정 파일에 dependencies 부분에  implementatio
 프라퍼티명 (필드명)
 
 
+파일 읽어들일떄는 파일리더 파일 인풋 스트림 
+
+바이너리를 읽어 들일때는 파일 인풋 스트림
+텍스트 타입을 읽어 들일때는 파일리더
+
+
 ## 네티워킹을 이용한 파일 공유
     
     - Client / Server Application Arcgitecture
       장점: 다중 사용자에게 동시 서비스 제공.
-      단점: 
-
-
+    
 두 Application이 데이터를 주고 받을 수 있도록 연결
 
 
+DataInputStream 
+문자열을 UTF-8 로 변환시켜준다.
+
+InputStreamReader
+
+비트를 UTF-16 으로 변환시켜준다
+
+
+ FileInputStream, FileOutputStream, DataInputStream, DataOutputStream, BufferedInputStream, BufferedOutputStream, CipherInputStream, CipherOutputStream 등 수많은 클래스의 부모 클래스가 되는 InputStream 과 OutpuStream 클래스가 있습니다. 일반적인 경우, InputStream 의 read() 메소드와 OutputStream 의 write() 메소드만 있으면 입출력하는데 부족함이 없습니다. 수많은 종류의 스트림들은 이 부모 스트림들을 확장해서 특수한 목적에 사용되도록 특수한 성질을 부여한 스트림입니다. 예를 들어, Buffered{Input	Output}Stream 은 내부적으로 적절한 버퍼링을 하여 입출력을 효율적으로 하도록 도와줍니다. Cipher{Input	Output}Stream 은 객체 암호문을 쉽고 편하게 입출력 하도록 도와줍니다.
+그럼 자바에서 유닉스의 파일 디스크립터와 같은 역할을 하는것은 무엇일까요. 각각의 InputStream 과 OutputStream 의 인스턴스들입니다. System.out 은 C의 stdout 이라고 봐도 무방할듯 합니다. 자바를 한번이라도 접해본 사람은 다음과 같은 코드를 본 적이 있을것입니다.
+
+
+
+=> key나 value에 null을 사용하고 싶다면 HashMap을 사용하라.
+=> key나 value가 null이 되어서는 안된다면 Hashtable을 사용하라.
+
+
+
+
+
+       2022_08_19
+
     
-    
+    ##Proxy 패턴을 활용한 네트워킹 코드 캡슐화
+
+    캡슐화란 복잡한 코드가 안보이도록 클래스 안의 메서드로 감추는것. 해당 기능이 필요한 경우 간단히 메서드 호출로 처리 한다. 
+
+
+
+
