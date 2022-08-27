@@ -8,7 +8,25 @@ import static org.junit.Assert.*;
 
 public class AppTest {
     @Test public void appHasAGreeting() {
-        //App classUnderTest = new App();
-        //assertNotNull("app should have a greeting", classUnderTest.getGreeting());
+        System.out.println("서버 실행중..");
+
+        ServerSocket ss - new ServerSocket(8888);
+
+        while(true){
+            Socket socket = ss.accept();
+            System.out.println("클라이언트 요청 처리!");
+            try{
+                processRequest(socket)
+ 0           }catch(Exception e){
+                System.out.println("클라이언트 요청 처리 중 오류 발생 ");
+                System.out.println("다음 클라이언트의 요청을 처리합니다.");
+            }
+        }
+    }
+
+
+    static void processRequest(Socket socket) throws Exception{
+        try(Socket socket2 = socket;
+        DataInput)
     }
 }

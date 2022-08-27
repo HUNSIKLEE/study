@@ -432,4 +432,264 @@ InputStreamReader
 
 
 
+  2022_08_22
+
+  
+  Remote Object (서버 서블릿)
+
+  Stub (BoardDao proxy)
+
+  skeleton (BoardServlet)
+
+  2022_08_23
+
+  서버는 포트 번호를 고정 시켜야하지만
+
+  클라이언트는 고정시킬 필요없기때문에 OS가 자동으로 부여한다.
+  
+
+  출력은 블로킹이 안걸리지만 리딩은 블로킹이 걸린다.                                                                        
+
+  버퍼 쓸때 flush 항상 생각하기
+  왜? 버퍼는 버퍼에 다 쌓여야 보내기때문에
+
+  
+  게임은 전형적인 Stateful 방식이다. Stateful 의 멀티쓰레드가 동작 한다.
+
+  인터넷 검색은 전형적인 Statelees 방식이다. 
+
+  Node.js 방식은 예제 stateless2 방식이다.
+  문제점은 한명이 기달리게되면 나머지애들도 다 기달려야된다.
+
+  stateless도 결국 싱글 스레드 이기 때문에 문제가 발생되고
+  그 문제를 해결하기 위해선 쓰레드를 사용해야한다.
+
+  UDP 
+  단점을 보완하기 위해서 루틴을 산입해야한다.
+  루틴이란 상대가 받았는지 안받았는지 확인하는 방법.
+
+
+  URI -> URL,URN
+
+
+  URI (Uniform Resource Identifier)
+
+   - URL (Uniform Resource Locator)
+        http:(프로토콜(Scheme))
+
+          hong (사용자 ID)        생략함 
+          11111 (암호 password)  생략함
+          www.naver.com (서버주소 host)
+          80(포트번호 prot)       생략 ( http ->80 , https -> 443)
+          cafe(경로 path)
+          list?no=20&sort=a (Query String)
+
+
+   - URN (Uniform Resource Name)
+        ex) example:animal:ferret:nose
+
+
+
+
+Static Resource
+
+
+
+Dynamice Resource = 실행할 때마다 리턴결과가 달라질 수 있다.
+
+
+
+## Query String
+     - 자원의 경로(예: /index.php) 다음(물음표 ? 다음)에 오는 파라미터
+     - 형식: 파라미터명=값&파라미터명=값&파라미터명=값
+     - 예) sm=top_hty&fbm=1&ie=utf8&query=비트캠프
+
+
+
+웹 파싱할때 net = ex08 번 예제 0110 사용할것.
+      응답 헤더 필요하면 예제 0210 사용
+  
+
+
+
+App를 실행하여 필요한 H/W 자원만 사용
+
+물론 VM 처럼 별도의 컴퓨터에서 실행하는 것처럼 동작.
+
+- # 멀티 스레딩
+
+code와 heap 메모리를 여러 스레드가 공유를 한다
+멀티 프로세싱 방식에 비해 메모리 낭비가 적다.
+
+VM (하드웨어 자원을 다 사용해서 자원이 많이 들어간다.)
+
+  Parallels - 맥에서 윈도우 프로그램 사용할수있게해주는 가상머신
+
+Docker (최소한의 자원만 사용한다.) 도커 엔진은 VM 웨어의 이미지라 생각하면 편하고 
+도커는 서버의 저장된 이미지를 불러와서 실행하기 떄문에 많이 가볍고 속도도 빠르다.  
+
+# 프로세스 종료시 종속된 스레드도 모두 사용 종료된다.
+
+
+ Parallels 병렬 프로그래밍 . 정말 따로따로 실행되는것.
+
+
+ 멀티 테스킹
+ 콘크런트 동시성. 왔다갔다 왔다갔다 마치 동시에 실행되는것처럼 보이게 실행하는것.
+
+
+
+## CPU가 프로세스나 스레드의 명령을 실행할 때, CPU 실행을 분배한느 전략?
+(cpu를 어떤식으로 분배해서 명ㄹ형을 처리할 것인가?)
+=> "cpu Scheduling"
+
+1.windows -> Round Robin (프로세스와 스레드에 동일 시간 분배)
+
+2.Unix -> priority (문제점 하버드대하교에서 프로그램실행이 3년동안 밀린사건.)
+          + Aging 
+priorty는 우선순위가 높은 프로세스나 스레드를 더많이 실행하는것.
+Aging은 우선순위가 낮아 실행이 밀릴 때 마다 우선순위를 높여서 다음 번엔 실행 될수 있게 하는것.
+
+
+# Context Switching
+- cpu가 다른 프로세스나 스레드를 실행하기 위해 현재 프로세스나 스레드의 실행상태(여기까지 실행했다.)를 저장하고
+실행 할 프로세스나 스레드의 실행상태(어디서부터 실행하나?)를 로딩하는것.
+
+ex) 5대의 컴퓨터를 10초마다 돌아가면서 코딩하는데 코딩하고 다음 컴퓨터 코딩 하면서
+어? 어디까지 코딩했지? 아 여기 까지 했지. 라고 생각하는 데 시간이 소요된다.
+이러한것을 Context라 한다.
+          
+
+      cpu 스케쥴링 시간을 너무 짧게 잡으면 명령을 실행하는 시간보다
+      Context Switching 에 더많은 시간을 소비하는 문제가 발생한다.
+      -> 너무 간극을 크게 잡으면 동시실행 효과가 떨어진다.
+
+
+  2022_08_25
+
+  
+  Socket socket = serverSocket.accept();
+   문장 이해하기 이해안되면 생성자와 인스턴스 필드 이해야됨
+
+   익명클래스에서 바깥에있는 로컬변수를 사용하는것.
+   익명클래스에서 필드초기화 문장이 생성자에 
+
+12:00 다시보기.
+  
+
+
+  2022_08_26
+
+  모든 스레드가 완료 할 때까지  JVM은 종료되지 않는다.
+
+  Running = cpu 를 받을수 있는 상태 (cpu 스케줄링 대상)
+ (지금 실행하고있다는 뜻이아니라 대기를 하고있는상태)
+
+ 한번 Dead된 쓰레드는 다시 작동하지 않는다.
+예외 발생 ! IllegalThreadStateException.
+
+Not Runnable = cpu 를 안받는 상태( cpu 스케줄링 대상에서 제외)
+
+요즘은 거의다 선점형 운영체제다
+
+OS가 cpu 사용을 온전히 점유하여 점유하여 관리한다.
+
+IOT는
+(마이크로 보드)아두이노
+
+
+트렌지스터를 가지고 and or 게이트 -> 더하기 뺴기 -> 미니보드에 초소형 os 
+
+
+Cpu Racing 
+
+OS가 CPU 스케쥴링에 규칙에 의해서 결정한다.
+
+
+# 같은메모리를 여러 스레드가 동시에 접근할때 문제점
+
+-       여러 스레드가 동시에 이 메서드에 진입하면 
+       배열의 값을 덮어쓰는 문제가 발생한다.
+       이렇게 여러 스레드가 동시에 접근했을 때 문제가 발생하는 코드 부분을
+       한국말 로는 치명적인 영역 영어로는 
+       "Critical Section" 또는 "Critical Region" 이라 부른다.
+
+        어떤 코드에 문제가 발생하는가?
+       같은 메모리(변수)를 동시에 접근할 때
+       다른 쓰레드가 쓴 값을 덮어 쓸수 있다.
+
+        해결책? 상호배제 기법 
+       한번에 한 스레드 만이 접근하도록 제한하면 된다.
+       Mutual Exclusion (상호 배제 -> Mutex 뮤텍스라 부른다.)
+       Semaphore(n) (n개 까지만 허용 나머지는 배제);
+       ex) Semaphore(1) 이것을 Mutex라 부른다.
+       ex) Semaphore(최대수용인원) 화장실이라 정하면 대변기 한칸 Semaphore(1) 이것을 Mutex라 부른다. 
+       자바에서는 Mutex를 문법으로 지원한다!
+       세마포어는 개발자가 프로그램 짜야한다.
+
+
+
+    비동기 실행은 모든 스레드가 진입 가능하고 동기 실행은 한번에 한 스레드만 진입 가능하다. 
+    블록 동기 실행은 한번에 한스레드만이 블록에 진입가능.
+    블록의 코드 실행이 완료되어야만 다른스레드 진입가능!
+
+
+14시 50분 개념 설명 반복해서 듣기 
+
+## DBMS(DataBase Management Sytstem Service)
+ DBMS 란 DataBase 를 지원하고 관리해주는 S/W
+  - DataBase 관리
+  - 다중 Client 요청 관리
+  - 접속자 인증/권한 검사
+  
+  ex) 
+  
+    Oracle -  Oracle DBMS  
+    Oracle -  MYSQL ( 오픈소스) 재발 커뮤니티에서 관리
+      MS   -  MS_SQL
+      IBM  -  DB2
+      한국  -  Cubrid
+              Altibase
+              Tobero
+
+## DataBase 
+  - 데이터 공유
+  - 일관성,무결성,보안성
+  - 데이터중복 최소화
+  - 실시간 접근
+
+  
+
+## DBMS 사용법
+
+각 DBMS 마다 문법이 다른데 이 문법을 통일 시킨것
+SQL(Structured Query Language) 
+구조를 갖춘 DBMS에 명령을 내릴떄 사용하는 문법
+
+*SQL 표준?
+
+SQL 표준 문법 + Oracle 에서만 인식되는 문법
+
+SQL 표준 문법 + MS-SQL 에서만 인식되는 문법
+
+SQL 표준 문법 + MariaDB에서만 실행 할 수 있는 문법
+
+왜? DBMS 마다 전용문법이 있는가?
+DBMS만의  마다 특별한 기능을 사용할 문법이 필요.
+
+왜 다른 언어들을 사용하는가?
+상황마다 적합한 언어가 있다.
+ 
+
+ ##  MariaDB Server 와 Client
+
+
+brew install mariadb
+
+brew services start mariadb
+
+sudo mysql_secure_installation
+
+ mysql -u root -p
+
 
