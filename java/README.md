@@ -43,3 +43,16 @@ Object의 equals,hashcode 와 String 의 equals,hashcode 는 다르다.
 LinkedList의 가장 중요한 연습은 인스턴스 주소를 마음대로 컨트롤 할수 있어야 한다.
 
 
+
+## RPC RMI
+
+RPC(Remote Procedure Call)
+
+
+RMI(Remote Method Invocation)
+
+
+프론트엔드면 브라우저가 어떻게 구동되는지 근본을 공부해야한다.
+
+
+

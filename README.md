@@ -693,3 +693,20 @@ sudo mysql_secure_installation
  mysql -u root -p
 
 
+
+
+2022_08_29
+
+
+mysql -u root -p
+
+select user, host frome mysql.user;
+
+
+create database studydb character set utf8 collate utf8_general_ci;
+
+
+show databasees;
+
+
+show variables like 'character_set%';
