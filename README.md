@@ -699,14 +699,117 @@ sudo mysql_secure_installation
 
 
 mysql -u root -p
+루트권한으로 접속
 
 select user, host frome mysql.user;
-
+유저목록 보기
 
 create database studydb character set utf8 collate utf8_general_ci;
-
+생성
 
 show databasees;
-
+데이터베이스 목록 보기.
 
 show variables like 'character_set%';
+마리아 DB가 지원하는 케릭터셋 보기.
+
+grant all on studydb.* to 'study'@'localhost';
+권한
+
+create table test1(name vardar (50) not null,
+);
+
+
+use root;
+사용할 데이터베이스 지정
+
+insert into test1(no, name) values(1, 'aaa');
+테이블에 데이터 입력
+
+select no,name from test1;
+테이블에 들어있는 데이터 조회
+
+
+desc test1;
+
+select *
+
+
+2022_08_30
+
+
+# DDL(Data Definition Language)
+DB 객체(테이블, 뷰, 함수, 트리거 등)를 생성, 변경, 삭제하는 SQL 명령이다.
+
+
+ alter table test1
+    add constraint test1_pk primary key(no),
+    add constraint test1_uk unique (name, age);
+
+alter = 변경하는 명령어.
+
+
+unique  = primary key 중복해서 사용할수 있게해주는 명령어
+
+ 
+ 변수 지정해줄떄 사용해도되지만
+ 
+ alter 명령어로 따로 지정해줄수있다.
+
+
+ 인덱스 컬럼은 빠르게 검색 하고싶을때 사용한다.
+ select * from test1 where name = 'bbb';
+
+  단점, 이런 이유로 이름으로 검색할 때 찾기 속도는 빠르지만,
+  입력,변경,삭제 속도는 느리게 된다.
+
+
+  Key - 데이터를 구분하는 식별자.
+
+  데이터를 식별할때 사용할 수 있는 컬럼들의 값.
+
+  
+  candidata key (후보키 = 최소키)
+   -이메일, 주민번호,휴대폰
+ Key중에서 최소의 컬럼으로 줄인 Key
+
+
+ primary key (주(핵심) 키)
+= alternate key (대안 키지만 주키처럼 쓸수 있는 키)
+ => unique 컬럼으로 지정된다.
+
+줄여서 PK라 부르는데 PK는 변경할 수 없다.
+
+
+후보키 중에서 DB관리자가 선정한 키
+
+artificial key (인공키)
+
+PK로 사용하기에 적절한 키가 없다면
+임의의 컬럼을 만들어 PK로 지정한다.
+보통 일련번호 컬럼.
+
+
+특정조건의 데이터를 선택하는 것을 selection 이라 부른다.
+ex) select no,name from test1 where no > 10; 
+
+결과로 추출할  컬럼(행)을 지정 하는것을 projection프로젝션이라 부른다.
+ex) select no,name from test1;
+ 
+
+
+ select no, concat(name,'(',class,')') from test1;
+
+dbms에서 코딩을 하면 업무와 관련된 코드가 작성될수 밖에없는데
+그래서 회사에서는 dbms에다가 (비지니스로직)을 놓지말라고 권고하지만,
+자바에서 하면 네트워크에 부하가 많이걸려서
+편하게 작업하기 위해서 dbms에서 작업하는 경우가 많다. 
+
+
+ 결과 데이터중에서 추출할 컬럼을 선택하는걸 프로젝션
+ 결과 데이터를 선택하는것을 셀렉션.
+
+
+Mariadb 실행 순서:
+ from --> where --> group by --> select --> having --> order by
+ 
