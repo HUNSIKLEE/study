@@ -1,17 +1,41 @@
-# 039. JSON 형식으로 데이터 입출력하기: Gson 라이브러리 사용
+# 051. Application Server 구조로 전환하기
 
 ## 작업 내용
 
-### 1단계 - 프로젝트에 google-gson 라이브러리를 포함한다.
+### 1단계 - app-client 프로젝트를 복사하여 app-server 프로젝트로 만든다.
 
-- board-app/app/build.gradle 변경
-  - search.maven.org 사이트에서 gson 라이브러리를 찾는다.
-  - dependencies{} 블록에 gson 라이브러리 설정을 추가한다.
-- 이클립스의 프로젝트 설정 파일(.classpath)에 라이브러리 정보를 추가한다.
-  - CLI에서 `gradle eclipse` 를 실행한다.
-  - 이클립스 프로젝트를 리프래시 한다.
+- build.gradle 변경
+  - 이클립스 프로젝트 이름을 'board-app-server'로 변경
+  - application 메인 클래스를 ServerApp 으로 변경
 
-### 2단계 - XxxDao에 Gson 라이브러리를 적용한다.
+### 2단계 - 메인 클래스의 이름을 'ServerApp'으로 변경한다.
 
-- com.bitcamp.board.dao.XxxDao 클래스 변경
-  - save(), load() 메서드에서 Gson 라이브러리를 사용하여 JSON 데이터를 다룬다.
+- com.bitcamp.board.ServerApp 클래스 이름 변경
+
+### 3단계 - 클라이언트와 통신 프로토콜을 정의한다.
+
+```
+[client] <---------------------> [server]
+   |---- 접속 ---------------------->|
+   |<----- 환영 메시지 --------------|
+   |---- 사용자 입력 전송(요청) ---->|
+   |<----- 응답 메시지 --------------|
+   |         요청/응답 반복          |
+   |---- "quit" -------------------->| 
+   |          연결 끊기              |
+
+                   
+```
+
+```
+요청 메시지:
+  한 덩어리의 문자열
+
+응답 메시지: 
+  한 덩어리의 문자열
+
+```
+
+### 4단계 - 통신 프로토콜에 따라 클라이언트의 요청을 처리한다.
+
+- com.bitcamp.board.ServerApp 클래스 변경
