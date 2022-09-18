@@ -1,4 +1,4 @@
-package hello.hellospring.controller;
+package hello.hellospring;
 
 import hello.hellospring.repository.MemberRepository;
 import hello.hellospring.repository.MemoryMemberRepository;
@@ -12,6 +12,7 @@ public class SpringConfig {
 
 @Bean
     public MemberService memberService() {
+
     return new MemberService(memberRepository());
 }
 

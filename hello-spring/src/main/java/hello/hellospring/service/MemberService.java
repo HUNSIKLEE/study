@@ -1,31 +1,31 @@
 package hello.hellospring.service;
 
 import hello.hellospring.domain.Member;
-import hello.hellospring.repository.MemoryMemberRepository;
+import hello.hellospring.repository.MemberRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public class MemverService {
+public class MemberService {
 
-    private final MemoryMemberRepository memoryMemberRepository;
+    private final MemberRepository memberRepository;
 
-    public MemverService(MemoryMemberRepository memoryMemberRepository) {
-        this.memoryMemberRepository = memoryMemberRepository;
+    public MemberService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
     }
 
     public Long join(Member member) {
 
         validateDuplicateMember(member);
 
-        memoryMemberRepository.save(member);
+        memberRepository.save(member);
         return member.getId();
 
 
     }
 
     private void validateDuplicateMember(Member member) {
-        memoryMemberRepository.findByName(member.getName())
+        memberRepository.findByName(member.getName())
                .ifPresent(member1 -> {
                     throw new IllegalStateException("이미 존재하는 회원입니다.");
                  });
@@ -33,12 +33,12 @@ public class MemverService {
 
 
     public List<Member> findMembers(){
-      return memoryMemberRepository.findAll();
+      return memberRepository.findAll();
 
     }
 
     public Optional<Member> findOne(Long memberId){
-        return memoryMemberRepository.findById(memberId);
+        return memberRepository.findById(memberId);
     }
 
 }

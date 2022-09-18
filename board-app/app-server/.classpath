@@ -28,17 +28,22 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-11/"/>
-	<classpathentry kind="src" path="/board-app-common">
-		<attributes>
-			<attribute name="without_test_code" value="true"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry sourcepath="/Users/sik/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/30.1.1-jre/fac882f35fd501581954dcaffa410ee4b5cd8d1b/guava-30.1.1-jre-sources.jar" kind="lib" path="/Users/sik/.gradle/caches/modules-2/files-2.1/com.google.guava/guava/30.1.1-jre/87e0fd1df874ea3cbe577702fe6f17068b790fd8/guava-30.1.1-jre.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry sourcepath="/Users/sik/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.9.1/2f8e47a3905fcb3c0511d7c294c987d77803021e/gson-2.9.1-sources.jar" kind="lib" path="/Users/sik/.gradle/caches/modules-2/files-2.1/com.google.code.gson/gson/2.9.1/2cc2131b98ebfb04e2b2c7dfb84431f4045096b/gson-2.9.1.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/sik/.gradle/caches/modules-2/files-2.1/org.mariadb.jdbc/mariadb-java-client/3.0.7/bfa8f2e8988519e2ef48c10eb16e1fb90b7ebce4/mariadb-java-client-3.0.7-sources.jar" kind="lib" path="/Users/sik/.gradle/caches/modules-2/files-2.1/org.mariadb.jdbc/mariadb-java-client/3.0.7/708456abf19170c3c80896826993eaa5f663ffa4/mariadb-java-client-3.0.7.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/sik/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.10.2/68391d7abbca924e397401333c5a9492531812b6/reflections-0.10.2-sources.jar" kind="lib" path="/Users/sik/.gradle/caches/modules-2/files-2.1/org.reflections/reflections/0.10.2/b638d7ca0e0fe0146b60a0e7ba232ad852a73b31/reflections-0.10.2.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
@@ -73,7 +78,12 @@
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry sourcepath="/Users/sik/.gradle/caches/modules-2/files-2.1/org.mariadb.jdbc/mariadb-java-client/3.0.7/bfa8f2e8988519e2ef48c10eb16e1fb90b7ebce4/mariadb-java-client-3.0.7-sources.jar" kind="lib" path="/Users/sik/.gradle/caches/modules-2/files-2.1/org.mariadb.jdbc/mariadb-java-client/3.0.7/708456abf19170c3c80896826993eaa5f663ffa4/mariadb-java-client-3.0.7.jar">
+	<classpathentry sourcepath="/Users/sik/.gradle/caches/modules-2/files-2.1/org.javassist/javassist/3.28.0-GA/4e112a71eca1bebcadd85c5a07a9a26265eb12f4/javassist-3.28.0-GA-sources.jar" kind="lib" path="/Users/sik/.gradle/caches/modules-2/files-2.1/org.javassist/javassist/3.28.0-GA/9a958811a88381bb159cc2f5ed79c34a45c4af7a/javassist-3.28.0-GA.jar">
+		<attributes>
+			<attribute name="gradle_used_by_scope" value="main,test"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry sourcepath="/Users/sik/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.32/4381b152f738580aef4e436b2692a3db30609b26/slf4j-api-1.7.32-sources.jar" kind="lib" path="/Users/sik/.gradle/caches/modules-2/files-2.1/org.slf4j/slf4j-api/1.7.32/cdcff33940d9f2de763bc41ea05a0be5941176c3/slf4j-api-1.7.32.jar">
 		<attributes>
 			<attribute name="gradle_used_by_scope" value="main,test"/>
 		</attributes>
