@@ -209,3 +209,6 @@ Debug/
 Release/
 html-exam/
 package-lock.json
+
+# intelliJ
+.IDEA
