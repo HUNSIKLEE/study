@@ -5,39 +5,65 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b2d917b6-700a-43bc-9e3a-9c17cdc21902" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app-common/board-app-common.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-client/bin/main/com/bitcamp/board/ClientApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/app-client/bin/main/com/bitcamp/board/ClientApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-client/bin/main/com/bitcamp/board/handler/BoardHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-client/bin/main/com/bitcamp/board/handler/MemberHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-client/bin/main/com/bitcamp/handler/AbstractHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-client/bin/main/com/bitcamp/handler/Handler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-common/bin/main/com/bitcamp/board/dao/BoardDaoProxy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-common/bin/main/com/bitcamp/board/dao/MemberDaoProxy.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-common/bin/main/com/bitcamp/board/domain/Board.class" beforeDir="false" afterPath="$PROJECT_DIR$/app-common/bin/main/com/bitcamp/board/domain/Board.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-common/bin/main/com/bitcamp/board/domain/Member.class" beforeDir="false" afterPath="$PROJECT_DIR$/app-common/bin/main/com/bitcamp/board/domain/Member.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/ServerApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/ServerApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/dao/BoardDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/dao/BoardDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/dao/MemberDao.class" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/dao/MemberDao.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/servlet/BoardServlet.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/servlet/MemberServlet.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/.classpath" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/.project" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/.settings/org.eclipse.jdt.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/ClientApp.bat" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/ClientApp.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/ClientApp.sh" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/ClientApp.sh" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/Selector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/AppTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/dao/BoardDao.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/dao/MariaDBBoardDao.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/dao/MariaDBMemberDao.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/dao/MemberDao.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/handler/BoardHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/handler/MemberHandler.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/main/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/Selector.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/dao/BoardDao.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/dao/MemberDao.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/servlet/Servlet.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/HelloSpringApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/HelloSpringApplication.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/SpringConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/SpringConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/controller/HelloController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/controller/HelloController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/controller/HomeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/controller/HomeController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/controller/MemberController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/controller/MemberForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/controller/MemberForm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/domain/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/domain/Member.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/repository/MemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/repository/MemberRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/repository/MemoryMemberRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/repository/MemoryMemberRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/java/hello/hellospring/service/MemberService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/resources/static/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/resources/templates/hello-template.html" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/resources/templates/hello-template.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/resources/templates/hello.html" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/resources/templates/hello.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/resources/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/resources/templates/home.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/main/resources/templates/members/createMemberForm.html" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/main/resources/templates/members/createMemberForm.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/test/java/hello/hellospring/repository/MemoryMemberRepositoryTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/test/java/hello/hellospring/repository/MemoryMemberRepositoryTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../hello-spring/src/test/java/hello/hellospring/service/MemberServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/../hello-spring/src/test/java/hello/hellospring/service/MemberServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/test/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/bin/test/com/bitcamp/board/AppTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/board-app-server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/board-app-server.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/doc/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/doc/data.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/doc/model.exerd" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/doc/model.exerd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/Selector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/Selector.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/Test2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/MiniWebServer.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardAddHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardDeleteHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardDetailHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardFormHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardListHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardUpdateHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/CalculatorHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/ErrorHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/HelloHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberAddHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberDeleteHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberDetailHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberFormHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberListHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberUpdateHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/WelcomeHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/servlet/Servlet.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/servlet/annotation/WebServlet.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/JhWebServlet.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/sub/A.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/sub/B.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/sub/C.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/suck/ex2_1.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/suck/ex2_2.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/test/resources/com/bitcamp/Test.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,6 +72,13 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -56,13 +89,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;testing.instrumented.configuration&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Downloaded.Files.Path.Enabled": "false",
+    "Repository.Attach.Annotations": "false",
+    "Repository.Attach.JavaDocs": "false",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "/Users/sik/git/study/board-app",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration default="true" type="JetRunConfigurationType">
       <module name="board-app-client" />
@@ -73,6 +115,40 @@
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <module name="board-app-client" />
       <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unnamed" type="com.poratu.idea.plugins.tomcat" nameIsGenerated="true">
+      <predefined_log_file enabled="true" id="Tomcat Localhost Log" />
+      <predefined_log_file enabled="true" id="Tomcat Access Log" />
+      <predefined_log_file id="Tomcat Catalina Log" />
+      <predefined_log_file id="Tomcat Manager Log" />
+      <predefined_log_file id="Tomcat Host Manager Log" />
+      <option name="contextPath" value="/board-app-server" />
+      <option name="docBase" value="$PROJECT_DIR$/app-server/src/main/webapp" />
+      <option name="envOptions">
+        <map />
+      </option>
+      <option name="port" value="8888" />
+      <option name="tomcatInfo">
+        <TomcatInfo>
+          <option name="name" value="Apache Tomcat/9.0.65" />
+          <option name="path" value="$USER_HOME$/server/apache-tomcat-9.0.65" />
+          <option name="version" value="9.0.65.0" />
+        </TomcatInfo>
+      </option>
+      <option name="vmOptions" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="com.poratu.idea.plugins.tomcat">
+      <predefined_log_file enabled="true" id="Tomcat Localhost Log" />
+      <predefined_log_file enabled="true" id="Tomcat Access Log" />
+      <predefined_log_file id="Tomcat Catalina Log" />
+      <predefined_log_file id="Tomcat Manager Log" />
+      <predefined_log_file id="Tomcat Host Manager Log" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
