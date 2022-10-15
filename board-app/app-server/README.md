@@ -1,14 +1,21 @@
-### 061. JSP를 이용하여 출력문을 자동으로 생성하기: MVC 모델1
+### 069. 파일을 업로드하기: multipart/form-data MIME 타입
 
 ## 작업 내용
 
-### 1단계 - WelcomeServlet을 JSP 파일로 교체한다.
+### 1단계 - 게시글의 첨부 파일 테이블을 생성한다.
 
-- webapp/welcome.jsp 파일 생성
+- /doc/model.exerd 변경
+- /doc/ddl.sql 변경
+- /doc/data.sql 변경
 
-### 2단계 - *Servlet을 JSP 파일로 교체한다.
+### 2단계 - 게시글 등록할 때 파일을 첨부한다.
 
-- com.bitcamp.board.servlet.*.Servlet 클래스를 JSP 파일로 전환
-- /webapp/WEB-INF/web.xml 변경
-- /webapp/board/*.jsp 파일 추가
-- /webapp/member/*.jsp 파일 추가
+- /webapp/board/form.jsp 변경
+- charlesproxy 프로그램으로 multipart/form-data 형식으로 넘어가는 프로토콜 확인
+
+### 3단계 - 멀티파트 형식으로 업로드된 데이터를 처리한다.
+
+- apache의 commons-fileupload 라이브러리를 프로젝트 추가
+- com.bitcamp.board.domain.AttachedFile 클래스 생성
+  - app_board_file 테이블의 값을 담는 객체
+  

@@ -1,19 +1,7 @@
 <%@ page language="java" 
     contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.List"%>
-<%@ page import="com.bitcamp.board.dao.BoardDao"%>
-<%@ page import="com.bitcamp.board.domain.Board"%>
-
-<%! 
-BoardDao boardDao;
-
-// init(ServletConfig) 메서드에 코드를 넣고 싶으면 
-// 다음과 같이 JspPage.jspInit() 메서드를 오버라이딩 하라!
-public void jspInit() {
-  boardDao = (BoardDao) this.getServletContext().getAttribute("boardDao");
-}
-%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,12 +15,8 @@ tr:hover {
 </style>
 </head>
 <body>
-  <h1>게시글-JSP</h1>
+  <h1>게시글(JSP + Servlet + EL + JSTL)</h1>
   <a href='form'>새 글</a>
-<% 
-try {
-  List<Board> boards = boardDao.findAll();
-%>
   <table border='1'>
     <tr>
       <th>번호</th>
@@ -41,27 +25,16 @@ try {
       <th>작성자</th>
       <th>등록일</th>
     </tr>
-<% 
-  for (Board board : boards) {
-%>
+<c:forEach items="${boards}" var="board">
     <tr>
-      <td><%=board.no%></td>
-      <td><a href='detail?no=<%=board.no%>'><%=board.title%></a></td>
-      <td><%=board.viewCount%></td>
-      <td><%=board.memberNo%></td>
-      <td><%=board.createdDate%></td>
+      <td>${board.no}</td>
+      <td><a href='detail?no=${board.no}'>${board.title}</a></td>
+      <td>${board.viewCount}</td>
+      <td>${board.writer.name}</td>
+      <td>${board.createdDate}</td>
     </tr>
-<%   
-  }
-%>
+</c:forEach>
   </table>
-<%   
-} catch (Exception e) {
-%>
-  <p>실행 중 오류 발생!</p>
-<%     
-}
-%>
   <p><a href='../'>메인</a></p>
 </body>
 </html>

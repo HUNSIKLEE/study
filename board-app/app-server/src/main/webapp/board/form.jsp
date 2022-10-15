@@ -10,7 +10,7 @@
 <body>
 <h1>게시글 입력-JSP</h1>
 
-<form action='add'>
+<form action='add' method="post" enctype="multipart/form-data">
 <table border='1'>
   <tr>
     <th>제목</th><td><input name='title' type='text' size='60'></td>
@@ -19,7 +19,7 @@
     <th>내용</th><td><textarea name='content' rows='10' cols='60'></textarea></td>
   </tr>
   <tr>
-    <th>작성자</th><td><input name='writerNo' type='number' size='5'></td>
+    <th>첨부파일</th><td><input name='files' type="file" multiple></td>
   </tr>
 </table>
 <p>
