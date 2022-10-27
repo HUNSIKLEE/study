@@ -15,6 +15,8 @@ insert into app_board(bno,title,cont,mno) values(15,'제목5','내용',2);
 insert into app_board(bno,title,cont,mno) values(16,'제목6','내용',4);
 
 -- 비회원 게시글 데이터 입력
+
+
 insert into app_board(bno,title,cont,pwd) values(17,'제목101','내용',sha2('1111',256));
 insert into app_board(bno,title,cont,pwd) values(18,'제목102','내용',sha2('1111',256));
 insert into app_board(bno,title,cont,pwd) values(19,'제목103','내용',sha2('',256));

@@ -4,164 +4,120 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b2d917b6-700a-43bc-9e3a-9c17cdc21902" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app-common/board-app-common.iml" afterDir="false" />
+    <list default="true" id="0dd70e79-e83e-465e-a570-25c1ecd3f246" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/images/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/.classpath" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/.project" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/.settings/org.eclipse.jdt.core.prefs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app-server/ClientApp.bat" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/ClientApp.bat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app-server/ClientApp.sh" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/ClientApp.sh" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app-server/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/Selector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/AppTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/dao/BoardDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/dao/MariaDBBoardDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/dao/MariaDBMemberDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/dao/MemberDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/handler/BoardHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/default/com/bitcamp/board/handler/MemberHandler.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/Selector.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/dao/BoardDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/board/dao/MemberDao.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/main/com/bitcamp/servlet/Servlet.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/test/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/bin/test/com/bitcamp/board/AppTest.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/board-app-server.iml" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/board-app-server.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app-server/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app-server/doc/data.sql" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/doc/data.sql" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/doc/model.exerd" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/doc/model.exerd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/Selector.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/Selector.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/Test2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/MiniWebServer.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardAddHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardDeleteHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardDetailHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardFormHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardListHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/BoardUpdateHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/CalculatorHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/ErrorHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/HelloHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberAddHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberDeleteHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberDetailHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberFormHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberListHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/MemberUpdateHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/handler/WelcomeHandler.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/servlet/Servlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/servlet/annotation/WebServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/JhWebServlet.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/Test.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/sub/A.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/sub/B.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/jong/sub/C.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/suck/ex2_1.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/suck/ex2_2.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/test/resources/com/bitcamp/Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/doc/ddl.sql" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/doc/ddl.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/Selector.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/BoardAddController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/BoardDeleteController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/BoardDetailController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/BoardListController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/BoardUpdateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/LoginController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/LogoutController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/MemberAddController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/MemberDeleteController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/MemberDetailController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/MemberListController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/controller/MemberUpdateController.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/dao/BoardDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/dao/BoardDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/dao/MariaDBBoardDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/dao/MariaDBMemberDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/dao/MemberDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/dao/MemberDao.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/domain/AttachedFile.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/domain/AttachedFile.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/filter/AdminCheckFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/filter/AdminCheckFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/filter/LoginCheckFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/filter/LoginCheckFilter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/listener/ContextLoaderListener.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/WEB-INF/web.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/auth/form.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/auth/loginResult.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/board/detail.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/board/form.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/board/list.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/css/common.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/error.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/images/img.jpg" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/js/my.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/member/detail.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/member/form.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/member/list.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/test.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/webapp/welcome.jsp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/test/java/com/bitcamp/board/AppTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/test/java/com/bitcamp/board/AppTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/settings.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
-  </component>
-  <component name="LogFilters">
-    <option name="FILTER_ERRORS" value="false" />
-    <option name="FILTER_WARNINGS" value="false" />
-    <option name="FILTER_INFO" value="true" />
-    <option name="FILTER_DEBUG" value="true" />
-    <option name="CUSTOM_FILTER" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectId" id="2EmVReDt10cbHqhogzxCVxtGR3w" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectId" id="2Gi1mspsjaydEIzl73TB7DWsoue" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "Downloaded.Files.Path.Enabled": "false",
-    "Repository.Attach.Annotations": "false",
-    "Repository.Attach.JavaDocs": "false",
-    "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "last_opened_file_path": "/Users/sik/git/study/board-app",
-    "project.structure.last.edited": "SDKs",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "preferences.pluginManager"
+    "last_opened_file_path": "/Users/sik/git/study/board-app/app-server/src/main/resources/static/images",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app-server/src/main/resources/static/images" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <module name="board-app-client" />
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="com.bitcamp.board.App" />
+      <module name="board-app.app-server.main" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.bitcamp.board.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
-      <module name="board-app-client" />
-      <option name="filePath" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Unnamed" type="com.poratu.idea.plugins.tomcat" nameIsGenerated="true">
-      <predefined_log_file enabled="true" id="Tomcat Localhost Log" />
-      <predefined_log_file enabled="true" id="Tomcat Access Log" />
-      <predefined_log_file id="Tomcat Catalina Log" />
-      <predefined_log_file id="Tomcat Manager Log" />
-      <predefined_log_file id="Tomcat Host Manager Log" />
-      <option name="contextPath" value="/board-app-server" />
-      <option name="docBase" value="$PROJECT_DIR$/app-server/src/main/webapp" />
-      <option name="envOptions">
-        <map />
-      </option>
-      <option name="port" value="8888" />
-      <option name="tomcatInfo">
-        <TomcatInfo>
-          <option name="name" value="Apache Tomcat/9.0.65" />
-          <option name="path" value="$USER_HOME$/server/apache-tomcat-9.0.65" />
-          <option name="version" value="9.0.65.0" />
-        </TomcatInfo>
-      </option>
-      <option name="vmOptions" value="" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration default="true" type="com.poratu.idea.plugins.tomcat">
-      <predefined_log_file enabled="true" id="Tomcat Localhost Log" />
-      <predefined_log_file enabled="true" id="Tomcat Access Log" />
-      <predefined_log_file id="Tomcat Catalina Log" />
-      <predefined_log_file id="Tomcat Manager Log" />
-      <predefined_log_file id="Tomcat Host Manager Log" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="b2d917b6-700a-43bc-9e3a-9c17cdc21902" name="Changes" comment="" />
-      <created>1663200739778</created>
+      <changelist id="0dd70e79-e83e-465e-a570-25c1ecd3f246" name="Changes" comment="" />
+      <created>1666856753334</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1663200739778</updated>
+      <updated>1666856753334</updated>
     </task>
     <servers />
   </component>

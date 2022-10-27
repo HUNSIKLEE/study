@@ -7,12 +7,12 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.stereotype.Component;
 import com.bitcamp.board.domain.Member;
 
-@WebFilter("/member/*")
+@Component
 public class AdminCheckFilter implements Filter {
 
   @Override
@@ -23,16 +23,18 @@ public class AdminCheckFilter implements Filter {
   @Override
   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
       throws IOException, ServletException {
-    System.out.println("AdminCheckFilter.doFilter() 실행!");
 
     HttpServletRequest httpRequest = (HttpServletRequest) request;
     HttpServletResponse httpResponse = (HttpServletResponse) response;
 
-    Member loginMember = (Member) httpRequest.getSession().getAttribute("loginMember");
-    if (loginMember == null || // 로그인이 안됐거나 
-        !loginMember.getEmail().equals("admin@test.com")) { // 관리자가 아니라면
-      httpResponse.sendRedirect(httpRequest.getContextPath() + "/");
-      return;
+    System.out.println("AdminCheckFilter.doFilter() 실행!");
+    if (httpRequest.getServletPath().startsWith("/member")) {
+      Member loginMember = (Member) httpRequest.getSession().getAttribute("loginMember");
+      if (loginMember == null || // 로그인이 안됐거나 
+          !loginMember.getEmail().equals("admin@test.com")) { // 관리자가 아니라면
+        httpResponse.sendRedirect(httpRequest.getContextPath() + "/");
+        return;
+      }
     }
 
     chain.doFilter(request, response);
