@@ -5,11 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dd70e79-e83e-465e-a570-25c1ecd3f246" name="Changes" comment="Changes">
+      <change afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/auth/form0back.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/services.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/services.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/services.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/services.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/auth/form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/login.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/auth/form.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +56,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
   <component name="ProjectId" id="2Gi1mspsjaydEIzl73TB7DWsoue" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -72,6 +79,12 @@
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app-server/src/main/resources/static/images" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app-server/src/main/resources/templates" />
+      <recent name="$PROJECT_DIR$/app-server/src/main/resources/templates/auth" />
+      <recent name="$PROJECT_DIR$/app-server/src/main/resources/static" />
+      <recent name="$PROJECT_DIR$/app-server/src/main/resources/static/summernote" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -89,7 +102,7 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="애플리케이션.App" />
+        <item itemvalue="Application.App" />
       </list>
     </recent_temporary>
   </component>
