@@ -5,15 +5,93 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="0dd70e79-e83e-465e-a570-25c1ecd3f246" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/auth/form0back.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/auth/form.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/java/com/bitcamp/board/App.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/com/bitcamp/board/dao/BoardDao.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/com/bitcamp/board/dao/MemberDao.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/css/common.css" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/css/common.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/images/img.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/images/img.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/images/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/images/logo.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/js/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/js/my.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/services.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/static/services.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/static/summernote/test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/auth/form0back.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/auth/loginResult.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/templates/auth/loginResult.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/board/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/templates/board/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/board/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/templates/board/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/board/form0.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/board/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/templates/board/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/error.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/member/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/templates/member/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/member/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/templates/member/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/out/production/resources/templates/welcome.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/out/production/resources/templates/welcome.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/com/bitcamp/board/dao/BoardDao.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/com/bitcamp/board/dao/MemberDao.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/css/common.css" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/css/common.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/css/style.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/images/img.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/images/img.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/images/logo.png" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/images/logo.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/index.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/login.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/auth/form.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/js/my.js" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/js/my.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/services.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/static/services.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/static/summernote/test.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/auth/form0back.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/auth/loginResult.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/auth/loginResult.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/board/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/board/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/board/form.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/board/form.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/board/form0.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/board/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/board/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/error.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/member/detail.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/member/detail.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/member/list.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/member/list.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app-server/src/main/resources/templates/welcome.html" beforeDir="false" afterPath="$PROJECT_DIR$/app-server/src/main/resources/templates/welcome.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/board.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/build.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/member.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/Selector.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/board/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/board/dao/BoardDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/board/dao/MemberDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/board/domain/Board.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/board/domain/Member.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/board/handler/BoardHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/board/handler/MemberHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/handler/AbstractHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/handler/Handler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/AbstractList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/Iterator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/LinkedList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/List.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/ListException.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/ListTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/ObjectList.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/Prompt.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/com/bitcamp/util/Stack.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/resources/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/java/com/bitcamp/board/AppTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/test/resources/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/Selector.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/board/App.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/board/dao/BoardDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/board/dao/MemberDao.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/board/domain/Board.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/board/domain/Member.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/board/handler/BoardHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/board/handler/MemberHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/handler/AbstractHandler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/handler/Handler.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/study/Client.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/study/Server.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/java/com/bitcamp/util/Prompt.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/main1.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/main/resources/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/test/java/com/bitcamp/board/AppTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/test/resources/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src_back/test/test1.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
