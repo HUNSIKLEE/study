@@ -17,9 +17,9 @@ public class App {
     SpringApplication.run(App.class, args);
   }
 
-  @GetMapping("/summernote")
+  @GetMapping("/")
   public String welcome() {
-    return "index.html";
+    return "index";
   }
 
 }
