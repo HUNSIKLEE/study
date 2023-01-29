@@ -12,9 +12,8 @@ public class MemberApp {
         Member member = new Member(1L, "memberA", Grade.VIP);
         memberService.join(member);
 
-    Member findMember =  memberService.findMember(1L);
-        System.out.println("new member =" + member.getName());
+        Member findMember = memberService.findMember(1L);
+        System.out.println("new member = " + member.getName());
         System.out.println("find Member = " + findMember.getName());
-
     }
 }
