@@ -1,6 +1,6 @@
 package construct;
 
-public class ConstructMain1 {
+public class  ConstructMain1 {
 
     public static void main(String[] args) {
 

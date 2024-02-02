@@ -1,30 +1,33 @@
-package hello.hellospring.service;
-
-import java.util.Scanner;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int t = sc.nextInt();
-        while (t-- > 0) {
-            int n = sc.nextInt();
-            int[] a = new int[n];
-            for (int i = 0; i < n; i++) {
-                a[i] = sc.nextInt();
-            }
-            int result = 0;
-            for (int i = 1; i < n - 1; i++) {
-                if (a[i - 1] == a[i + 1]) {
-                    result = a[i + 1];
-                    break;
-                }
-            }
-            if (result == 0) {
-                System.out.println("-1");
-            } else {
-                System.out.println(result * n);
-            }
+        int[] arr1 = new int[]{5, 1, 5, 10};
+        int[] arr2 = new int[]{3, 1, 5, 5, 3, 3, 5};
+        int[] arr3 = new int[]{4, 1, 5, 5, 3, 3, 5, 4, 5};
+        int[] arr4 = new int[]{2, 2, 1, 2, 1};
+        int[] arr5 = new int[]{2, 4, 6, 4, 4};
+
+        System.out.println(getResult(arr1));
+        System.out.println(getResult(arr2));
+        System.out.println(getResult(arr3));
+        System.out.println(getResult(arr4));
+        System.out.println(getResult(arr5));
+    }
+
+    public static int getResult(int[] arr) {
+        Map<Integer, Integer> countMap = new HashMap<>();
+
+        for (int num : arr) {
+            countMap.put(num, countMap.getOrDefault(num, 0) + 1);
         }
-        sc.close();
+
+        int maxCount = 0;
+        for (int count : countMap.values()) {
+            maxCount = Math.max(maxCount, count);
+        }
+
+        return maxCount;
     }
 }

@@ -20,8 +20,5 @@ public class MemberinitMain {
             System.out.println("이름:" + s.name + " 나이:" + s.age + " 성적:" + s.grade);
         }
     }
-
-
-
-
 }
+
