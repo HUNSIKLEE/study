@@ -9,13 +9,12 @@ public class Book {
 
 
     Book() {
+        this("", "", 0);
 
     }
 
-
     Book(String title, String author){
-        this.title = title;
-        this.author = author;
+        this(title, author, 0);
     }
 
 
@@ -26,7 +25,7 @@ public class Book {
     }
 
     void  displayInfo() {
-        System.out.println("제목 "+ title  + ", 저자: "+ author +" 페이지:" + page);
+        System.out.println("제목 "+ title  + ", 저자: "+ author +", 페이지:" + page);
     }
 
 }
