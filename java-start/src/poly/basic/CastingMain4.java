@@ -10,12 +10,8 @@ public class CastingMain4 {
         child1.childMethod();
 
 
-
         Parent parent2 = new Parent();
         Child child2 = (Child) parent2;
         child2.childMethod();
     }
-
-
-
 }
