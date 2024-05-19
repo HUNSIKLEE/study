@@ -12,6 +12,11 @@ public class CastingEx2 {
         System.out.printf("[int -> byte]: i=%d -> b=%d%n", i, b);
 
 
+        b = 10;
+        i = (int) b;
+        System.out.printf("[byte -> int] b=%d -> i=%d%n", b, i);
+
+
 
     }
 }
